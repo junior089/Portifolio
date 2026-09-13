@@ -1,0 +1,104 @@
+---
+order: 2
+name: "Avivando"
+eyebrow: "Case study 02 · Avivando"
+title: "Two applications, one member base"
+lede: "Avivando is a member management platform in production, serving over 500 users. It is two integrated applications built on Payload CMS — a public site and an operational core covering member records, forms, check-in, announcements and activities, with role-based access control. Built alongside a senior engineer."
+meta:
+  - k: "Role"
+    v: "Built in a pair with a senior engineer"
+  - k: "Status"
+    v: "In production, serving over 500 users."
+  - k: "Stack"
+    v: "React · TypeScript · Payload CMS · PostgreSQL · Node.js"
+  - k: "Timeline"
+    v: "Jun 2026 – Sep 2026"
+numbersLabel: "Audited in the workspace · snapshot 12 Sep 2026"
+numbers:
+  - "2 independent, integrated applications"
+  - "23 content modules · 13 migrations in the core"
+  - "22 API/BFF routes across both applications"
+  - "181 automated tests"
+  - "CI with lint, type checking, tests and build against an isolated PostgreSQL, plus Playwright end-to-end"
+numbersNote: "Counts come from the workspace. The user figure is measured, not estimated."
+home:
+  desc: "A member management platform in production, serving over 500 users. Built on Payload CMS across two integrated applications — a public site and an operational core covering member records, forms, check-in, announcements, activities and role-based access, with role-based access control. Built alongside a senior engineer."
+  status: "In production, serving over 500 users."
+  meta: "Jun 2026 – Sep 2026 · React · TypeScript · Payload CMS · PostgreSQL · Node.js"
+---
+
+import Bullets from '../../../components/Bullets.astro';
+import Diagram from '../../../components/Diagram.astro';
+
+## Context
+
+The platform serves an organization that tracks members, runs activities and needs different people to see different things. It is two applications: a public site, and an operational core with member records, forms, check-in, announcements, activities and role-based access.
+
+I worked in a pair with a senior engineer. The two of us shared the codebase throughout, and my design decisions were questioned in review — that loop is where most of the reasoning on this page came from. I am not going to draw a line through the work and claim a side of it.
+
+## The problem
+
+A member management platform is mostly a permissions problem wearing a CRUD costume. Leaders see their own group; coordinators see several groups; administrators see everything; a member sees themselves. Every list, every dashboard, every export and every check-in screen has to answer the same question — who is allowed to see this row — and answer it identically.
+
+The second problem is that two applications read overlapping data. A public site and an operational core with separate front ends can easily drift into two definitions of what a member is, two shapes for an activity, two places to change when a field is added.
+
+## Constraints
+
+<Bullets items={[
+  { k: "Two front doors", v: "A public site and an operational core read overlapping data with entirely different audiences." },
+  { k: "Real data", v: "Member records of a live organization. A leak is not a bug report, it is a disclosure." },
+  { k: "Shared ownership", v: "Every decision had to be legible to the other engineer on the project." },
+  { k: "Small team", v: "Two developers. Nothing could depend on remembering to be careful." }
+]} />
+
+## The architecture
+
+Payload CMS, running on Node.js and TypeScript, is the core. Content and domain objects are declared as collections in code; PostgreSQL is the store, reached through @payloadcms/db-postgres, and schema changes are migrations checked into the repository alongside the collection definitions.
+
+The public site is a separate application that integrates with the core rather than talking to the database on its own. Both applications end up reading one definition of a member, one definition of an activity, and one set of API routes over them. Adding a field is one change in one place.
+
+Access control is role-based and configured per collection in Payload. Roles decide what each collection exposes, and the same configuration governs both applications.
+
+<Diagram
+  caption="Fig. 2 — One core, one schema, two front ends. The public site integrates with the core rather than reaching past it."
+  layers={[
+    { nodes: [{ label: "Public site", sub: "React · TypeScript" }, { label: "Operational core", sub: "Payload CMS · 23 modules" }], edge: "22 API / BFF routes" },
+    { nodes: [{ label: "Role-based access control", sub: "configured per collection" }], edge: "permitted data only" },
+    { nodes: [{ label: "PostgreSQL", sub: "@payloadcms/db-postgres · 13 migrations" }] }
+  ]}
+/>
+
+## Trade-offs
+
+Building the core on a CMS rather than a bespoke service is a real choice with real costs.
+
+<Bullets items={[
+  { k: "Framework shape", v: "Payload decides a lot: how collections are declared, how access is configured, how the admin surface is generated. That is most of the reason the project moved quickly, and it is also the reason anything the framework does not model well has to be worked around instead of designed." },
+  { k: "Coupling", v: "Two applications sharing one core means a change to a collection is a change to both. The single definition is the point, but it removes the option of letting one side move on its own." },
+  { k: "Migrations", v: "Schema lives in code and ships as migrations, so a field rename is a reviewed change with a history. It also means no quick fixes in the database — 13 migrations is 13 deliberate steps." },
+  { k: "Testing cost", v: "Correctness depends on the database, so CI runs against an isolated PostgreSQL instead of a mock. Slower pipeline, but a test run without a database would prove very little here." }
+]} />
+
+## Quality and tests
+
+There are 181 automated tests, and CI runs lint, type checking, tests and build against an isolated PostgreSQL instance, plus end-to-end tests with Playwright.
+
+The pipeline is the part I would defend hardest. Two people on a live system with real member data need a gate that does not depend on either of them being careful that day.
+
+## Results
+
+In production, serving over 500 users. Two integrated applications, 23 content modules and 22 API/BFF routes run against a single core and a single schema.
+
+The outcome I care about is narrower than a usage number: a field added to a member is added once, and both applications see it.
+
+## What this case does not claim
+
+A specific database-level authorization mechanism. Access control is role-based and configured per collection in Payload CMS; the underlying policies were not independently re-verified for this write-up, so this page does not describe them in more detail than that.
+
+A division of labour. The work was done in a pair and the commit history does not accurately reflect how effort was split, so there is no per-directory or per-commit authorship claim here — only that I was one of the two people who built it.
+
+## Retrospective
+
+The part worth carrying forward is the single definition. Two applications, one schema, one place where a member is described. Most of the bugs this project did not have are bugs of two systems disagreeing about the same row.
+
+What I would do differently is write the access-control test matrix first — one seeded user per role, one assertion per collection — instead of growing it behind the features. The tests that exist were largely written to catch behaviour I had already shipped to staging.

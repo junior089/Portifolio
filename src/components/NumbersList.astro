@@ -1,0 +1,19 @@
+---
+interface Props {
+  label: string;
+  numbers: string[];
+  note: string;
+}
+
+const { label, numbers, note } = Astro.props;
+---
+
+<div class="mb-20 max-w-[760px]">
+  <div class="mb-4 font-mono text-[11px] tracking-[0.1em] text-muted uppercase">{label}</div>
+  {
+    numbers.map((n) => (
+      <div class="border-t border-line py-3.5 font-mono text-[13px] leading-[1.7] text-paper">{n}</div>
+    ))
+  }
+  <div class="border-t border-line pt-4 font-mono text-xs leading-[1.7] text-muted">{note}</div>
+</div>

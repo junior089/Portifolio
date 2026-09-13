@@ -1,0 +1,31 @@
+---
+import type { Lang } from '../data/types';
+import { en } from '../data/en';
+import { pt } from '../data/pt';
+import { homeHref, workAnchorHref, resumeHref } from '../lib/routes';
+import { NAV_NAME } from '../data/constants';
+
+interface Props {
+  lang: Lang;
+  enHref: string;
+  ptHref: string;
+}
+
+const { lang, enHref, ptHref } = Astro.props;
+const t = lang === 'pt' ? pt : en;
+---
+
+<div class="sticky top-0 z-50 border-b border-line bg-ink/92 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-6 px-[clamp(20px,4vw,32px)] py-4">
+    <a href={homeHref(lang)} class="font-mono text-[13px] tracking-[0.04em] text-paper">{NAV_NAME}</a>
+    <div class="flex items-center gap-[clamp(20px,3vw,32px)]">
+      <a href={workAnchorHref(lang)} class="font-mono text-[13px] text-muted transition-colors hover:text-paper">{t.nav.work}</a>
+      <a href={resumeHref(lang)} class="font-mono text-[13px] text-muted transition-colors hover:text-paper">{t.nav.resume}</a>
+      <div class="flex items-center gap-2 border-l border-line pl-[clamp(20px,3vw,32px)]">
+        <a href={enHref} class:list={["font-mono text-[13px]", lang === 'en' ? 'text-bone' : 'text-muted']}>EN</a>
+        <span class="font-mono text-[13px] text-line">/</span>
+        <a href={ptHref} class:list={["font-mono text-[13px]", lang === 'pt' ? 'text-bone' : 'text-muted']}>PT</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,127 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkItem from '../components/WorkItem.astro';
+import ExperienceRow from '../components/ExperienceRow.astro';
+import { en } from '../data/en';
+import { GITHUB_URL, GITHUB_HANDLE, LINKEDIN_URL, LINKEDIN_HANDLE, EMAIL } from '../data/constants';
+import { caseHref, homeHref, resumeHref } from '../lib/routes';
+
+const t = en;
+
+const allProjects = await getCollection('projects', ({ id }) => id.startsWith('en/'));
+const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  lang="en"
+  title="Carlos Alberto Jr. — Software Engineering Student & Backend Developer"
+  description={t.hero.sub}
+  enHref={homeHref('en')}
+  ptHref={homeHref('pt')}
+>
+  <div class="mx-auto max-w-[1180px] px-[clamp(20px,4vw,32px)]">
+    <section class="max-w-[760px] py-[clamp(72px,12vw,136px)] pb-[clamp(72px,10vw,120px)]">
+      <div class="mb-10 font-mono text-xs tracking-[0.14em] text-muted uppercase">{t.hero.eyebrow}</div>
+      <h1 class="mb-8 text-display font-serif text-paper text-pretty">{t.hero.headline}</h1>
+      <p class="mb-10 max-w-[680px] text-[19px] leading-[1.65] text-muted text-pretty">{t.hero.sub}</p>
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-6 font-mono text-[13px]">
+        <a href="#selected-work" class="rounded-lg border border-line px-5 py-3 text-paper transition-colors hover:border-muted">
+          {t.hero.ctaWork}
+        </a>
+        <a href={resumeHref('en')} class="border-b border-line pb-0.5 text-bone">{t.hero.ctaResume}</a>
+        <a href={GITHUB_URL} target="_blank" rel="noreferrer" class="text-muted">{`github.com/${GITHUB_HANDLE}`}</a>
+        <a href={`mailto:${EMAIL}`} class="text-muted">{EMAIL}</a>
+      </div>
+    </section>
+
+    <section id="selected-work" class="scroll-mt-20 border-t border-line pt-20">
+      <div class="mb-2 font-mono text-xs tracking-[0.14em] text-muted uppercase">{t.labels.selectedWork}</div>
+      <ul>
+        {
+          projects.map((p) => (
+            <WorkItem
+              n={String(p.data.order).padStart(2, '0')}
+              name={p.data.name}
+              title={p.data.title}
+              desc={p.data.home.desc}
+              status={p.data.home.status}
+              meta={p.data.home.meta}
+              href={caseHref('en', p.id.replace('en/', ''))}
+              viewSource={p.data.viewSource}
+              readCaseLabel={t.labels.readCase}
+              viewSourceLabel={t.labels.viewSource}
+            />
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="border-t border-line py-20 pb-22">
+      <div class="mb-14 font-mono text-xs tracking-[0.14em] text-muted uppercase">{t.labels.experience}</div>
+      {t.experience.map((e) => <ExperienceRow role={e.role} org={e.org} meta={e.meta} desc={e.desc} stack={e.stack} />)}
+    </section>
+
+    <section class="border-t border-line py-20 pb-22">
+      <div class="mb-14 font-mono text-xs tracking-[0.14em] text-muted uppercase">{t.labels.technicalFocus}</div>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-x-14 gap-y-12">
+        {
+          t.focus.map((f) => (
+            <div>
+              <div class="mb-4 border-b border-line pb-4 font-mono text-xs tracking-[0.06em] text-bone">{f.group}</div>
+              <div class="text-[17px] leading-[2] text-muted">{f.items}</div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="border-t border-line py-20 pb-22">
+      <div class="mb-14 font-mono text-xs tracking-[0.14em] text-muted uppercase">{t.labels.certifications}</div>
+      <div class="flex flex-wrap gap-[clamp(24px,5vw,56px)]">
+        <div class="w-[200px] shrink-0 font-mono text-xs leading-[1.9] text-muted">{t.labels.education}</div>
+        <div class="mb-12 min-w-0 max-w-[680px] flex-1">
+          <h3 class="mb-1 font-sans text-xl font-medium text-paper">{t.education.degree}</h3>
+          <div class="font-mono text-xs text-muted">{t.education.meta}</div>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-[clamp(24px,5vw,56px)] pt-6">
+        <div class="w-[200px] shrink-0 font-mono text-xs leading-[1.9] text-muted">{t.labels.certs}</div>
+        <div class="min-w-0 max-w-[680px] flex-1">
+          {
+            t.certsList.map((c) => (
+              <div class="flex justify-between gap-6 border-t border-line py-4">
+                <span class="text-[17px] text-paper">{c.name}</span>
+                <span class="shrink-0 font-mono text-xs text-muted">{c.year}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="max-w-[760px] border-t border-line py-20 pb-40">
+      <div class="mb-10 font-mono text-xs tracking-[0.14em] text-muted uppercase">{t.labels.contact}</div>
+      <h2 class="mb-8 text-subtitle font-serif text-paper text-pretty">{t.contact.headline}</h2>
+      <p class="mb-12 max-w-[680px] text-lg text-muted text-pretty">{t.contact.body}</p>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 font-mono text-[13px]">
+        <div>
+          <div class="mb-2 text-[11px] tracking-[0.1em] text-muted uppercase">Email</div>
+          <a href={`mailto:${EMAIL}`} class="break-all text-bone">{EMAIL}</a>
+        </div>
+        <div>
+          <div class="mb-2 text-[11px] tracking-[0.1em] text-muted uppercase">GitHub</div>
+          <a href={GITHUB_URL} target="_blank" rel="noreferrer" class="text-bone">{GITHUB_HANDLE}</a>
+        </div>
+        <div>
+          <div class="mb-2 text-[11px] tracking-[0.1em] text-muted uppercase">LinkedIn</div>
+          <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" class="text-bone">{LINKEDIN_HANDLE}</a>
+        </div>
+        <div>
+          <div class="mb-2 text-[11px] tracking-[0.1em] text-muted uppercase">{t.labels.location}</div>
+          <span class="text-muted">{t.contact.location}</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,106 @@
+---
+order: 1
+name: "CourtIQ"
+eyebrow: "Case study 01 · CourtIQ"
+title: "From scraping to decision: 19 court adapters behind one API"
+lede: "CourtIQ is my personal SaaS project for monitoring Brazilian judicial proceedings. It is not deployed. Everything below was designed, built and validated in a controlled environment."
+meta:
+  - k: "Role"
+    v: "Sole developer · architecture, API, scraper, portal"
+  - k: "Status"
+    v: "Personal project · not deployed"
+  - k: "Stack"
+    v: "Python · FastAPI · PostgreSQL · Redis · Playwright · Docker"
+  - k: "Surface"
+    v: "REST API · API keys · SDKs · webhooks · portal"
+viewSource: "https://github.com/junior089"
+numbersLabel: "Audited in the repository"
+numbers:
+  - "19 judicial adapters registered"
+  - "634 tests passing in consolidated validation — 504 API (66.42% line coverage), 41 scraper (73.45%), 89 frontend"
+  - "~20,700 lines of Python in the API core, across 185 files"
+  - "~32,800 lines of TypeScript in the portal, across 190 files"
+numbersNote: "Counts come from the repository itself. There are no production numbers on this page because there is no production."
+home:
+  desc: "A personal SaaS project for monitoring Brazilian judicial proceedings. Each court exposes data through a different portal and structure, with no unified API. I designed an adapter-based architecture that normalizes 19 court integrations (PJe and e-SAJ families) into a single domain model, with async workers, webhooks with retry history, API keys, SDKs, multi-tenant organizations and billing."
+  status: "Personal project · Not deployed"
+  meta: "Python · FastAPI · PostgreSQL · Redis · Playwright · Docker"
+---
+
+import Bullets from '../../../components/Bullets.astro';
+import Diagram from '../../../components/Diagram.astro';
+
+## Context
+
+Brazilian judicial proceedings are public, but they are not accessible. Each court runs its own portal, with its own layout, its own session handling and its own idea of what a case record contains. A lawyer tracking twenty cases across four states opens four different websites and reads four different vocabularies.
+
+CourtIQ is the product I wanted to exist when I was writing a judicial scraper at Agiliza Doutor. I designed it as a single API that answers one question — what changed in this proceeding — regardless of which court holds it.
+
+## The problem
+
+There is no unified API. Two portal families cover most of the territory, PJe and e-SAJ, and it is tempting to treat each family as one integration. That is wrong. A family is a resemblance, not a contract. Markup differs per state, pagination differs, authentication and rate limits differ, and the same field carries a different label and occasionally a different meaning.
+
+Writing one scraper per court solves the extraction problem and creates a worse one: nineteen codebases that drift apart, each with its own shape of output, and a consumer that has to know which court it is talking to. The real work is not fetching pages. It is deciding what a proceeding is, once, and forcing every court to speak it.
+
+## Constraints
+
+<Bullets items={[
+  { k: "No contract", v: "No official API and no notice when a portal changes. Any design that assumes stable HTML is a design that breaks silently." },
+  { k: "Heterogeneity", v: "19 integrations across two portal families, each with its own session, markup and limits." },
+  { k: "Extensibility", v: "Adding the twentieth court must not require touching the nineteen that already work, or the domain model." },
+  { k: "One developer", v: "I am the whole team. Anything operationally expensive is effectively unavailable to me." }
+]} />
+
+## Architecture
+
+The system is a monolithic FastAPI application with a queue in front of the workers. A client authenticates with an API key, registers the proceedings it cares about, and receives changes by webhook. Nothing is scraped during a request.
+
+The adapter layer is where the heterogeneity is contained. Each court has an adapter that knows exactly one thing: how to turn that portal's pages into the domain model. Adapters are registered rather than hardcoded, so the pipeline downstream — normalization, persistence, change detection, notification — never learns which court produced the data.
+
+<Diagram
+  caption="Fig. 1 — The adapter layer is the only place in the system that knows a court exists. Everything downstream sees one domain model."
+  layers={[
+    { nodes: [{ label: "REST API", sub: "FastAPI · API keys · SDKs" }], edge: "enqueue job · never scrape in-request" },
+    { nodes: [{ label: "Queue", sub: "Redis" }], edge: "async workers" },
+    { nodes: [{ label: "Workers", sub: "Playwright · retry & backoff" }], edge: "one adapter per court · PJe & e-SAJ families" },
+    { nodes: [{ label: "19 court adapters", sub: "registered, not hardcoded" }], edge: "normalization · single domain model" },
+    { nodes: [{ label: "PostgreSQL", sub: "proceedings · events · tenants" }], edge: "change detected" },
+    { nodes: [{ label: "Webhooks", sub: "retry history" }, { label: "Notifications", sub: "per organization" }] }
+  ]}
+/>
+
+## Key decisions and trade-offs
+
+Four decisions shaped the system, and each of them cost something.
+
+<Bullets items={[
+  { k: "Adapter per court", v: "I chose one adapter per court over a configurable generic scraper. A config-driven parser looks cheaper until the first court that paginates differently, and then the config language becomes a programming language with no debugger. The cost is 19 units to maintain instead of one; the benefit is that a court changing its HTML breaks exactly one file." },
+  { k: "Browser automation", v: "I chose Playwright over raw HTTP parsing. Several portals render results through JavaScript and defend against plain requests, so HTTP-level scraping would have needed per-court reverse engineering. The cost is real: browsers are slow and memory-hungry, which forces the queue and makes each worker expensive." },
+  { k: "Queue, not request-time", v: "Scraping never happens inside an API call. A court being slow or down would otherwise become my API being slow or down. The cost is that every read is eventually consistent, and the product has to be honest about when data was last seen." },
+  { k: "Webhooks over polling", v: "Clients are notified instead of asking. Delivery is at-least-once with retry history, which pushes idempotency onto the consumer — so the SDKs document a deduplication key rather than pretending exactly-once delivery exists. Retries use exponential backoff with jitter, and a delivery that keeps failing terminally lands as a record in a dead-letter table in Postgres rather than a queue that reprocesses itself — reprocessing from the dead-letter table is manual." },
+  { k: "Monolith", v: "One deployable, not services. For a single developer, the operational cost of a distributed system is paid daily and the benefit is theoretical until there is traffic. The boundaries are enforced in the code layout so they can be split later if there is ever a reason." }
+]} />
+
+## Implementation
+
+The API core is about 20,700 lines of Python across 185 files: domain model, adapter registry, workers, multi-tenant organizations, API keys, webhook delivery with retry history, SDKs and billing. The portal is a separate TypeScript surface of about 32,800 lines across 190 files, covering onboarding, proceeding management, key issuance and delivery logs.
+
+Multi-tenancy is in the data model from the first migration rather than added later. Retrofitting tenant isolation onto a schema that assumed one customer is the kind of migration that is never clean, and the cost of doing it up front is a mandatory organization column and a slightly noisier query layer.
+
+## Quality and tests
+
+Consolidated validation runs 634 tests: 504 for the API at 66.42% line coverage, 41 for the scraper at 73.45%, and 89 for the frontend. Adapters are tested against saved page fixtures, so a parsing regression is caught without hitting a live court.
+
+Coverage is the number I trust least. Line coverage says my code ran; it says nothing about a court silently renaming a field, which is the failure mode that actually matters here. The honest test for this system is a scheduled run against real portals with alerting on shape changes, and that is not something a test suite can substitute for.
+
+## Results
+
+What was demonstrated: 19 court integrations normalized into one domain model, an asynchronous pipeline that isolates the API from unreliable upstreams, and webhook delivery with retry history, all validated in a controlled environment against fixtures and test tenants.
+
+What was not demonstrated: anything about behaviour under real load, real proceeding volume or real customers. The project is not deployed, so there are no uptime, volume or revenue figures — and I would rather show the architecture than borrow numbers I did not measure.
+
+## Retrospective
+
+I would invest earlier in adapter contract tests — a single shared suite every adapter must satisfy, so a new court is finished when it passes rather than when it looks right. I would also build the shape-change alarm before the billing code: for a scraping product, detecting that a portal moved is more valuable than anything downstream of it.
+
+The decision I would repeat is the adapter boundary. It is the reason the nineteenth integration cost roughly what the third did, and the reason the domain model survived every portal I pointed it at.

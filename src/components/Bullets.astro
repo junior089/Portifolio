@@ -1,0 +1,23 @@
+---
+interface Item {
+  k: string;
+  v: string;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="mt-8 border-t border-line">
+  {
+    items.map((b) => (
+      <div class="flex flex-wrap gap-6 border-b border-line py-5">
+        <span class="w-[120px] shrink-0 pt-1 font-mono text-xs leading-[1.6] text-muted">{b.k}</span>
+        <span class="min-w-[220px] flex-1 text-[17px] leading-[1.7] text-paper text-pretty">{b.v}</span>
+      </div>
+    ))
+  }
+</div>

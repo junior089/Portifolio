@@ -1,0 +1,105 @@
+---
+order: 1
+name: "CourtIQ"
+eyebrow: "Estudo de caso 01 · CourtIQ"
+title: "Do scraping à decisão: 19 adaptadores judiciais atrás de uma API"
+lede: "O CourtIQ é meu projeto pessoal de SaaS para monitoramento de processos judiciais brasileiros. Ele não está implantado. Tudo abaixo foi projetado, construído e validado em ambiente controlado."
+meta:
+  - k: "Papel"
+    v: "Desenvolvedor único · arquitetura, API, scraper, portal"
+  - k: "Status"
+    v: "Projeto pessoal · não implantado"
+  - k: "Stack"
+    v: "Python · FastAPI · PostgreSQL · Redis · Playwright · Docker"
+  - k: "Superfície"
+    v: "API REST · chaves de API · SDKs · webhooks · portal"
+numbersLabel: "Auditado no repositório"
+numbers:
+  - "19 adaptadores judiciais registrados"
+  - "634 testes aprovados na validação consolidada — 504 da API (66,42% de cobertura de linhas), 41 do scraper (73,45%), 89 do frontend"
+  - "~20,7 mil linhas de Python no núcleo da API, em 185 arquivos"
+  - "~32,8 mil linhas de TypeScript no portal, em 190 arquivos"
+numbersNote: "As contagens vêm do próprio repositório. Não há números de produção nesta página porque não há produção."
+home:
+  desc: "Projeto pessoal de SaaS para monitoramento de processos judiciais brasileiros. Cada tribunal expõe os dados em um portal e uma estrutura diferentes, sem API unificada. Projetei uma arquitetura baseada em adaptadores que normaliza 19 integrações judiciais (famílias PJe e e-SAJ) em um único modelo de domínio, com workers assíncronos, webhooks com histórico de reenvio, chaves de API, SDKs, organizações multi-tenant e cobrança."
+  status: "Projeto pessoal · não implantado"
+  meta: "Python · FastAPI · PostgreSQL · Redis · Playwright · Docker"
+---
+
+import Bullets from '../../../components/Bullets.astro';
+import Diagram from '../../../components/Diagram.astro';
+
+## Contexto
+
+Processos judiciais brasileiros são públicos, mas não são acessíveis. Cada tribunal mantém o próprio portal, com o próprio layout, a própria sessão e a própria ideia do que um processo contém. Um advogado acompanhando vinte casos em quatro estados abre quatro sites diferentes e lê quatro vocabulários diferentes.
+
+O CourtIQ é o produto que eu queria que existisse quando escrevia um scraper judicial na Agiliza Doutor. Projetei como uma API única que responde a uma pergunta — o que mudou neste processo — independentemente de qual tribunal o guarda.
+
+## O problema
+
+Não existe API unificada. Duas famílias de portal cobrem a maior parte do território, PJe e e-SAJ, e é tentador tratar cada família como uma integração. É errado. Família é semelhança, não contrato. O markup muda por estado, a paginação muda, autenticação e limites de requisição mudam, e o mesmo campo aparece com outro rótulo e, às vezes, outro significado.
+
+Escrever um scraper por tribunal resolve a extração e cria um problema pior: dezenove bases de código que divergem, cada uma com seu formato de saída, e um consumidor que precisa saber com qual tribunal está falando. O trabalho de verdade não é buscar páginas. É decidir o que é um processo, uma única vez, e obrigar todo tribunal a falar isso.
+
+## Restrições
+
+<Bullets items={[
+  { k: "Sem contrato", v: "Nenhuma API oficial e nenhum aviso quando um portal muda. Qualquer design que assuma HTML estável é um design que quebra em silêncio." },
+  { k: "Heterogeneidade", v: "19 integrações em duas famílias de portal, cada uma com sessão, markup e limites próprios." },
+  { k: "Extensibilidade", v: "Adicionar o vigésimo tribunal não pode exigir mexer nos dezenove que já funcionam, nem no modelo de domínio." },
+  { k: "Um desenvolvedor", v: "Eu sou o time inteiro. O que é caro de operar é, na prática, indisponível para mim." }
+]} />
+
+## Arquitetura
+
+O sistema é uma aplicação FastAPI monolítica com uma fila à frente dos workers. O cliente se autentica com uma chave de API, registra os processos que lhe interessam e recebe as mudanças por webhook. Nada é raspado durante uma requisição.
+
+A camada de adaptadores é onde a heterogeneidade fica contida. Cada tribunal tem um adaptador que sabe exatamente uma coisa: como transformar as páginas daquele portal no modelo de domínio. Os adaptadores são registrados, não hardcoded, então o resto do pipeline — normalização, persistência, detecção de mudança, notificação — nunca descobre qual tribunal produziu o dado.
+
+<Diagram
+  caption="Fig. 1 — A camada de adaptadores é o único lugar do sistema que sabe que tribunais existem. Tudo depois dela vê um modelo de domínio só."
+  layers={[
+    { nodes: [{ label: "API REST", sub: "FastAPI · chaves de API · SDKs" }], edge: "enfileira o job · nunca raspa na requisição" },
+    { nodes: [{ label: "Fila", sub: "Redis" }], edge: "workers assíncronos" },
+    { nodes: [{ label: "Workers", sub: "Playwright · retry e backoff" }], edge: "um adaptador por tribunal · famílias PJe e e-SAJ" },
+    { nodes: [{ label: "19 adaptadores judiciais", sub: "registrados, não hardcoded" }], edge: "normalização · modelo de domínio único" },
+    { nodes: [{ label: "PostgreSQL", sub: "processos · eventos · tenants" }], edge: "mudança detectada" },
+    { nodes: [{ label: "Webhooks", sub: "histórico de reenvio" }, { label: "Notificações", sub: "por organização" }] }
+  ]}
+/>
+
+## Decisões-chave e trade-offs
+
+Quatro decisões moldaram o sistema, e cada uma custou algo.
+
+<Bullets items={[
+  { k: "Adaptador por tribunal", v: "Escolhi um adaptador por tribunal em vez de um scraper genérico configurável. Um parser guiado por configuração parece mais barato até o primeiro tribunal que pagina diferente, e então a linguagem de configuração vira uma linguagem de programação sem debugger. O custo são 19 unidades para manter em vez de uma; o ganho é que um tribunal mudando o HTML quebra exatamente um arquivo." },
+  { k: "Automação de navegador", v: "Escolhi Playwright em vez de parsing HTTP puro. Vários portais renderizam resultados por JavaScript e se defendem de requisições simples, então o caminho HTTP exigiria engenharia reversa por tribunal. O custo é real: navegadores são lentos e comem memória, o que obriga a fila e deixa cada worker caro." },
+  { k: "Fila, não requisição", v: "O scraping nunca acontece dentro de uma chamada de API. Sem isso, um tribunal lento ou fora do ar vira a minha API lenta ou fora do ar. O custo é que toda leitura é eventualmente consistente, e o produto tem de ser honesto sobre quando o dado foi visto pela última vez." },
+  { k: "Webhooks em vez de polling", v: "Os clientes são notificados em vez de perguntarem. A entrega é at-least-once com histórico de reenvio, o que empurra a idempotência para o consumidor — então os SDKs documentam uma chave de deduplicação em vez de fingir que entrega exactly-once existe. O reenvio usa backoff exponencial com jitter, e uma entrega que falha de forma terminal vira um registro em uma tabela dead-letter no Postgres, em vez de uma fila que se reprocessa sozinha — o reprocessamento a partir da dead-letter é manual." },
+  { k: "Monólito", v: "Um artefato de deploy, não serviços. Para um desenvolvedor só, o custo operacional de um sistema distribuído se paga todo dia e o benefício é teórico enquanto não há tráfego. As fronteiras estão marcadas na organização do código, para poderem ser separadas se houver motivo." }
+]} />
+
+## Implementação
+
+O núcleo da API tem cerca de 20,7 mil linhas de Python em 185 arquivos: modelo de domínio, registro de adaptadores, workers, organizações multi-tenant, chaves de API, entrega de webhooks com histórico de reenvio, SDKs e cobrança. O portal é uma superfície TypeScript separada de cerca de 32,8 mil linhas em 190 arquivos, cobrindo onboarding, gestão de processos, emissão de chaves e logs de entrega.
+
+O multi-tenant está no modelo de dados desde a primeira migração, e não colado depois. Adaptar isolamento de tenant a um schema que assumiu um cliente só é o tipo de migração que nunca sai limpa; o custo de fazer antes é uma coluna de organização obrigatória e uma camada de query um pouco mais ruidosa.
+
+## Qualidade e testes
+
+A validação consolidada roda 634 testes: 504 da API com 66,42% de cobertura de linhas, 41 do scraper com 73,45% e 89 do frontend. Os adaptadores são testados contra fixtures de páginas salvas, então uma regressão de parsing é pega sem acessar um tribunal ao vivo.
+
+Cobertura é o número em que confio menos. Cobertura de linhas diz que meu código executou; não diz nada sobre um tribunal renomear um campo em silêncio, que é o modo de falha que realmente importa aqui. O teste honesto para este sistema é uma execução agendada contra os portais reais com alerta de mudança de estrutura, e isso nenhuma suíte de testes substitui.
+
+## Resultados
+
+O que ficou demonstrado: 19 integrações judiciais normalizadas em um modelo de domínio, um pipeline assíncrono que isola a API de fontes instáveis e entrega de webhooks com histórico de reenvio, tudo validado em ambiente controlado contra fixtures e tenants de teste.
+
+O que não ficou demonstrado: qualquer coisa sobre comportamento sob carga real, volume real de processos ou clientes reais. O projeto não está implantado, então não há números de uptime, volume ou receita — e prefiro mostrar a arquitetura a emprestar números que não medi.
+
+## Retrospectiva
+
+Investiria mais cedo em testes de contrato de adaptador — uma suíte compartilhada que todo adaptador precisa satisfazer, para que um tribunal novo esteja pronto quando passa, e não quando parece certo. Também construiria o alarme de mudança de estrutura antes do código de cobrança: para um produto de scraping, detectar que um portal mudou vale mais do que qualquer coisa depois disso.
+
+A decisão que eu repetiria é a fronteira do adaptador. É a razão pela qual a décima nona integração custou aproximadamente o que custou a terceira, e a razão pela qual o modelo de domínio sobreviveu a todo portal que apontei para ele.

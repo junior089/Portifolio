@@ -1,0 +1,104 @@
+---
+order: 2
+name: "Avivando"
+eyebrow: "Estudo de caso 02 · Avivando"
+title: "Duas aplicações, uma base de membros"
+lede: "O Avivando é uma plataforma de gestão de membros em produção, atendendo mais de 500 usuários. São duas aplicações integradas construídas sobre Payload CMS — um site público e um core operacional que cobre cadastro de membros, formulários, check-in, avisos e atividades, com controle de acesso por papéis. Construída ao lado de um engenheiro sênior."
+meta:
+  - k: "Papel"
+    v: "Construído em dupla com um engenheiro sênior"
+  - k: "Status"
+    v: "Em produção, atendendo mais de 500 usuários."
+  - k: "Stack"
+    v: "React · TypeScript · Payload CMS · PostgreSQL · Node.js"
+  - k: "Período"
+    v: "Jun 2026 – Set 2026"
+numbersLabel: "Auditado no workspace · snapshot de 12/09/2026"
+numbers:
+  - "2 aplicações independentes e integradas"
+  - "23 módulos de conteúdo · 13 migrações no core"
+  - "22 rotas de API/BFF nas duas aplicações"
+  - "181 testes automatizados"
+  - "CI com lint, checagem de tipos, testes e build contra PostgreSQL isolado, mais end-to-end com Playwright"
+numbersNote: "As contagens vêm do workspace. O número de usuários é medido, não estimado."
+home:
+  desc: "Plataforma de gestão de membros em produção, atendendo mais de 500 usuários. Construída sobre Payload CMS em duas aplicações integradas — um site público e um core operacional que cobre cadastro de membros, formulários, check-in, avisos, atividades, com controle de acesso por papéis. Construída ao lado de um engenheiro sênior."
+  status: "Em produção, atendendo mais de 500 usuários."
+  meta: "Jun 2026 – Set 2026 · React · TypeScript · Payload CMS · PostgreSQL · Node.js"
+---
+
+import Bullets from '../../../components/Bullets.astro';
+import Diagram from '../../../components/Diagram.astro';
+
+## Contexto
+
+A plataforma atende uma organização que acompanha membros, realiza atividades e precisa que pessoas diferentes vejam coisas diferentes. São duas aplicações: um site público e um core operacional com cadastro de membros, formulários, check-in, avisos, atividades e acesso por papéis.
+
+Trabalhei em dupla com um engenheiro sênior. Os dois compartilharam o código o tempo todo, e minhas decisões de design eram questionadas em review — esse ciclo é a origem de boa parte do raciocínio desta página. Não vou traçar uma linha no trabalho e reivindicar um lado dela.
+
+## O problema
+
+Uma plataforma de gestão de membros é, no fundo, um problema de permissões vestido de CRUD. Líderes veem o próprio grupo; coordenadores veem vários grupos; administradores veem tudo; um membro vê a si mesmo. Toda lista, todo dashboard, toda exportação e toda tela de check-in precisa responder à mesma pergunta — quem pode ver esta linha — e responder igual.
+
+O segundo problema é que duas aplicações leem dados sobrepostos. Um site público e um core operacional com front ends separados escorregam com facilidade para duas definições do que é um membro, dois formatos de atividade, dois lugares para mexer quando um campo é adicionado.
+
+## Restrições
+
+<Bullets items={[
+  { k: "Duas portas", v: "Um site público e um core operacional leem dados sobrepostos com públicos completamente diferentes." },
+  { k: "Dado real", v: "Cadastro de membros de uma organização em operação. Um vazamento não é relato de bug, é divulgação indevida." },
+  { k: "Autoria dividida", v: "Toda decisão precisava ser legível para o outro engenheiro do projeto." },
+  { k: "Time pequeno", v: "Dois desenvolvedores. Nada podia depender de alguém lembrar de ter cuidado." }
+]} />
+
+## A arquitetura
+
+O Payload CMS, em Node.js e TypeScript, é o core. Conteúdo e objetos de domínio são declarados como coleções em código; o PostgreSQL é o armazenamento, acessado via @payloadcms/db-postgres, e mudanças de schema são migrações versionadas no repositório junto das definições de coleção.
+
+O site público é uma aplicação separada que se integra ao core, em vez de falar com o banco por conta própria. As duas aplicações acabam lendo uma definição de membro, uma definição de atividade e um conjunto de rotas de API sobre elas. Adicionar um campo é uma mudança em um lugar.
+
+O controle de acesso é baseado em papéis e configurado por coleção no Payload. Os papéis determinam o que cada coleção expõe, e a mesma configuração vale para as duas aplicações.
+
+<Diagram
+  caption="Fig. 2 — Um core, um schema, dois front ends. O site público se integra ao core em vez de passar por cima dele."
+  layers={[
+    { nodes: [{ label: "Site público", sub: "React · TypeScript" }, { label: "Core operacional", sub: "Payload CMS · 23 módulos" }], edge: "22 rotas de API / BFF" },
+    { nodes: [{ label: "Controle de acesso por papéis", sub: "configurado por coleção" }], edge: "apenas dados permitidos" },
+    { nodes: [{ label: "PostgreSQL", sub: "@payloadcms/db-postgres · 13 migrações" }] }
+  ]}
+/>
+
+## Trade-offs
+
+Construir o core sobre um CMS em vez de um serviço sob medida é uma escolha real, com custos reais.
+
+<Bullets items={[
+  { k: "Forma do framework", v: "O Payload decide muita coisa: como as coleções são declaradas, como o acesso é configurado, como a superfície de admin é gerada. É boa parte da razão pela qual o projeto andou rápido, e também a razão pela qual o que o framework não modela bem precisa ser contornado em vez de desenhado." },
+  { k: "Acoplamento", v: "Duas aplicações sobre um core significa que mudar uma coleção muda as duas. A definição única é o objetivo, mas tira a opção de deixar um dos lados andar sozinho." },
+  { k: "Migrações", v: "O schema mora no código e sobe como migração, então renomear um campo é uma mudança revisada e com histórico. Também significa nada de correção rápida no banco — 13 migrações são 13 passos deliberados." },
+  { k: "Custo de teste", v: "A correção depende do banco, então o CI roda contra um PostgreSQL isolado, e não contra um mock. Pipeline mais lento, mas uma execução de testes sem banco provaria muito pouco aqui." }
+]} />
+
+## Qualidade e testes
+
+São 181 testes automatizados, e o CI roda lint, checagem de tipos, testes e build contra uma instância isolada de PostgreSQL, além de testes end-to-end com Playwright.
+
+O pipeline é a parte que eu defenderia com mais convicção. Duas pessoas em um sistema em produção com dados reais de membros precisam de um portão que não dependa de nenhuma das duas estar atenta naquele dia.
+
+## Resultados
+
+Em produção, atendendo mais de 500 usuários. Duas aplicações integradas, 23 módulos de conteúdo e 22 rotas de API/BFF rodando sobre um único core e um único schema.
+
+O resultado que me interessa é mais estreito que um número de uso: um campo adicionado ao membro é adicionado uma vez, e as duas aplicações o enxergam.
+
+## O que este case não afirma
+
+Um mecanismo específico de autorização no nível do banco. O controle de acesso é baseado em papéis e configurado por coleção no Payload CMS; as políticas subjacentes não foram reverificadas de forma independente para este texto, então esta página não as descreve em mais detalhe do que isso.
+
+Uma divisão de trabalho. O projeto foi feito em dupla e o histórico de commits não reflete com precisão como o esforço foi dividido, então não há aqui reivindicação de autoria por diretório ou por commit — apenas que fui uma das duas pessoas que o construíram.
+
+## Retrospectiva
+
+O que vale carregar é a definição única. Duas aplicações, um schema, um lugar onde um membro é descrito. A maioria dos bugs que este projeto não teve são bugs de dois sistemas discordando sobre a mesma linha.
+
+O que eu faria diferente é escrever a matriz de testes de acesso primeiro — um usuário semeado por papel, uma asserção por coleção — em vez de crescê-la atrás das features. Os testes que existem foram em boa parte escritos para pegar comportamento que eu já havia subido para staging.

@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { en } from '../data/en';
+import { workAnchorHref, homeHref, resumeHref } from '../lib/routes';
+
+const t = en;
+
+const links = [
+  { label: t.notFound.links[0].label, path: t.notFound.links[0].path, href: homeHref('en') },
+  { label: t.notFound.links[1].label, path: t.notFound.links[1].path, href: workAnchorHref('en') },
+  { label: t.notFound.links[2].label, path: t.notFound.links[2].path, href: resumeHref('en') }
+];
+---
+
+<BaseLayout lang="en" title="404 — Carlos Alberto Jr." description={t.notFound.body} enHref={homeHref('en')} ptHref={homeHref('pt')}>
+  <div class="mx-auto max-w-[1180px] px-[clamp(20px,4vw,32px)]">
+    <div class="max-w-[680px] py-[clamp(96px,16vw,200px)]">
+      <div class="mb-10 font-mono text-xs tracking-[0.14em] text-muted uppercase">404</div>
+      <h1 class="mb-8 text-display-case font-serif text-paper text-pretty">{t.notFound.title}</h1>
+      <p class="mb-12 text-lg text-muted text-pretty">{t.notFound.body}</p>
+      <div class="border-t border-line">
+        {
+          links.map((l) => (
+            <a href={l.href} class="flex justify-between gap-6 border-b border-line py-5 text-[17px] text-paper transition-colors hover:bg-surface">
+              <span>{l.label}</span>
+              <span class="font-mono text-xs text-muted">{l.path}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>

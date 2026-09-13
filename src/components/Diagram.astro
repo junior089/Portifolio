@@ -1,0 +1,45 @@
+---
+interface Node {
+  label: string;
+  sub: string;
+}
+
+interface Layer {
+  nodes: Node[];
+  edge?: string;
+}
+
+interface Props {
+  caption: string;
+  layers: Layer[];
+}
+
+const { caption, layers } = Astro.props;
+---
+
+<figure class="mt-12">
+  <div class="rounded-xl border border-line bg-surface px-[clamp(16px,3vw,32px)] py-10">
+    {
+      layers.map((layer) => (
+        <div>
+          <div class="flex flex-wrap justify-center gap-3">
+            {layer.nodes.map((n) => (
+              <div class="min-w-[150px] rounded-lg border border-line bg-ink px-5 py-4 text-center">
+                <div class="font-mono text-xs leading-[1.5] text-paper">{n.label}</div>
+                <div class="mt-1 font-mono text-[11px] text-muted">{n.sub}</div>
+              </div>
+            ))}
+          </div>
+          {layer.edge && (
+            <div class="flex flex-col items-center py-2">
+              <div class="h-5 w-px bg-line" />
+              <div class="py-2 text-center font-mono text-[11px] text-muted">{layer.edge}</div>
+              <div class="h-5 w-px bg-line" />
+            </div>
+          )}
+        </div>
+      ))
+    }
+  </div>
+  <figcaption class="mt-4 font-mono text-xs leading-[1.6] text-muted">{caption}</figcaption>
+</figure>

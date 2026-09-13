@@ -1,0 +1,76 @@
+---
+order: 3
+name: "MAY Derma"
+eyebrow: "Estudo de caso 03 · MAY Derma"
+title: "Manter a loja e um sistema externo em sincronia"
+lede: "Plataforma de e-commerce em WooCommerce construída e customizada para a MAY Derma e integrada aos sistemas externos de negócio da empresa. Entregue como contrato remoto entre maio e julho de 2026."
+meta:
+  - k: "Papel"
+    v: "Desenvolvedor Full Stack · contrato, remoto"
+  - k: "Status"
+    v: "Entregue"
+  - k: "Stack"
+    v: "WordPress · WooCommerce · C#/.NET · PostgreSQL · Docker · Nginx · Linux"
+  - k: "Período"
+    v: "Mai 2026 – Jul 2026"
+numbersLabel: "Escopo"
+numbers:
+  - "1 loja WooCommerce, construída e customizada"
+  - "Integração com os sistemas externos de negócio do cliente via webhooks"
+  - "Consumidores assíncronos idempotentes em C#/.NET"
+  - "Implantado em Docker atrás do Nginx em Linux"
+numbersNote: "O cliente autorizou este nível de detalhe. Os sistemas externos não são nomeados e nenhum dado comercial é publicado."
+home:
+  desc: "Plataforma WooCommerce construída e customizada para a MAY Derma, integrada a sistemas externos de negócio via webhooks e workers assíncronos, com idempotência para sobreviver a reenvios e entregas duplicadas."
+  status: "Entregue · contrato"
+  meta: "Mai 2026 – Jul 2026 · WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux"
+---
+
+import Bullets from '../../../components/Bullets.astro';
+import Diagram from '../../../components/Diagram.astro';
+
+## Contexto
+
+A MAY Derma precisava de uma loja que não fosse uma ilha. Pedidos feitos online tinham de chegar aos sistemas em que o negócio já rodava, e dados de produto e estoque mantidos no back-office tinham de aparecer na loja. Construí e customizei a plataforma WooCommerce e depois construí a integração entre os dois lados.
+
+## O problema
+
+Uma loja e um sistema de back-office discordam no instante em que qualquer um dos dois pode mudar de estado por conta própria. Pedidos, estoque e cadastros existem nos dois, e nenhum é naturalmente o seguidor. O trabalho foi decidir, registro por registro, qual sistema é dono da verdade e como o outro fica sabendo.
+
+O atalho tentador é a loja chamar o outro sistema direto no checkout. É a menor quantidade de código e o pior modo de falha: um checkout que depende do back-office estar acessível é um checkout que cai quando o back-office cai.
+
+## A integração
+
+A comunicação corre por webhooks para workers assíncronos. A loja emite um evento quando algo acontece; um worker pega, traduz e escreve no outro lado. Se o destino está indisponível, o evento espera e é reprocessado, em vez de se perder no caixa.
+
+Como a entrega é at-least-once, todo consumidor é idempotente. O mesmo evento chegando duas vezes produz um pedido, não dois — deduplicado pelo identificador do próprio evento antes de qualquer escrita. É a parte do design que eu defenderia com mais convicção: reenvio não é caso de borda, é o modo normal de operação de uma integração por webhook.
+
+<Diagram
+  caption="Fig. 3 — A loja nunca chama o sistema externo de forma síncrona. Toda escrita atravessa um consumidor idempotente."
+  layers={[
+    { nodes: [{ label: "WooCommerce", sub: "WordPress · loja" }], edge: "webhook · eventos de pedido e estoque" },
+    { nodes: [{ label: "Workers assíncronos", sub: "C#/.NET · consumidores idempotentes" }], edge: "escritas deduplicadas · reenvio em falha" },
+    { nodes: [{ label: "PostgreSQL", sub: "estado da integração" }, { label: "Sistemas externos de negócio", sub: "lado do cliente" }] }
+  ]}
+/>
+
+## Trade-offs
+
+<Bullets items={[
+  { k: "Assíncrono", v: "Eventos enfileirados mantêm o checkout disponível quando o back-office não está. O custo é que os dois sistemas são apenas eventualmente consistentes, então a loja pode mostrar por um momento um estoque que o back-office já movimentou." },
+  { k: "Custo da idempotência", v: "Todo consumidor carrega estado de deduplicação, o que é armazenamento extra e mais uma coisa para raciocinar. A alternativa é pedido duplicado, o que não é trade-off nenhum." },
+  { k: "WooCommerce", v: "Construir sobre WordPress trouxe catálogo e checkout de graça, e os pontos de extensão não. O trabalho de customização vai onde o ecossistema de plugins para, e foi nessa fronteira que a maior parte do esforço ficou." },
+  { k: "Docker em um host", v: "Containers atrás do Nginx deram deploy reprodutível sem introduzir um orquestrador que o cliente teria de operar depois que eu saísse. É um teto deliberado." }
+]} />
+
+## Resultados
+
+Entregue e repassado: a plataforma roda em Docker atrás do Nginx em Linux, e pedidos e estoque atravessam entre a loja e os sistemas do cliente por workers idempotentes e reprocessáveis, não por chamadas síncronas.
+
+Não publico dados comerciais deste projeto. O cliente autorizou a descrição técnica acima, não os números de venda.
+
+## Retrospectiva
+
+A integração seria mais fácil de operar com um log de entrega exposto no admin desde o primeiro dia — uma tela que responde "este pedido chegou do outro lado, e se não, por quê" sem abrir o banco. Construí a confiabilidade e subconstruí a visibilidade sobre ela.
+
+O que eu repetiria é recusar o atalho síncrono. Deu mais trabalho na primeira semana e é a razão pela qual a disponibilidade da loja não depende do uptime de outra pessoa.

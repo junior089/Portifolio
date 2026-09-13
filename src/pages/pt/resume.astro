@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { pt } from '../../data/pt';
+import { EMAIL } from '../../data/constants';
+import { homeHref, resumeHref } from '../../lib/routes';
+
+const t = pt;
+---
+
+<BaseLayout lang="pt" title={`${t.resume.title} — Carlos Alberto Jr.`} description={t.resume.lede} enHref={resumeHref('en')} ptHref={resumeHref('pt')}>
+  <div class="mx-auto max-w-[1180px] px-[clamp(20px,4vw,32px)]">
+    <div class="max-w-[760px] py-[clamp(56px,9vw,96px)] pb-[clamp(96px,14vw,160px)]">
+      <a href={homeHref('pt')} class="mb-16 inline-block font-mono text-xs text-muted">{t.labels.backHome}</a>
+
+      <h1 class="mb-6 text-display-case font-serif text-paper">{t.resume.title}</h1>
+      <p class="mb-8 text-lg text-muted text-pretty">{t.resume.lede}</p>
+      <div class="flex flex-wrap gap-6 border-b border-line pb-16 font-mono text-[13px]">
+        <a href={t.resume.cvFile} download class="border-b border-line pb-0.5 text-bone">{t.resume.download}</a>
+        <a href={`mailto:${EMAIL}`} class="text-muted">{EMAIL}</a>
+      </div>
+
+      {
+        t.resume.blocks.map((r) => (
+          <section class="pt-14">
+            <div class="mb-8 font-mono text-xs tracking-[0.14em] text-muted uppercase">{r.label}</div>
+            {r.rows.map((row) => (
+              <div class="border-t border-line py-5">
+                <div class="flex flex-wrap items-baseline justify-between gap-6">
+                  <span class="text-lg font-medium text-paper">{row.k}</span>
+                  <span class="shrink-0 font-mono text-xs text-muted">{row.meta}</span>
+                </div>
+                {row.v && <p class="mt-2 text-[17px] text-muted text-pretty">{row.v}</p>}
+              </div>
+            ))}
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

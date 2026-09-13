@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#100F0E">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#100F0E"/>
+    <text x="600" y="430" text-anchor="middle" font-family="Georgia,serif" font-size="300" fill="#F2EFEA">CA</text>
+    <rect x="420" y="530" width="360" height="2" fill="#2A2724"/>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #100F0E; }
+  body { -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: #E8E2D9; text-decoration: none; }
+  a:hover { color: #FFFFFF; }
+  ::selection { background: #2A2724; color: #F2EFEA; }
+</style>
+</helmet>
+
+<div style="background:#100F0E; color:#F2EFEA; font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:18px; line-height:1.7; min-height:100vh">
+
+  <div style="position:sticky; top:0; z-index:50; background:rgba(16,15,14,0.92); backdrop-filter:blur(8px); border-bottom:1px solid #2A2724">
+    <div style="max-width:1180px; margin:0 auto; padding:16px clamp(20px,4vw,32px); display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap">
+      
+      <a href="#/" onClick="{{ goHome }}" style="font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.04em; color:#F2EFEA">Carlos ALberto S. Oliveira Jr.</a><div style="display:flex; align-items:center; gap:clamp(20px,3vw,32px)">
+        <a href="#/" onClick="{{ goWork }}" style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8F8880" style-hover="{{ navHover }}">{{ t.nav.work }}</a>
+        <a href="#/resume" onClick="{{ goResume }}" style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8F8880" style-hover="{{ navHover }}">{{ t.nav.resume }}</a>
+        <div style="display:flex; align-items:center; gap:8px; border-left:1px solid #2A2724; padding-left:clamp(20px,3vw,32px)">
+          <a href="#/" onClick="{{ setEn }}" style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:{{ enColor }}">EN</a>
+          <span style="color:#2A2724; font-size:13px">/</span>
+          <a href="#/pt" onClick="{{ setPt }}" style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:{{ ptColor }}">PT</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div>
+    <div style="max-width:1180px; margin:0 auto; padding:0 clamp(20px,4vw,32px)">
+
+      <section style="padding:clamp(72px,12vw,136px) 0 clamp(72px,10vw,120px); max-width:760px">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8F8880; margin-bottom:40px">{{ t.hero.eyebrow }}</div>
+        <h1 style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; font-size:clamp(32px,7vw,60px); line-height:1.08; letter-spacing:-0.01em; margin:0 0 32px; color:#F2EFEA; text-wrap:pretty">{{ t.hero.headline }}</h1>
+        <p style="margin:0 0 40px; font-size:19px; line-height:1.65; color:#8F8880; max-width:680px; text-wrap:pretty">{{ t.hero.sub }}</p>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:24px 32px; font-family:'IBM Plex Mono',monospace; font-size:13px">
+          <a href="#/" onClick="{{ goWork }}" style="color:#F2EFEA; border:1px solid #2A2724; border-radius:8px; padding:12px 20px" style-hover="{{ btnHover }}">{{ t.hero.ctaWork }}</a>
+          <a href="#/resume" onClick="{{ goResume }}" style="color:#E8E2D9; border-bottom:1px solid #2A2724; padding-bottom:2px">{{ t.hero.ctaResume }}</a>
+          <a href="https://github.com/junior089" target="_blank" style="color:#8F8880">github.com/junior089</a>
+          <a href="mailto:carlosalbertoliveirajr07@gmail.com" style="color:#8F8880">carlosalbertoliveirajr07@gmail.com</a>
+        </div>
+      </section>
+
+      <section id="selected-work" style="border-top:1px solid #2A2724; padding:80px 0 0; scroll-margin-top:80px">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8F8880; margin-bottom:8px">{{ t.labels.selectedWork }}</div>
+        <sc-for list="{{ t.work }}" as="w" hint-placeholder-count="3">
+          <div onClick="{{ w.open }}" style="display:block; border-top:1px solid #2A2724; padding:48px 0; color:#F2EFEA; cursor:pointer" style-hover="{{ rowHover }}">
+            <div style="display:flex; gap:clamp(24px,5vw,56px); align-items:baseline; flex-wrap:wrap">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; min-width:24px">{{ w.n }}</div>
+              <div style="flex:1; min-width:0; max-width:760px">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#E8E2D9; margin-bottom:12px">{{ w.name }}</div>
+                <h2 style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; font-size:clamp(28px,5vw,42px); line-height:1.12; margin:0 0 16px; color:#F2EFEA; text-wrap:pretty">{{ w.title }}</h2>
+                <p style="margin:0 0 20px; color:#8F8880; font-size:18px; max-width:680px; text-wrap:pretty">{{ w.desc }}</p>
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#F2EFEA; margin-bottom:12px">{{ w.status }}</div>
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; line-height:1.8">{{ w.meta }}</div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:12px; font-family:'IBM Plex Mono',monospace; font-size:12px">
+                <a href="{{ w.href }}" onClick="{{ w.open }}" style="color:#E8E2D9">{{ t.labels.readCase }}</a>
+                <sc-if value="{{ w.viewSource }}" hint-placeholder-val="{{ false }}">
+                  <a href="{{ w.viewSource }}" target="_blank" onClick="{{ stopProp }}" style="color:#8F8880">{{ t.labels.viewSource }}</a>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+
+      <section style="border-top:1px solid #2A2724; padding:80px 0 88px">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8F8880; margin-bottom:56px">{{ t.labels.experience }}</div>
+        <sc-for list="{{ t.experience }}" as="e" hint-placeholder-count="2">
+          <div style="display:flex; gap:clamp(24px,5vw,56px); flex-wrap:wrap; border-top:1px solid #2A2724; padding-top:48px; margin-bottom:48px">
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; width:200px; flex-shrink:0; line-height:1.9">{{ e.meta }}</div>
+            <div style="flex:1; min-width:0; max-width:680px">
+              <h3 style="font-family:'IBM Plex Sans',sans-serif; font-weight:500; font-size:20px; margin:0 0 4px; color:#F2EFEA">{{ e.role }}</h3>
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; margin-bottom:20px">{{ e.org }}</div>
+              <p style="margin:0 0 20px; color:#8F8880; font-size:17px; text-wrap:pretty">{{ e.desc }}</p>
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880">{{ e.stack }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+
+      <section style="border-top:1px solid #2A2724; padding:80px 0 88px">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8F8880; margin-bottom:56px">{{ t.labels.technicalFocus }}</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:48px 56px">
+          <sc-for list="{{ t.focus }}" as="f" hint-placeholder-count="5">
+            <div>
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.06em; color:#E8E2D9; padding-bottom:16px; border-bottom:1px solid #2A2724; margin-bottom:16px">{{ f.group }}</div>
+              <div style="font-size:17px; color:#8F8880; line-height:2">{{ f.items }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="border-top:1px solid #2A2724; padding:80px 0 88px">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8F8880; margin-bottom:56px">{{ t.labels.certifications }}</div>
+        <div style="display:flex; gap:clamp(24px,5vw,56px); flex-wrap:wrap">
+          <div style="width:200px; flex-shrink:0; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; line-height:1.9">{{ t.labels.education }}</div>
+          <div style="flex:1; min-width:0; max-width:680px; margin-bottom:48px">
+            <h3 style="font-family:'IBM Plex Sans',sans-serif; font-weight:500; font-size:20px; margin:0 0 4px; color:#F2EFEA">{{ t.education.degree }}</h3>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880">{{ t.education.meta }}</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:clamp(24px,5vw,56px); flex-wrap:wrap; padding-top:24px">
+          <div style="width:200px; flex-shrink:0; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; line-height:1.9">{{ t.labels.certs }}</div>
+          <div style="flex:1; min-width:0; max-width:680px">
+            <sc-for list="{{ t.certs }}" as="c" hint-placeholder-count="3">
+              <div style="display:flex; justify-content:space-between; gap:24px; padding:16px 0; border-top:1px solid #2A2724">
+                <span style="font-size:17px; color:#F2EFEA">{{ c.name }}</span>
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; flex-shrink:0">{{ c.year }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <section style="border-top:1px solid #2A2724; padding:80px 0 160px; max-width:760px">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8F8880; margin-bottom:40px">{{ t.labels.contact }}</div>
+        <h2 style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; font-size:clamp(28px,5vw,44px); line-height:1.12; margin:0 0 32px; color:#F2EFEA; text-wrap:pretty">{{ t.contact.headline }}</h2>
+        <p style="margin:0 0 48px; color:#8F8880; font-size:18px; max-width:680px; text-wrap:pretty">{{ t.contact.body }}</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:32px; font-family:'IBM Plex Mono',monospace; font-size:13px">
+          <div>
+            <div style="color:#8F8880; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px">Email</div>
+            <a href="mailto:carlosalbertoliveirajr07@gmail.com" style="color:#E8E2D9; word-break:break-all">carlosalbertoliveirajr07@gmail.com</a>
+          </div>
+          <div>
+            <div style="color:#8F8880; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px">GitHub</div>
+            <a href="https://github.com/junior089" target="_blank" style="color:#E8E2D9">junior089</a>
+          </div>
+          <div>
+            <div style="color:#8F8880; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px">LinkedIn</div>
+            <a href="https://www.linkedin.com/in/carlos-alberto-soares-de-oliveira-júnior" target="_blank" style="color:#E8E2D9">carlos-alberto-oliveira-júnior</a>
+          </div>
+          <div>
+            <div style="color:#8F8880; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px">{{ t.labels.location }}</div>
+            <span style="color:#8F8880">{{ t.contact.location }}</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isCase }}" hint-placeholder-val="{{ false }}">
+  <div>
+    <div style="max-width:1180px; margin:0 auto; padding:0 clamp(20px,4vw,32px)">
+      <article style="padding:clamp(56px,9vw,96px) 0 clamp(96px,14vw,160px)">
+        <a href="#/" onClick="{{ goHome }}" style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; display:inline-block; margin-bottom:64px">{{ t.labels.backHome }}</a>
+
+        <header style="max-width:760px; margin-bottom:72px">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8F8880; margin-bottom:32px">{{ c.eyebrow }}</div>
+          <h1 style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; font-size:clamp(32px,6.5vw,56px); line-height:1.1; letter-spacing:-0.01em; margin:0 0 32px; color:#F2EFEA; text-wrap:pretty">{{ c.title }}</h1>
+          <p style="margin:0; font-size:19px; line-height:1.65; color:#8F8880; max-width:680px; text-wrap:pretty">{{ c.lede }}</p>
+        </header>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:32px; border-top:1px solid #2A2724; border-bottom:1px solid #2A2724; padding:32px 0; margin-bottom:48px">
+          <sc-for list="{{ c.meta }}" as="m" hint-placeholder-count="4">
+            <div>
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#8F8880; margin-bottom:8px">{{ m.k }}</div>
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F2EFEA; line-height:1.6">{{ m.v }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="max-width:760px; margin-bottom:80px">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#8F8880; margin-bottom:16px">{{ c.numbersLabel }}</div>
+          <sc-for list="{{ c.numbers }}" as="n" hint-placeholder-count="4">
+            <div style="border-top:1px solid #2A2724; padding:14px 0; font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F2EFEA; line-height:1.7">{{ n }}</div>
+          </sc-for>
+          <div style="border-top:1px solid #2A2724; padding-top:16px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; line-height:1.7">{{ c.numbersNote }}</div>
+        </div>
+
+        <sc-for list="{{ c.sections }}" as="s" hint-placeholder-count="6">
+          <section style="max-width:760px; margin-bottom:72px">
+            <h2 style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; font-size:clamp(26px,4vw,32px); line-height:1.2; margin:0 0 24px; color:#F2EFEA">{{ s.h }}</h2>
+            <sc-for list="{{ s.paras }}" as="p" hint-placeholder-count="2">
+              <p style="margin:0 0 20px; font-size:18px; line-height:1.75; color:#8F8880; text-wrap:pretty">{{ p }}</p>
+            </sc-for>
+            <sc-if value="{{ s.hasBullets }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:32px; border-top:1px solid #2A2724">
+                <sc-for list="{{ s.bullets }}" as="b" hint-placeholder-count="3">
+                  <div style="display:flex; gap:24px; padding:20px 0; border-bottom:1px solid #2A2724; flex-wrap:wrap">
+                    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; width:120px; flex-shrink:0; padding-top:4px; line-height:1.6">{{ b.k }}</span>
+                    <span style="font-size:17px; line-height:1.7; color:#F2EFEA; flex:1; min-width:220px; text-wrap:pretty">{{ b.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ s.hasDiagram }}" hint-placeholder-val="{{ false }}">
+              <figure style="margin:48px 0 0">
+                <div style="border:1px solid #2A2724; border-radius:12px; background:#171614; padding:40px clamp(16px,3vw,32px)">
+                  <sc-for list="{{ s.diagram.layers }}" as="l" hint-placeholder-count="3">
+                    <div>
+                      <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center">
+                        <sc-for list="{{ l.nodes }}" as="n" hint-placeholder-count="2">
+                          <div style="border:1px solid #2A2724; border-radius:8px; padding:16px 20px; background:#100F0E; min-width:150px; text-align:center">
+                            <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#F2EFEA; line-height:1.5">{{ n.label }}</div>
+                            <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8F8880; margin-top:4px">{{ n.sub }}</div>
+                          </div>
+                        </sc-for>
+                      </div>
+                      <sc-if value="{{ l.hasEdge }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex; flex-direction:column; align-items:center; padding:8px 0">
+                          <div style="width:1px; height:20px; background:#2A2724"></div>
+                          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8F8880; padding:8px 0; text-align:center">{{ l.edge }}</div>
+                          <div style="width:1px; height:20px; background:#2A2724"></div>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+                <figcaption style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; margin-top:16px; line-height:1.6">{{ s.diagram.caption }}</figcaption>
+              </figure>
+            </sc-if>
+          </section>
+        </sc-for>
+
+        <div style="max-width:760px; border-top:1px solid #2A2724; padding-top:48px; display:flex; gap:32px; flex-wrap:wrap; font-family:'IBM Plex Mono',monospace; font-size:13px">
+          <a href="{{ c.otherHref }}" onClick="{{ c.openOther }}" style="color:#E8E2D9">{{ c.otherLabel }}</a>
+          <sc-if value="{{ c.viewSource }}" hint-placeholder-val="{{ false }}">
+            <a href="{{ c.viewSource }}" target="_blank" style="color:#8F8880">{{ t.labels.viewSource }}</a>
+          </sc-if>
+          <a href="#/" onClick="{{ goHome }}" style="color:#8F8880">{{ t.labels.backHome }}</a>
+        </div>
+      </article>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isResume }}" hint-placeholder-val="{{ false }}">
+  <div>
+    <div style="max-width:1180px; margin:0 auto; padding:0 clamp(20px,4vw,32px)">
+      <div style="padding:clamp(56px,9vw,96px) 0 clamp(96px,14vw,160px); max-width:760px">
+        <a href="#/" onClick="{{ goHome }}" style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; display:inline-block; margin-bottom:64px">{{ t.labels.backHome }}</a>
+
+        <h1 style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; font-size:clamp(32px,6.5vw,56px); line-height:1.1; margin:0 0 24px; color:#F2EFEA">{{ t.resume.title }}</h1>
+        <p style="margin:0 0 32px; color:#8F8880; font-size:18px; text-wrap:pretty">{{ t.resume.lede }}</p>
+        <div style="display:flex; gap:24px; flex-wrap:wrap; font-family:'IBM Plex Mono',monospace; font-size:13px; padding-bottom:64px; border-bottom:1px solid #2A2724">
+          <a href="{{ t.resume.cvFile }}" download="" style="color:#E8E2D9; border-bottom:1px solid #2A2724; padding-bottom:2px">{{ t.resume.download }}</a>
+          <a href="mailto:carlosalbertoliveirajr07@gmail.com" style="color:#8F8880">carlosalbertoliveirajr07@gmail.com</a>
+        </div>
+
+        <sc-for list="{{ t.resume.blocks }}" as="r" hint-placeholder-count="5">
+          <section style="padding:56px 0 0">
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8F8880; margin-bottom:32px">{{ r.label }}</div>
+            <sc-for list="{{ r.rows }}" as="row" hint-placeholder-count="3">
+              <div style="padding:20px 0; border-top:1px solid #2A2724">
+                <div style="display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; align-items:baseline">
+                  <span style="font-size:18px; color:#F2EFEA; font-weight:500">{{ row.k }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880; flex-shrink:0">{{ row.meta }}</span>
+                </div>
+                <p style="margin:8px 0 0; font-size:17px; color:#8F8880; text-wrap:pretty">{{ row.v }}</p>
+              </div>
+            </sc-for>
+          </section>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isNotFound }}" hint-placeholder-val="{{ false }}">
+  <div>
+    <div style="max-width:1180px; margin:0 auto; padding:0 clamp(20px,4vw,32px)">
+      <div style="padding:clamp(96px,16vw,200px) 0 clamp(96px,14vw,200px); max-width:680px">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8F8880; margin-bottom:40px">404</div>
+        <h1 style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; font-size:clamp(32px,6.5vw,56px); line-height:1.1; margin:0 0 32px; color:#F2EFEA; text-wrap:pretty">{{ t.notFound.title }}</h1>
+        <p style="margin:0 0 48px; color:#8F8880; font-size:18px; text-wrap:pretty">{{ t.notFound.body }}</p>
+        <div style="border-top:1px solid #2A2724">
+          <sc-for list="{{ t.notFound.links }}" as="l" hint-placeholder-count="3">
+            <a href="{{ l.href }}" onClick="{{ l.open }}" style="display:flex; justify-content:space-between; gap:24px; padding:20px 0; border-bottom:1px solid #2A2724; color:#F2EFEA; font-size:17px" style-hover="{{ rowHover }}">
+              <span>{{ l.label }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880">{{ l.path }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <footer style="border-top:1px solid #2A2724">
+    <div style="max-width:1180px; margin:0 auto; padding:40px clamp(20px,4vw,32px); display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8F8880">
+      <span>Carlos Alberto Soares de Oliveira Júnior</span>
+      <span>{{ t.contact.location }}</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;pt&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en' | 'pt'&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;showDiagrams&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;}}">
+const EN = {
+  nav: { work: "Work", resume: "Résumé" },
+  hero: {
+    eyebrow: "Brasília, Brazil — open to remote",
+    headline: "Software Engineering Student & Backend Developer",
+    sub: "I build backend systems and data pipelines with Python, C#/.NET, PostgreSQL and Docker. Software Engineering student at UniCEUB, Brasília.",
+    ctaWork: "View selected work →",
+    ctaResume: "Read the résumé"
+  },
+  labels: {
+    selectedWork: "Selected work", experience: "Experience", technicalFocus: "Technical focus",
+    certifications: "Certifications & education", contact: "Contact", readCase: "Read case →",
+    viewSource: "View source →",
+    education: "Education", certs: "Certifications", location: "Location", backHome: "← Index"
+  },
+  work: [
+    { n: "01", name: "CourtIQ", route: "/work/courtiq",
+      title: "From scraping to decision: 19 court adapters behind one API",
+      desc: "A personal SaaS project for monitoring Brazilian judicial proceedings. Each court exposes data through a different portal and structure, with no unified API. I designed an adapter-based architecture that normalizes 19 court integrations (PJe and e-SAJ families) into a single domain model, with async workers, webhooks with retry history, API keys, SDKs, multi-tenant organizations and billing.",
+      status: "Personal project · Not deployed",
+      meta: "Python · FastAPI · PostgreSQL · Redis · Playwright · Docker",
+      viewSource: "https://github.com/junior089" },
+    { n: "02", name: "Avivando", route: "/work/avivando",
+      title: "Two applications, one member base",
+      desc: "A member management platform in production, serving over 500 users. Built on Payload CMS across two integrated applications — a public site and an operational core covering member records, forms, check-in, announcements, activities and role-based access, with role-based access control. Built alongside a senior engineer.",
+      status: "In production, serving over 500 users.",
+      meta: "Jun 2026 – Sep 2026 · React · TypeScript · Payload CMS · PostgreSQL · Node.js" },
+    { n: "03", name: "MAY Derma", route: "/work/may-derma",
+      title: "Keeping a storefront and an external business system in sync",
+      desc: "A WooCommerce platform built and customized for MAY Derma, integrated with external business systems over webhooks and async workers, with idempotency to survive retries and duplicate deliveries.",
+      status: "Delivered · contract",
+      meta: "May 2026 – Jul 2026 · WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux" }
+  ],
+  experience: [
+    { role: "Full Stack Developer", org: "MAY Derma · Contract · Remote", meta: "May 2026 – Jul 2026",
+      desc: "Built and customized a WooCommerce e-commerce platform and integrated it with external business systems. Worked with WordPress, C#/.NET, PostgreSQL, Docker, Nginx and Linux in production.",
+      stack: "WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux" },
+    { role: "Back-end Developer", org: "Agiliza Doutor · Contract · Remote", meta: "Aug 2025 – Feb 2026",
+      desc: "Back-end development on a platform serving the medical and legal sectors, working in Scrum sprints. I built the judicial scraper that later evolved into CourtIQ, and implemented most of the platform's API endpoints — each delivered as a full vertical slice: data modeling, migrations, models and DTOs, repository layer, controller, endpoint and documentation.",
+      stack: "Python · REST APIs · PostgreSQL · Async processing · Scrum" }
+  ],
+  focus: [
+    { group: "Languages", items: "Python · C# / .NET · TypeScript · SQL" },
+    { group: "Backend", items: "FastAPI · REST APIs · Async workers · Webhooks · Idempotency" },
+    { group: "Data", items: "PostgreSQL · Payload CMS · Data modeling · Data normalization" },
+    { group: "Infrastructure", items: "Docker · Linux · Nginx · CI/CD · Git" },
+    { group: "Frontend", items: "React · Next.js · Tailwind CSS" }
+  ],
+  education: { degree: "Bachelor's in Software Engineering", meta: "UniCEUB — Centro Universitário de Brasília · Feb 2026 – Dec 2029" },
+  certs: [
+    { name: "Oracle Cloud Infrastructure 2026 Architect Associate", year: "2026" },
+    { name: "AWS Certified Cloud Practitioner", year: "2026" },
+    { name: "AWS Certified AI Practitioner", year: "2026" }
+  ],
+  contact: {
+    headline: "Open to internships and backend engineering roles.",
+    body: "The fastest way to reach me is email. Code is on GitHub; the résumé is one page and downloadable as PDF.",
+    location: "Brasília, DF, Brazil · Open to remote"
+  },
+  notFound: {
+    title: "This page does not exist.",
+    body: "The address is wrong or the page was moved. Everything on the site is reachable from these three places.",
+    links: [
+      { label: "Index", path: "/" },
+      { label: "Selected work", path: "/#selected-work" },
+      { label: "Résumé", path: "/resume" }
+    ]
+  },
+  resume: {
+    title: "Résumé", lede: "Condensed version. The full document is available as a PDF.",
+    download: "Download PDF ↓", cvFile: "Carlos-Alberto-Oliveira-Jr-CV-EN.pdf",
+    blocks: [
+      { label: "Experience", rows: [
+        { k: "Full Stack Developer", meta: "MAY Derma · May – Jul 2026", v: "Built and customized a WooCommerce platform and integrated it with external business systems. WordPress, C#/.NET, PostgreSQL, Docker, Nginx and Linux in production." },
+        { k: "Back-end Developer", meta: "Agiliza Doutor · Aug 2025 – Feb 2026", v: "Back-end development on a platform serving the medical and legal sectors, in Scrum sprints. Built the judicial scraper that later evolved into CourtIQ and implemented most of the platform's API endpoints as full vertical slices." }
+      ]},
+      { label: "Projects", rows: [
+        { k: "CourtIQ", meta: "Personal project · not deployed", v: "Judicial monitoring SaaS. Adapter-based architecture normalizing 19 court integrations into one domain model. Python, FastAPI, PostgreSQL, Redis, Playwright, Docker." },
+        { k: "Avivando", meta: "Jun – Sep 2026 · in production", v: "Member management platform serving over 500 users, built alongside a senior engineer. Two integrated applications on Payload CMS: public site and operational core, with role-based access control. React, TypeScript, Payload CMS, PostgreSQL, Node.js." },
+        { k: "MAY Derma", meta: "May – Jul 2026 · contract", v: "WooCommerce platform integrated with external business systems over webhooks and idempotent async workers." }
+      ]},
+      { label: "Education", rows: [
+        { k: "Bachelor's in Software Engineering", meta: "UniCEUB · Feb 2026 – Dec 2029", v: "Centro Universitário de Brasília." }
+      ]},
+      { label: "Certifications", rows: [
+        { k: "Oracle Cloud Infrastructure 2026 Architect Associate", meta: "2026", v: "" },
+        { k: "AWS Certified Cloud Practitioner", meta: "2026", v: "" },
+        { k: "AWS Certified AI Practitioner", meta: "2026", v: "" }
+      ]},
+      { label: "Technical", rows: [
+        { k: "Languages & backend", meta: "", v: "Python, C#/.NET, TypeScript, SQL. FastAPI, REST APIs, async workers, webhooks, idempotency." },
+        { k: "Data & infrastructure", meta: "", v: "PostgreSQL, Payload CMS, Docker, Linux, Nginx, CI/CD, Git." }
+      ]}
+    ]
+  }
+};
+
+const PT = {
+  nav: { work: "Trabalhos", resume: "Currículo" },
+  hero: {
+    eyebrow: "Brasília, Brasil — aberto a remoto",
+    headline: "Estudante de Engenharia de Software e desenvolvedor backend",
+    sub: "Construo sistemas backend e pipelines de dados com Python, C#/.NET, PostgreSQL e Docker. Estudante de Engenharia de Software na UniCEUB, Brasília.",
+    ctaWork: "Ver trabalhos selecionados →",
+    ctaResume: "Ver o currículo"
+  },
+  labels: {
+    selectedWork: "Trabalhos selecionados", experience: "Experiência", technicalFocus: "Foco técnico",
+    certifications: "Certificações e formação", contact: "Contato", readCase: "Ler o caso →",
+    viewSource: "Ver código →",
+    education: "Formação", certs: "Certificações", location: "Localização", backHome: "← Índice"
+  },
+  work: [
+    { n: "01", name: "CourtIQ", route: "/work/courtiq",
+      title: "Do scraping à decisão: 19 adaptadores judiciais atrás de uma API",
+      desc: "Projeto pessoal de SaaS para monitoramento de processos judiciais brasileiros. Cada tribunal expõe os dados em um portal e uma estrutura diferentes, sem API unificada. Projetei uma arquitetura baseada em adaptadores que normaliza 19 integrações judiciais (famílias PJe e e-SAJ) em um único modelo de domínio, com workers assíncronos, webhooks com histórico de reenvio, chaves de API, SDKs, organizações multi-tenant e cobrança.",
+      status: "Projeto pessoal · não implantado",
+      meta: "Python · FastAPI · PostgreSQL · Redis · Playwright · Docker" },
+    { n: "02", name: "Avivando", route: "/work/avivando",
+      title: "Duas aplicações, uma base de membros",
+      desc: "Plataforma de gestão de membros em produção, atendendo mais de 500 usuários. Construída sobre Payload CMS em duas aplicações integradas — um site público e um core operacional que cobre cadastro de membros, formulários, check-in, avisos, atividades, com controle de acesso por papéis. Construída ao lado de um engenheiro sênior.",
+      status: "Em produção, atendendo mais de 500 usuários.",
+      meta: "Jun 2026 – Set 2026 · React · TypeScript · Payload CMS · PostgreSQL · Node.js" },
+    { n: "03", name: "MAY Derma", route: "/work/may-derma",
+      title: "Manter a loja e um sistema externo em sincronia",
+      desc: "Plataforma WooCommerce construída e customizada para a MAY Derma, integrada a sistemas externos de negócio via webhooks e workers assíncronos, com idempotência para sobreviver a reenvios e entregas duplicadas.",
+      status: "Entregue · contrato",
+      meta: "Mai 2026 – Jul 2026 · WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux" }
+  ],
+  experience: [
+    { role: "Desenvolvedor Full Stack", org: "MAY Derma · Contrato · Remoto", meta: "Mai 2026 – Jul 2026",
+      desc: "Construí e customizei uma plataforma de e-commerce em WooCommerce e a integrei a sistemas externos de negócio. Trabalhei com WordPress, C#/.NET, PostgreSQL, Docker, Nginx e Linux em produção.",
+      stack: "WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux" },
+    { role: "Desenvolvedor Back-end", org: "Agiliza Doutor · Contrato · Remoto", meta: "Ago 2025 – Fev 2026",
+      desc: "Desenvolvimento back-end em uma plataforma para os setores médico e jurídico, trabalhando em sprints Scrum. Construí o scraper judicial que depois evoluiu para o CourtIQ e implementei a maior parte dos endpoints da API da plataforma — cada um entregue como fatia vertical completa: modelagem de dados, migrações, models e DTOs, camada de repositório, controller, endpoint e documentação.",
+      stack: "Python · APIs REST · PostgreSQL · Processamento assíncrono · Scrum" }
+  ],
+  focus: [
+    { group: "Linguagens", items: "Python · C# / .NET · TypeScript · SQL" },
+    { group: "Backend", items: "FastAPI · APIs REST · Workers assíncronos · Webhooks · Idempotência" },
+    { group: "Dados", items: "PostgreSQL · Payload CMS · Modelagem de dados · Normalização de dados" },
+    { group: "Infraestrutura", items: "Docker · Linux · Nginx · CI/CD · Git" },
+    { group: "Frontend", items: "React · Next.js · Tailwind CSS" }
+  ],
+  education: { degree: "Bacharelado em Engenharia de Software", meta: "UniCEUB — Centro Universitário de Brasília · Fev 2026 – Dez 2029" },
+  certs: [
+    { name: "Oracle Cloud Infrastructure 2026 Architect Associate", year: "2026" },
+    { name: "AWS Certified Cloud Practitioner", year: "2026" },
+    { name: "AWS Certified AI Practitioner", year: "2026" }
+  ],
+  contact: {
+    headline: "Aberto a estágios e vagas de engenharia backend.",
+    body: "O caminho mais rápido é o email. O código está no GitHub; o currículo tem uma página e pode ser baixado em PDF.",
+    location: "Brasília, DF, Brasil · Aberto a remoto"
+  },
+  notFound: {
+    title: "Esta página não existe.",
+    body: "O endereço está errado ou a página foi movida. Tudo no site é alcançável a partir destes três lugares.",
+    links: [
+      { label: "Índice", path: "/pt" },
+      { label: "Trabalhos selecionados", path: "/pt#selected-work" },
+      { label: "Currículo", path: "/pt/resume" }
+    ]
+  },
+  resume: {
+    title: "Currículo", lede: "Versão resumida. O documento completo está disponível em PDF.",
+    download: "Baixar PDF ↓", cvFile: "Carlos-Alberto-Oliveira-Jr-CV-PT.pdf",
+    blocks: [
+      { label: "Experiência", rows: [
+        { k: "Desenvolvedor Full Stack", meta: "MAY Derma · Mai – Jul 2026", v: "Construí e customizei uma plataforma WooCommerce e a integrei a sistemas externos de negócio. WordPress, C#/.NET, PostgreSQL, Docker, Nginx e Linux em produção." },
+        { k: "Desenvolvedor Back-end", meta: "Agiliza Doutor · Ago 2025 – Fev 2026", v: "Desenvolvimento back-end em plataforma para os setores médico e jurídico, em sprints Scrum. Construí o scraper judicial que evoluiu para o CourtIQ e implementei a maior parte dos endpoints da API como fatias verticais completas." }
+      ]},
+      { label: "Projetos", rows: [
+        { k: "CourtIQ", meta: "Projeto pessoal · não implantado", v: "SaaS de monitoramento judicial. Arquitetura de adaptadores normalizando 19 integrações judiciais em um modelo de domínio. Python, FastAPI, PostgreSQL, Redis, Playwright, Docker." },
+        { k: "Avivando", meta: "Jun – Set 2026 · em produção", v: "Plataforma de gestão de membros atendendo mais de 500 usuários, construída ao lado de um engenheiro sênior. Duas aplicações integradas sobre Payload CMS: site público e core operacional, com controle de acesso por papéis. React, TypeScript, Payload CMS, PostgreSQL, Node.js." },
+        { k: "MAY Derma", meta: "Mai – Jul 2026 · contrato", v: "Plataforma WooCommerce integrada a sistemas externos de negócio via webhooks e workers assíncronos idempotentes." }
+      ]},
+      { label: "Formação", rows: [
+        { k: "Bacharelado em Engenharia de Software", meta: "UniCEUB · Fev 2026 – Dez 2029", v: "Centro Universitário de Brasília." }
+      ]},
+      { label: "Certificações", rows: [
+        { k: "Oracle Cloud Infrastructure 2026 Architect Associate", meta: "2026", v: "" },
+        { k: "AWS Certified Cloud Practitioner", meta: "2026", v: "" },
+        { k: "AWS Certified AI Practitioner", meta: "2026", v: "" }
+      ]},
+      { label: "Técnico", rows: [
+        { k: "Linguagens e backend", meta: "", v: "Python, C#/.NET, TypeScript, SQL. FastAPI, APIs REST, workers assíncronos, webhooks, idempotência." },
+        { k: "Dados e infraestrutura", meta: "", v: "PostgreSQL, Payload CMS, Docker, Linux, Nginx, CI/CD, Git." }
+      ]}
+    ]
+  }
+};
+
+const CASES_EN = {
+  courtiq: {
+    eyebrow: "Case study 01 · CourtIQ",
+    title: "From scraping to decision: 19 court adapters behind one API",
+    lede: "CourtIQ is my personal SaaS project for monitoring Brazilian judicial proceedings. It is not deployed. Everything below was designed, built and validated in a controlled environment.",
+    meta: [
+      { k: "Role", v: "Sole developer · architecture, API, scraper, portal" },
+      { k: "Status", v: "Personal project · not deployed" },
+      { k: "Stack", v: "Python · FastAPI · PostgreSQL · Redis · Playwright · Docker" },
+      { k: "Surface", v: "REST API · API keys · SDKs · webhooks · portal" }
+    ],
+    viewSource: "https://github.com/junior089",
+    numbersLabel: "Audited in the repository",
+    numbers: [
+      "19 judicial adapters registered",
+      "634 tests passing in consolidated validation — 504 API (66.42% line coverage), 41 scraper (73.45%), 89 frontend",
+      "~19,500 lines of Python in the API core, across 185 files",
+      "~33,900 lines of TS/TSX in the portal, across 190 files"
+    ],
+    numbersNote: "Counts come from the repository itself. There are no production numbers on this page because there is no production.",
+    sections: [
+      { h: "Context", paras: [
+        "Brazilian judicial proceedings are public, but they are not accessible. Each court runs its own portal, with its own layout, its own session handling and its own idea of what a case record contains. A lawyer tracking twenty cases across four states opens four different websites and reads four different vocabularies.",
+        "CourtIQ is the product I wanted to exist when I was writing a judicial scraper at Agiliza Doutor. I designed it as a single API that answers one question — what changed in this proceeding — regardless of which court holds it."
+      ]},
+      { h: "The problem", paras: [
+        "There is no unified API. Two portal families cover most of the territory, PJe and e-SAJ, and it is tempting to treat each family as one integration. That is wrong. A family is a resemblance, not a contract. Markup differs per state, pagination differs, authentication and rate limits differ, and the same field carries a different label and occasionally a different meaning.",
+        "Writing one scraper per court solves the extraction problem and creates a worse one: nineteen codebases that drift apart, each with its own shape of output, and a consumer that has to know which court it is talking to. The real work is not fetching pages. It is deciding what a proceeding is, once, and forcing every court to speak it."
+      ]},
+      { h: "Constraints", paras: [], bullets: [
+        { k: "No contract", v: "No official API and no notice when a portal changes. Any design that assumes stable HTML is a design that breaks silently." },
+        { k: "Heterogeneity", v: "19 integrations across two portal families, each with its own session, markup and limits." },
+        { k: "Extensibility", v: "Adding the twentieth court must not require touching the nineteen that already work, or the domain model." },
+        { k: "One developer", v: "I am the whole team. Anything operationally expensive is effectively unavailable to me." }
+      ]},
+      { h: "Architecture", paras: [
+        "The system is a monolithic FastAPI application with a queue in front of the workers. A client authenticates with an API key, registers the proceedings it cares about, and receives changes by webhook. Nothing is scraped during a request.",
+        "The adapter layer is where the heterogeneity is contained. Each court has an adapter that knows exactly one thing: how to turn that portal's pages into the domain model. Adapters are registered rather than hardcoded, so the pipeline downstream — normalization, persistence, change detection, notification — never learns which court produced the data."
+      ], diagram: { caption: "Fig. 1 — The adapter layer is the only place in the system that knows a court exists. Everything downstream sees one domain model.", layers: [
+        { nodes: [ { label: "REST API", sub: "FastAPI · API keys · SDKs" } ], hasEdge: true, edge: "enqueue job · never scrape in-request" },
+        { nodes: [ { label: "Queue", sub: "Redis" } ], hasEdge: true, edge: "async workers" },
+        { nodes: [ { label: "Workers", sub: "Playwright · retry & backoff" } ], hasEdge: true, edge: "one adapter per court · PJe & e-SAJ families" },
+        { nodes: [ { label: "19 court adapters", sub: "registered, not hardcoded" } ], hasEdge: true, edge: "normalization · single domain model" },
+        { nodes: [ { label: "PostgreSQL", sub: "proceedings · events · tenants" } ], hasEdge: true, edge: "change detected" },
+        { nodes: [ { label: "Webhooks", sub: "retry history" }, { label: "Notifications", sub: "per organization" } ], hasEdge: false }
+      ]}},
+      { h: "Key decisions and trade-offs", paras: [
+        "Four decisions shaped the system, and each of them cost something."
+      ], bullets: [
+        { k: "Adapter per court", v: "I chose one adapter per court over a configurable generic scraper. A config-driven parser looks cheaper until the first court that paginates differently, and then the config language becomes a programming language with no debugger. The cost is 19 units to maintain instead of one; the benefit is that a court changing its HTML breaks exactly one file." },
+        { k: "Browser automation", v: "I chose Playwright over raw HTTP parsing. Several portals render results through JavaScript and defend against plain requests, so HTTP-level scraping would have needed per-court reverse engineering. The cost is real: browsers are slow and memory-hungry, which forces the queue and makes each worker expensive." },
+        { k: "Queue, not request-time", v: "Scraping never happens inside an API call. A court being slow or down would otherwise become my API being slow or down. The cost is that every read is eventually consistent, and the product has to be honest about when data was last seen." },
+        { k: "Webhooks over polling", v: "Clients are notified instead of asking. Delivery is at-least-once with retry history, which pushes idempotency onto the consumer — so the SDKs document a deduplication key rather than pretending exactly-once delivery exists." },
+        { k: "Monolith", v: "One deployable, not services. For a single developer, the operational cost of a distributed system is paid daily and the benefit is theoretical until there is traffic. The boundaries are enforced in the code layout so they can be split later if there is ever a reason." }
+      ]},
+      { h: "Implementation", paras: [
+        "The API core is about 19,500 lines of Python across 185 files: domain model, adapter registry, workers, multi-tenant organizations, API keys, webhook delivery with retry history, SDKs and billing. The portal is a separate TypeScript surface of about 33,900 lines across 190 files, covering onboarding, proceeding management, key issuance and delivery logs.",
+        "Multi-tenancy is in the data model from the first migration rather than added later. Retrofitting tenant isolation onto a schema that assumed one customer is the kind of migration that is never clean, and the cost of doing it up front is a mandatory organization column and a slightly noisier query layer."
+      ]},
+      { h: "Quality and tests", paras: [
+        "Consolidated validation runs 634 tests: 504 for the API at 66.42% line coverage, 41 for the scraper at 73.45%, and 89 for the frontend. Adapters are tested against saved page fixtures, so a parsing regression is caught without hitting a live court.",
+        "Coverage is the number I trust least. Line coverage says my code ran; it says nothing about a court silently renaming a field, which is the failure mode that actually matters here. The honest test for this system is a scheduled run against real portals with alerting on shape changes, and that is not something a test suite can substitute for."
+      ]},
+      { h: "Results", paras: [
+        "What was demonstrated: 19 court integrations normalized into one domain model, an asynchronous pipeline that isolates the API from unreliable upstreams, and webhook delivery with retry history, all validated in a controlled environment against fixtures and test tenants.",
+        "What was not demonstrated: anything about behaviour under real load, real proceeding volume or real customers. The project is not deployed, so there are no uptime, volume or revenue figures — and I would rather show the architecture than borrow numbers I did not measure."
+      ]},
+      { h: "Retrospective", paras: [
+        "I would invest earlier in adapter contract tests — a single shared suite every adapter must satisfy, so a new court is finished when it passes rather than when it looks right. I would also build the shape-change alarm before the billing code: for a scraping product, detecting that a portal moved is more valuable than anything downstream of it.",
+        "The decision I would repeat is the adapter boundary. It is the reason the nineteenth integration cost roughly what the third did, and the reason the domain model survived every portal I pointed it at."
+      ]}
+    ]
+  },
+  avivando: {
+    eyebrow: "Case study 02 · Avivando",
+    title: "Two applications, one member base",
+    lede: "Avivando is a member management platform in production, serving over 500 users. It is two integrated applications built on Payload CMS — a public site and an operational core covering member records, forms, check-in, announcements and activities, with role-based access control. Built alongside a senior engineer.",
+    meta: [
+      { k: "Role", v: "Built in a pair with a senior engineer" },
+      { k: "Status", v: "In production, serving over 500 users." },
+      { k: "Stack", v: "React · TypeScript · Payload CMS · PostgreSQL · Node.js" },
+      { k: "Timeline", v: "Jun 2026 – Sep 2026" }
+    ],
+    numbersLabel: "Audited in the workspace · snapshot 12 Sep 2026",
+    numbers: [
+      "2 independent, integrated applications",
+      "23 content modules · 13 migrations in the core",
+      "22 API/BFF routes across both applications",
+      "181 automated tests",
+      "CI with lint, type checking, tests and build against an isolated PostgreSQL, plus Playwright end-to-end"
+    ],
+    numbersNote: "Counts come from the workspace. The user figure is measured, not estimated.",
+    sections: [
+      { h: "Context", paras: [
+        "The platform serves an organization that tracks members, runs activities and needs different people to see different things. It is two applications: a public site, and an operational core with member records, forms, check-in, announcements, activities and role-based access.",
+        "I worked in a pair with a senior engineer. The two of us shared the codebase throughout, and my design decisions were questioned in review — that loop is where most of the reasoning on this page came from. I am not going to draw a line through the work and claim a side of it."
+      ]},
+      { h: "The problem", paras: [
+        "A member management platform is mostly a permissions problem wearing a CRUD costume. Leaders see their own group; coordinators see several groups; administrators see everything; a member sees themselves. Every list, every dashboard, every export and every check-in screen has to answer the same question — who is allowed to see this row — and answer it identically.",
+        "The second problem is that two applications read overlapping data. A public site and an operational core with separate front ends can easily drift into two definitions of what a member is, two shapes for an activity, two places to change when a field is added."
+      ]},
+      { h: "Constraints", paras: [], bullets: [
+        { k: "Two front doors", v: "A public site and an operational core read overlapping data with entirely different audiences." },
+        { k: "Real data", v: "Member records of a live organization. A leak is not a bug report, it is a disclosure." },
+        { k: "Shared ownership", v: "Every decision had to be legible to the other engineer on the project." },
+        { k: "Small team", v: "Two developers. Nothing could depend on remembering to be careful." }
+      ]},
+      { h: "The architecture", paras: [
+        "Payload CMS, running on Node.js and TypeScript, is the core. Content and domain objects are declared as collections in code; PostgreSQL is the store, reached through @payloadcms/db-postgres, and schema changes are migrations checked into the repository alongside the collection definitions.",
+        "The public site is a separate application that integrates with the core rather than talking to the database on its own. Both applications end up reading one definition of a member, one definition of an activity, and one set of API routes over them. Adding a field is one change in one place.",
+        "Access control is role-based and configured per collection in Payload. Roles decide what each collection exposes, and the same configuration governs both applications."
+      ], diagram: { caption: "Fig. 2 — One core, one schema, two front ends. The public site integrates with the core rather than reaching past it.", layers: [
+        { nodes: [ { label: "Public site", sub: "React · TypeScript" }, { label: "Operational core", sub: "Payload CMS · 23 modules" } ], hasEdge: true, edge: "22 API / BFF routes" },
+        { nodes: [ { label: "Role-based access control", sub: "configured per collection" } ], hasEdge: true, edge: "permitted data only" },
+        { nodes: [ { label: "PostgreSQL", sub: "@payloadcms/db-postgres · 13 migrations" } ], hasEdge: false }
+      ]}},
+      { h: "Trade-offs", paras: [
+        "Building the core on a CMS rather than a bespoke service is a real choice with real costs."
+      ], bullets: [
+        { k: "Framework shape", v: "Payload decides a lot: how collections are declared, how access is configured, how the admin surface is generated. That is most of the reason the project moved quickly, and it is also the reason anything the framework does not model well has to be worked around instead of designed." },
+        { k: "Coupling", v: "Two applications sharing one core means a change to a collection is a change to both. The single definition is the point, but it removes the option of letting one side move on its own." },
+        { k: "Migrations", v: "Schema lives in code and ships as migrations, so a field rename is a reviewed change with a history. It also means no quick fixes in the database — 13 migrations is 13 deliberate steps." },
+        { k: "Testing cost", v: "Correctness depends on the database, so CI runs against an isolated PostgreSQL instead of a mock. Slower pipeline, but a test run without a database would prove very little here." }
+      ]},
+      { h: "Quality and tests", paras: [
+        "There are 181 automated tests, and CI runs lint, type checking, tests and build against an isolated PostgreSQL instance, plus end-to-end tests with Playwright.",
+        "The pipeline is the part I would defend hardest. Two people on a live system with real member data need a gate that does not depend on either of them being careful that day."
+      ]},
+      { h: "Results", paras: [
+        "In production, serving over 500 users. Two integrated applications, 23 content modules and 22 API/BFF routes run against a single core and a single schema.",
+        "The outcome I care about is narrower than a usage number: a field added to a member is added once, and both applications see it."
+      ]},
+      { h: "What this case does not claim", paras: [
+        "A specific database-level authorization mechanism. Access control is role-based and configured per collection in Payload CMS; the underlying policies were not independently re-verified for this write-up, so this page does not describe them in more detail than that.",
+        "A division of labour. The work was done in a pair and the commit history does not accurately reflect how effort was split, so there is no per-directory or per-commit authorship claim here — only that I was one of the two people who built it."
+      ]},
+      { h: "Retrospective", paras: [
+        "The part worth carrying forward is the single definition. Two applications, one schema, one place where a member is described. Most of the bugs this project did not have are bugs of two systems disagreeing about the same row.",
+        "What I would do differently is write the access-control test matrix first — one seeded user per role, one assertion per collection — instead of growing it behind the features. The tests that exist were largely written to catch behaviour I had already shipped to staging."
+      ]}
+    ]
+  },
+  maderma: {
+    eyebrow: "Case study 03 · MAY Derma",
+    title: "Keeping a storefront and an external business system in sync",
+    lede: "A WooCommerce e-commerce platform built and customized for MAY Derma and integrated with the company's external business systems. Delivered as a remote contract between May and July 2026.",
+    meta: [
+      { k: "Role", v: "Full Stack Developer · contract, remote" },
+      { k: "Status", v: "Delivered" },
+      { k: "Stack", v: "WordPress · WooCommerce · C#/.NET · PostgreSQL · Docker · Nginx · Linux" },
+      { k: "Timeline", v: "May 2026 – Jul 2026" }
+    ],
+    numbersLabel: "Scope",
+    numbers: [
+      "1 WooCommerce storefront, built and customized",
+      "Integration with the client's external business systems over webhooks",
+      "Idempotent async consumers in C#/.NET",
+      "Deployed in Docker behind Nginx on Linux"
+    ],
+    numbersNote: "The client authorized this level of detail. The external systems are not named, and no commercial figures are published.",
+    sections: [
+      { h: "Context", paras: [
+        "MAY Derma needed a storefront that was not an island. Orders taken online had to arrive in the systems the business already ran on, and product and stock data maintained back-office had to be reflected in the store. I built and customized the WooCommerce platform and then built the integration between the two sides."
+      ]},
+      { h: "The problem", paras: [
+        "A storefront and a back-office system disagree the moment either one can change state independently. Orders, stock and customer records exist in both, and neither is naturally the follower. The work was to decide, record by record, which system owns the truth and how the other finds out about it.",
+        "The tempting shortcut is to have the storefront call the other system directly at checkout. It is the smallest amount of code and the worst failure mode: a checkout that depends on the back office being reachable is a checkout that fails when the back office is down."
+      ]},
+      { h: "The integration", paras: [
+        "Communication runs over webhooks into asynchronous workers. The storefront emits an event when something happens; a worker picks it up, translates it, and writes to the other side. If the destination is unavailable, the event waits and is retried instead of being lost at the till.",
+        "Because delivery is at-least-once, every consumer is idempotent. The same event arriving twice produces one order, not two — deduplicated on the event's own identifier before any write. This is the part of the design I would defend hardest: retries are not an edge case, they are the normal operating mode of a webhook integration."
+      ], diagram: { caption: "Fig. 3 — The storefront never calls the external system synchronously. Every write crosses an idempotent consumer.", layers: [
+        { nodes: [ { label: "WooCommerce", sub: "WordPress · storefront" } ], hasEdge: true, edge: "webhook · order & stock events" },
+        { nodes: [ { label: "Async workers", sub: "C#/.NET · idempotent consumers" } ], hasEdge: true, edge: "deduplicated writes · retry on failure" },
+        { nodes: [ { label: "PostgreSQL", sub: "integration state" }, { label: "External business systems", sub: "client-side" } ], hasEdge: false }
+      ]}},
+      { h: "Trade-offs", paras: [], bullets: [
+        { k: "Async over sync", v: "Queued events keep checkout available when the back office is not. The cost is that the two systems are only eventually consistent, so the store can briefly show stock the back office has already moved." },
+        { k: "Idempotency cost", v: "Every consumer carries deduplication state, which is extra storage and an extra thing to reason about. The alternative is duplicate orders, which is not a trade-off at all." },
+        { k: "WooCommerce", v: "Building on WordPress meant the catalogue and checkout came for free and the extension points did not. Customization work goes where the plugin ecosystem stops, and that boundary is where most of the effort went." },
+        { k: "Docker on a single host", v: "Containers behind Nginx gave reproducible deploys without introducing an orchestrator the client would have to operate after I left. It is a deliberate ceiling." }
+      ]},
+      { h: "Results", paras: [
+        "Delivered and handed over: the storefront runs in Docker behind Nginx on Linux, and orders and stock cross between the store and the client's systems through retryable, idempotent workers rather than synchronous calls.",
+        "I am not publishing commercial figures for this project. The client authorized the technical description above, not their sales data."
+      ]},
+      { h: "Retrospective", paras: [
+        "The integration would have been easier to operate with a delivery log surfaced in the admin from day one — a screen that answers \"did this order reach the other side, and if not, why\" without opening a database. I built the reliability and under-built the visibility into it.",
+        "What I would repeat is refusing the synchronous shortcut. It was more work in week one and it is the reason the store's availability does not depend on someone else's uptime."
+      ]}
+    ]
+  }
+};
+
+const CASES_PT = {
+  courtiq: {
+    eyebrow: "Estudo de caso 01 · CourtIQ",
+    title: "Do scraping à decisão: 19 adaptadores judiciais atrás de uma API",
+    lede: "O CourtIQ é meu projeto pessoal de SaaS para monitoramento de processos judiciais brasileiros. Ele não está implantado. Tudo abaixo foi projetado, construído e validado em ambiente controlado.",
+    meta: [
+      { k: "Papel", v: "Desenvolvedor único · arquitetura, API, scraper, portal" },
+      { k: "Status", v: "Projeto pessoal · não implantado" },
+      { k: "Stack", v: "Python · FastAPI · PostgreSQL · Redis · Playwright · Docker" },
+      { k: "Superfície", v: "API REST · chaves de API · SDKs · webhooks · portal" }
+    ],
+    viewSource: "https://github.com/junior089",
+    numbersLabel: "Auditado no repositório",
+    numbers: [
+      "19 adaptadores judiciais registrados",
+      "634 testes aprovados na validação consolidada — 504 da API (66,42% de cobertura de linhas), 41 do scraper (73,45%), 89 do frontend",
+      "~19,5 mil linhas de Python no núcleo da API, em 185 arquivos",
+      "~33,9 mil linhas de TS/TSX no portal, em 190 arquivos"
+    ],
+    numbersNote: "As contagens vêm do próprio repositório. Não há números de produção nesta página porque não há produção.",
+    sections: [
+      { h: "Contexto", paras: [
+        "Processos judiciais brasileiros são públicos, mas não são acessíveis. Cada tribunal mantém o próprio portal, com o próprio layout, a própria sessão e a própria ideia do que um processo contém. Um advogado acompanhando vinte casos em quatro estados abre quatro sites diferentes e lê quatro vocabulários diferentes.",
+        "O CourtIQ é o produto que eu queria que existisse quando escrevia um scraper judicial na Agiliza Doutor. Projetei como uma API única que responde a uma pergunta — o que mudou neste processo — independentemente de qual tribunal o guarda."
+      ]},
+      { h: "O problema", paras: [
+        "Não existe API unificada. Duas famílias de portal cobrem a maior parte do território, PJe e e-SAJ, e é tentador tratar cada família como uma integração. É errado. Família é semelhança, não contrato. O markup muda por estado, a paginação muda, autenticação e limites de requisição mudam, e o mesmo campo aparece com outro rótulo e, às vezes, outro significado.",
+        "Escrever um scraper por tribunal resolve a extração e cria um problema pior: dezenove bases de código que divergem, cada uma com seu formato de saída, e um consumidor que precisa saber com qual tribunal está falando. O trabalho de verdade não é buscar páginas. É decidir o que é um processo, uma única vez, e obrigar todo tribunal a falar isso."
+      ]},
+      { h: "Restrições", paras: [], bullets: [
+        { k: "Sem contrato", v: "Nenhuma API oficial e nenhum aviso quando um portal muda. Qualquer design que assuma HTML estável é um design que quebra em silêncio." },
+        { k: "Heterogeneidade", v: "19 integrações em duas famílias de portal, cada uma com sessão, markup e limites próprios." },
+        { k: "Extensibilidade", v: "Adicionar o vigésimo tribunal não pode exigir mexer nos dezenove que já funcionam, nem no modelo de domínio." },
+        { k: "Um desenvolvedor", v: "Eu sou o time inteiro. O que é caro de operar é, na prática, indisponível para mim." }
+      ]},
+      { h: "Arquitetura", paras: [
+        "O sistema é uma aplicação FastAPI monolítica com uma fila à frente dos workers. O cliente se autentica com uma chave de API, registra os processos que lhe interessam e recebe as mudanças por webhook. Nada é raspado durante uma requisição.",
+        "A camada de adaptadores é onde a heterogeneidade fica contida. Cada tribunal tem um adaptador que sabe exatamente uma coisa: como transformar as páginas daquele portal no modelo de domínio. Os adaptadores são registrados, não hardcoded, então o resto do pipeline — normalização, persistência, detecção de mudança, notificação — nunca descobre qual tribunal produziu o dado."
+      ], diagram: { caption: "Fig. 1 — A camada de adaptadores é o único lugar do sistema que sabe que tribunais existem. Tudo depois dela vê um modelo de domínio só.", layers: [
+        { nodes: [ { label: "API REST", sub: "FastAPI · chaves de API · SDKs" } ], hasEdge: true, edge: "enfileira o job · nunca raspa na requisição" },
+        { nodes: [ { label: "Fila", sub: "Redis" } ], hasEdge: true, edge: "workers assíncronos" },
+        { nodes: [ { label: "Workers", sub: "Playwright · retry e backoff" } ], hasEdge: true, edge: "um adaptador por tribunal · famílias PJe e e-SAJ" },
+        { nodes: [ { label: "19 adaptadores judiciais", sub: "registrados, não hardcoded" } ], hasEdge: true, edge: "normalização · modelo de domínio único" },
+        { nodes: [ { label: "PostgreSQL", sub: "processos · eventos · tenants" } ], hasEdge: true, edge: "mudança detectada" },
+        { nodes: [ { label: "Webhooks", sub: "histórico de reenvio" }, { label: "Notificações", sub: "por organização" } ], hasEdge: false }
+      ]}},
+      { h: "Decisões-chave e trade-offs", paras: [
+        "Quatro decisões moldaram o sistema, e cada uma custou algo."
+      ], bullets: [
+        { k: "Adaptador por tribunal", v: "Escolhi um adaptador por tribunal em vez de um scraper genérico configurável. Um parser guiado por configuração parece mais barato até o primeiro tribunal que pagina diferente, e então a linguagem de configuração vira uma linguagem de programação sem debugger. O custo são 19 unidades para manter em vez de uma; o ganho é que um tribunal mudando o HTML quebra exatamente um arquivo." },
+        { k: "Automação de navegador", v: "Escolhi Playwright em vez de parsing HTTP puro. Vários portais renderizam resultados por JavaScript e se defendem de requisições simples, então o caminho HTTP exigiria engenharia reversa por tribunal. O custo é real: navegadores são lentos e comem memória, o que obriga a fila e deixa cada worker caro." },
+        { k: "Fila, não requisição", v: "O scraping nunca acontece dentro de uma chamada de API. Sem isso, um tribunal lento ou fora do ar vira a minha API lenta ou fora do ar. O custo é que toda leitura é eventualmente consistente, e o produto tem de ser honesto sobre quando o dado foi visto pela última vez." },
+        { k: "Webhooks em vez de polling", v: "Os clientes são notificados em vez de perguntarem. A entrega é at-least-once com histórico de reenvio, o que empurra a idempotência para o consumidor — então os SDKs documentam uma chave de deduplicação em vez de fingir que entrega exactly-once existe." },
+        { k: "Monólito", v: "Um artefato de deploy, não serviços. Para um desenvolvedor só, o custo operacional de um sistema distribuído se paga todo dia e o benefício é teórico enquanto não há tráfego. As fronteiras estão marcadas na organização do código, para poderem ser separadas se houver motivo." }
+      ]},
+      { h: "Implementação", paras: [
+        "O núcleo da API tem cerca de 19,5 mil linhas de Python em 185 arquivos: modelo de domínio, registro de adaptadores, workers, organizações multi-tenant, chaves de API, entrega de webhooks com histórico de reenvio, SDKs e cobrança. O portal é uma superfície TypeScript separada de cerca de 33,9 mil linhas em 190 arquivos, cobrindo onboarding, gestão de processos, emissão de chaves e logs de entrega.",
+        "O multi-tenant está no modelo de dados desde a primeira migração, e não colado depois. Adaptar isolamento de tenant a um schema que assumiu um cliente só é o tipo de migração que nunca sai limpa; o custo de fazer antes é uma coluna de organização obrigatória e uma camada de query um pouco mais ruidosa."
+      ]},
+      { h: "Qualidade e testes", paras: [
+        "A validação consolidada roda 634 testes: 504 da API com 66,42% de cobertura de linhas, 41 do scraper com 73,45% e 89 do frontend. Os adaptadores são testados contra fixtures de páginas salvas, então uma regressão de parsing é pega sem acessar um tribunal ao vivo.",
+        "Cobertura é o número em que confio menos. Cobertura de linhas diz que meu código executou; não diz nada sobre um tribunal renomear um campo em silêncio, que é o modo de falha que realmente importa aqui. O teste honesto para este sistema é uma execução agendada contra os portais reais com alerta de mudança de estrutura, e isso nenhuma suíte de testes substitui."
+      ]},
+      { h: "Resultados", paras: [
+        "O que ficou demonstrado: 19 integrações judiciais normalizadas em um modelo de domínio, um pipeline assíncrono que isola a API de fontes instáveis e entrega de webhooks com histórico de reenvio, tudo validado em ambiente controlado contra fixtures e tenants de teste.",
+        "O que não ficou demonstrado: qualquer coisa sobre comportamento sob carga real, volume real de processos ou clientes reais. O projeto não está implantado, então não há números de uptime, volume ou receita — e prefiro mostrar a arquitetura a emprestar números que não medi."
+      ]},
+      { h: "Retrospectiva", paras: [
+        "Investiria mais cedo em testes de contrato de adaptador — uma suíte compartilhada que todo adaptador precisa satisfazer, para que um tribunal novo esteja pronto quando passa, e não quando parece certo. Também construiria o alarme de mudança de estrutura antes do código de cobrança: para um produto de scraping, detectar que um portal mudou vale mais do que qualquer coisa depois disso.",
+        "A decisão que eu repetiria é a fronteira do adaptador. É a razão pela qual a décima nona integração custou aproximadamente o que custou a terceira, e a razão pela qual o modelo de domínio sobreviveu a todo portal que apontei para ele."
+      ]}
+    ]
+  },
+  avivando: {
+    eyebrow: "Estudo de caso 02 · Avivando",
+    title: "Duas aplicações, uma base de membros",
+    lede: "O Avivando é uma plataforma de gestão de membros em produção, atendendo mais de 500 usuários. São duas aplicações integradas construídas sobre Payload CMS — um site público e um core operacional que cobre cadastro de membros, formulários, check-in, avisos e atividades, com controle de acesso por papéis. Construída ao lado de um engenheiro sênior.",
+    meta: [
+      { k: "Papel", v: "Construído em dupla com um engenheiro sênior" },
+      { k: "Status", v: "Em produção, atendendo mais de 500 usuários." },
+      { k: "Stack", v: "React · TypeScript · Payload CMS · PostgreSQL · Node.js" },
+      { k: "Período", v: "Jun 2026 – Set 2026" }
+    ],
+    numbersLabel: "Auditado no workspace · snapshot de 12/09/2026",
+    numbers: [
+      "2 aplicações independentes e integradas",
+      "23 módulos de conteúdo · 13 migrações no core",
+      "22 rotas de API/BFF nas duas aplicações",
+      "181 testes automatizados",
+      "CI com lint, checagem de tipos, testes e build contra PostgreSQL isolado, mais end-to-end com Playwright"
+    ],
+    numbersNote: "As contagens vêm do workspace. O número de usuários é medido, não estimado.",
+    sections: [
+      { h: "Contexto", paras: [
+        "A plataforma atende uma organização que acompanha membros, realiza atividades e precisa que pessoas diferentes vejam coisas diferentes. São duas aplicações: um site público e um core operacional com cadastro de membros, formulários, check-in, avisos, atividades e acesso por papéis.",
+        "Trabalhei em dupla com um engenheiro sênior. Os dois compartilharam o código o tempo todo, e minhas decisões de design eram questionadas em review — esse ciclo é a origem de boa parte do raciocínio desta página. Não vou traçar uma linha no trabalho e reivindicar um lado dela."
+      ]},
+      { h: "O problema", paras: [
+        "Uma plataforma de gestão de membros é, no fundo, um problema de permissões vestido de CRUD. Líderes veem o próprio grupo; coordenadores veem vários grupos; administradores veem tudo; um membro vê a si mesmo. Toda lista, todo dashboard, toda exportação e toda tela de check-in precisa responder à mesma pergunta — quem pode ver esta linha — e responder igual.",
+        "O segundo problema é que duas aplicações leem dados sobrepostos. Um site público e um core operacional com front ends separados escorregam com facilidade para duas definições do que é um membro, dois formatos de atividade, dois lugares para mexer quando um campo é adicionado."
+      ]},
+      { h: "Restrições", paras: [], bullets: [
+        { k: "Duas portas", v: "Um site público e um core operacional leem dados sobrepostos com públicos completamente diferentes." },
+        { k: "Dado real", v: "Cadastro de membros de uma organização em operação. Um vazamento não é relato de bug, é divulgação indevida." },
+        { k: "Autoria dividida", v: "Toda decisão precisava ser legível para o outro engenheiro do projeto." },
+        { k: "Time pequeno", v: "Dois desenvolvedores. Nada podia depender de alguém lembrar de ter cuidado." }
+      ]},
+      { h: "A arquitetura", paras: [
+        "O Payload CMS, em Node.js e TypeScript, é o core. Conteúdo e objetos de domínio são declarados como coleções em código; o PostgreSQL é o armazenamento, acessado via @payloadcms/db-postgres, e mudanças de schema são migrações versionadas no repositório junto das definições de coleção.",
+        "O site público é uma aplicação separada que se integra ao core, em vez de falar com o banco por conta própria. As duas aplicações acabam lendo uma definição de membro, uma definição de atividade e um conjunto de rotas de API sobre elas. Adicionar um campo é uma mudança em um lugar.",
+        "O controle de acesso é baseado em papéis e configurado por coleção no Payload. Os papéis determinam o que cada coleção expõe, e a mesma configuração vale para as duas aplicações."
+      ], diagram: { caption: "Fig. 2 — Um core, um schema, dois front ends. O site público se integra ao core em vez de passar por cima dele.", layers: [
+        { nodes: [ { label: "Site público", sub: "React · TypeScript" }, { label: "Core operacional", sub: "Payload CMS · 23 módulos" } ], hasEdge: true, edge: "22 rotas de API / BFF" },
+        { nodes: [ { label: "Controle de acesso por papéis", sub: "configurado por coleção" } ], hasEdge: true, edge: "apenas dados permitidos" },
+        { nodes: [ { label: "PostgreSQL", sub: "@payloadcms/db-postgres · 13 migrações" } ], hasEdge: false }
+      ]}},
+      { h: "Trade-offs", paras: [
+        "Construir o core sobre um CMS em vez de um serviço sob medida é uma escolha real, com custos reais."
+      ], bullets: [
+        { k: "Forma do framework", v: "O Payload decide muita coisa: como as coleções são declaradas, como o acesso é configurado, como a superfície de admin é gerada. É boa parte da razão pela qual o projeto andou rápido, e também a razão pela qual o que o framework não modela bem precisa ser contornado em vez de desenhado." },
+        { k: "Acoplamento", v: "Duas aplicações sobre um core significa que mudar uma coleção muda as duas. A definição única é o objetivo, mas tira a opção de deixar um dos lados andar sozinho." },
+        { k: "Migrações", v: "O schema mora no código e sobe como migração, então renomear um campo é uma mudança revisada e com histórico. Também significa nada de correção rápida no banco — 13 migrações são 13 passos deliberados." },
+        { k: "Custo de teste", v: "A correção depende do banco, então o CI roda contra um PostgreSQL isolado, e não contra um mock. Pipeline mais lento, mas uma execução de testes sem banco provaria muito pouco aqui." }
+      ]},
+      { h: "Qualidade e testes", paras: [
+        "São 181 testes automatizados, e o CI roda lint, checagem de tipos, testes e build contra uma instância isolada de PostgreSQL, além de testes end-to-end com Playwright.",
+        "O pipeline é a parte que eu defenderia com mais convicção. Duas pessoas em um sistema em produção com dados reais de membros precisam de um portão que não dependa de nenhuma das duas estar atenta naquele dia."
+      ]},
+      { h: "Resultados", paras: [
+        "Em produção, atendendo mais de 500 usuários. Duas aplicações integradas, 23 módulos de conteúdo e 22 rotas de API/BFF rodando sobre um único core e um único schema.",
+        "O resultado que me interessa é mais estreito que um número de uso: um campo adicionado ao membro é adicionado uma vez, e as duas aplicações o enxergam."
+      ]},
+      { h: "O que este case não afirma", paras: [
+        "Um mecanismo específico de autorização no nível do banco. O controle de acesso é baseado em papéis e configurado por coleção no Payload CMS; as políticas subjacentes não foram reverificadas de forma independente para este texto, então esta página não as descreve em mais detalhe do que isso.",
+        "Uma divisão de trabalho. O projeto foi feito em dupla e o histórico de commits não reflete com precisão como o esforço foi dividido, então não há aqui reivindicação de autoria por diretório ou por commit — apenas que fui uma das duas pessoas que o construíram."
+      ]},
+      { h: "Retrospectiva", paras: [
+        "O que vale carregar é a definição única. Duas aplicações, um schema, um lugar onde um membro é descrito. A maioria dos bugs que este projeto não teve são bugs de dois sistemas discordando sobre a mesma linha.",
+        "O que eu faria diferente é escrever a matriz de testes de acesso primeiro — um usuário semeado por papel, uma asserção por coleção — em vez de crescê-la atrás das features. Os testes que existem foram em boa parte escritos para pegar comportamento que eu já havia subido para staging."
+      ]}
+    ]
+  },
+  maderma: {
+    eyebrow: "Estudo de caso 03 · MAY Derma",
+    title: "Manter a loja e um sistema externo em sincronia",
+    lede: "Plataforma de e-commerce em WooCommerce construída e customizada para a MAY Derma e integrada aos sistemas externos de negócio da empresa. Entregue como contrato remoto entre maio e julho de 2026.",
+    meta: [
+      { k: "Papel", v: "Desenvolvedor Full Stack · contrato, remoto" },
+      { k: "Status", v: "Entregue" },
+      { k: "Stack", v: "WordPress · WooCommerce · C#/.NET · PostgreSQL · Docker · Nginx · Linux" },
+      { k: "Período", v: "Mai 2026 – Jul 2026" }
+    ],
+    numbersLabel: "Escopo",
+    numbers: [
+      "1 loja WooCommerce, construída e customizada",
+      "Integração com os sistemas externos de negócio do cliente via webhooks",
+      "Consumidores assíncronos idempotentes em C#/.NET",
+      "Implantado em Docker atrás do Nginx em Linux"
+    ],
+    numbersNote: "O cliente autorizou este nível de detalhe. Os sistemas externos não são nomeados e nenhum dado comercial é publicado.",
+    sections: [
+      { h: "Contexto", paras: [
+        "A MAY Derma precisava de uma loja que não fosse uma ilha. Pedidos feitos online tinham de chegar aos sistemas em que o negócio já rodava, e dados de produto e estoque mantidos no back-office tinham de aparecer na loja. Construí e customizei a plataforma WooCommerce e depois construí a integração entre os dois lados."
+      ]},
+      { h: "O problema", paras: [
+        "Uma loja e um sistema de back-office discordam no instante em que qualquer um dos dois pode mudar de estado por conta própria. Pedidos, estoque e cadastros existem nos dois, e nenhum é naturalmente o seguidor. O trabalho foi decidir, registro por registro, qual sistema é dono da verdade e como o outro fica sabendo.",
+        "O atalho tentador é a loja chamar o outro sistema direto no checkout. É a menor quantidade de código e o pior modo de falha: um checkout que depende do back-office estar acessível é um checkout que cai quando o back-office cai."
+      ]},
+      { h: "A integração", paras: [
+        "A comunicação corre por webhooks para workers assíncronos. A loja emite um evento quando algo acontece; um worker pega, traduz e escreve no outro lado. Se o destino está indisponível, o evento espera e é reprocessado, em vez de se perder no caixa.",
+        "Como a entrega é at-least-once, todo consumidor é idempotente. O mesmo evento chegando duas vezes produz um pedido, não dois — deduplicado pelo identificador do próprio evento antes de qualquer escrita. É a parte do design que eu defenderia com mais convicção: reenvio não é caso de borda, é o modo normal de operação de uma integração por webhook."
+      ], diagram: { caption: "Fig. 3 — A loja nunca chama o sistema externo de forma síncrona. Toda escrita atravessa um consumidor idempotente.", layers: [
+        { nodes: [ { label: "WooCommerce", sub: "WordPress · loja" } ], hasEdge: true, edge: "webhook · eventos de pedido e estoque" },
+        { nodes: [ { label: "Workers assíncronos", sub: "C#/.NET · consumidores idempotentes" } ], hasEdge: true, edge: "escritas deduplicadas · reenvio em falha" },
+        { nodes: [ { label: "PostgreSQL", sub: "estado da integração" }, { label: "Sistemas externos de negócio", sub: "lado do cliente" } ], hasEdge: false }
+      ]}},
+      { h: "Trade-offs", paras: [], bullets: [
+        { k: "Assíncrono", v: "Eventos enfileirados mantêm o checkout disponível quando o back-office não está. O custo é que os dois sistemas são apenas eventualmente consistentes, então a loja pode mostrar por um momento um estoque que o back-office já movimentou." },
+        { k: "Custo da idempotência", v: "Todo consumidor carrega estado de deduplicação, o que é armazenamento extra e mais uma coisa para raciocinar. A alternativa é pedido duplicado, o que não é trade-off nenhum." },
+        { k: "WooCommerce", v: "Construir sobre WordPress trouxe catálogo e checkout de graça, e os pontos de extensão não. O trabalho de customização vai onde o ecossistema de plugins para, e foi nessa fronteira que a maior parte do esforço ficou." },
+        { k: "Docker em um host", v: "Containers atrás do Nginx deram deploy reprodutível sem introduzir um orquestrador que o cliente teria de operar depois que eu saísse. É um teto deliberado." }
+      ]},
+      { h: "Resultados", paras: [
+        "Entregue e repassado: a plataforma roda em Docker atrás do Nginx em Linux, e pedidos e estoque atravessam entre a loja e os sistemas do cliente por workers idempotentes e reprocessáveis, não por chamadas síncronas.",
+        "Não publico dados comerciais deste projeto. O cliente autorizou a descrição técnica acima, não os números de venda."
+      ]},
+      { h: "Retrospectiva", paras: [
+        "A integração seria mais fácil de operar com um log de entrega exposto no admin desde o primeiro dia — uma tela que responde \"este pedido chegou do outro lado, e se não, por quê\" sem abrir o banco. Construí a confiabilidade e subconstruí a visibilidade sobre ela.",
+        "O que eu repetiria é recusar o atalho síncrono. Deu mais trabalho na primeira semana e é a razão pela qual a disponibilidade da loja não depende do uptime de outra pessoa."
+      ]}
+    ]
+  }
+};
+
+const ROUTES = {
+  "": "home", "/": "home", "/resume": "resume",
+  "/work/courtiq": "courtiq", "/work/avivando": "avivando", "/work/may-derma": "maderma"
+};
+const ROUTE_OF = { courtiq: "/work/courtiq", avivando: "/work/avivando", maderma: "/work/may-derma", resume: "/resume", home: "/" };
+const CASE_KEYS = ["courtiq", "avivando", "maderma"];
+
+class Component extends DCLogic {
+  state = { page: "home", lang: null, routed: false };
+
+  componentDidMount() {
+    this.sync();
+    this._onHash = () => this.sync();
+    window.addEventListener("hashchange", this._onHash);
+  }
+  componentWillUnmount() { window.removeEventListener("hashchange", this._onHash); }
+
+  sync() {
+    let raw = (window.location.hash || "").replace(/^#/, "");
+    if (!raw) { this.setState({ routed: true }); return; }
+    const anchor = raw.indexOf("#");
+    if (anchor > -1) raw = raw.slice(0, anchor);
+    let lang = null, path = raw;
+    if (path === "/pt" || path.indexOf("/pt/") === 0) { lang = "pt"; path = path.slice(3) || "/"; }
+    const page = ROUTES.hasOwnProperty(path) ? ROUTES[path] : "404";
+    this.setState({ page: page, lang: lang || this.state.lang, routed: true });
+  }
+
+  get lang() { return this.state.lang || (this.props.defaultLang === "pt" ? "pt" : "en"); }
+  prefix(lang) { return lang === "pt" ? "/pt" : ""; }
+  href(page, lang) {
+    const p = ROUTE_OF[page] || "/";
+    const pre = this.prefix(lang || this.lang);
+    return "#" + (pre + (p === "/" ? "/" : p)).replace("//", "/");
+  }
+
+  go = (page) => (e) => {
+    if (e) e.preventDefault();
+    window.location.hash = this.href(page);
+    this.setState({ page: page });
+    window.scrollTo(0, 0);
+  };
+
+  goWork = (e) => {
+    if (e) e.preventDefault();
+    if (this.state.page !== "home") {
+      window.location.hash = this.href("home");
+      this.setState({ page: "home" });
+      window.setTimeout(() => this.scrollWork(), 60);
+    } else { this.scrollWork(); }
+  };
+
+  scrollWork() {
+    const el = document.getElementById("selected-work");
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - 72;
+    window.scrollTo({ top: top, behavior: "smooth" });
+  }
+
+  setLang = (lang) => (e) => {
+    if (e) e.preventDefault();
+    const page = this.state.page === "404" ? "home" : this.state.page;
+    window.location.hash = this.href(page, lang);
+    this.setState({ lang: lang, page: page });
+  };
+
+  renderVals() {
+    const lang = this.lang;
+    const t = lang === "pt" ? PT : EN;
+    const cases = lang === "pt" ? CASES_PT : CASES_EN;
+    const page = this.state.page;
+    const key = CASE_KEYS.indexOf(page) > -1 ? page : null;
+
+    const work = t.work.map((w) => {
+      const pageKey = w.route === "/work/courtiq" ? "courtiq" : w.route === "/work/avivando" ? "avivando" : "maderma";
+      return Object.assign({}, w, { open: this.go(pageKey), href: this.href(pageKey) });
+    });
+    const stopProp = (e) => e.stopPropagation();
+
+    const notFound = Object.assign({}, t.notFound, {
+      links: t.notFound.links.map((l, i) => ({
+        label: l.label, path: l.path,
+        href: i === 1 ? this.href("home") : this.href(i === 2 ? "resume" : "home"),
+        open: i === 1 ? this.goWork : this.go(i === 2 ? "resume" : "home")
+      }))
+    });
+
+    let c = {};
+    if (key) {
+      const i = CASE_KEYS.indexOf(key);
+      const otherKey = CASE_KEYS[(i + 1) % CASE_KEYS.length];
+      c = Object.assign({}, cases[key], {
+        openOther: this.go(otherKey),
+        otherHref: this.href(otherKey),
+        otherLabel: (lang === "pt" ? "Próximo caso: " : "Next case: ") + t.work[(i + 1) % 3].name
+      });
+      c.sections = c.sections.map((s) => Object.assign({}, s, {
+        hasBullets: !!(s.bullets && s.bullets.length),
+        hasDiagram: !!(s.diagram && this.props.showDiagrams !== false)
+      }));
+    }
+
+    return {
+      t: Object.assign({}, t, { work: work, notFound: notFound }),
+      c: c,
+      stopProp: stopProp,
+      isHome: page === "home",
+      isCase: !!key,
+      isResume: page === "resume",
+      isNotFound: page === "404",
+      goHome: this.go("home"),
+      goResume: this.go("resume"),
+      goWork: this.goWork,
+      setEn: this.setLang("en"),
+      setPt: this.setLang("pt"),
+      enColor: lang === "en" ? "#E8E2D9" : "#8F8880",
+      ptColor: lang === "pt" ? "#E8E2D9" : "#8F8880",
+      navHover: { color: "#F2EFEA" },
+      btnHover: { borderColor: "#8F8880" },
+      rowHover: { background: "#171614" }
+    };
+  }
+}
+</script>
+</body>
+</html>

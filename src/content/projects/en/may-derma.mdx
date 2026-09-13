@@ -1,0 +1,76 @@
+---
+order: 3
+name: "MAY Derma"
+eyebrow: "Case study 03 · MAY Derma"
+title: "Keeping a storefront and an external business system in sync"
+lede: "A WooCommerce e-commerce platform built and customized for MAY Derma and integrated with the company's external business systems. Delivered as a remote contract between May and July 2026."
+meta:
+  - k: "Role"
+    v: "Full Stack Developer · contract, remote"
+  - k: "Status"
+    v: "Delivered"
+  - k: "Stack"
+    v: "WordPress · WooCommerce · C#/.NET · PostgreSQL · Docker · Nginx · Linux"
+  - k: "Timeline"
+    v: "May 2026 – Jul 2026"
+numbersLabel: "Scope"
+numbers:
+  - "1 WooCommerce storefront, built and customized"
+  - "Integration with the client's external business systems over webhooks"
+  - "Idempotent async consumers in C#/.NET"
+  - "Deployed in Docker behind Nginx on Linux"
+numbersNote: "The client authorized this level of detail. The external systems are not named, and no commercial figures are published."
+home:
+  desc: "A WooCommerce platform built and customized for MAY Derma, integrated with external business systems over webhooks and async workers, with idempotency to survive retries and duplicate deliveries."
+  status: "Delivered · contract"
+  meta: "May 2026 – Jul 2026 · WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux"
+---
+
+import Bullets from '../../../components/Bullets.astro';
+import Diagram from '../../../components/Diagram.astro';
+
+## Context
+
+MAY Derma needed a storefront that was not an island. Orders taken online had to arrive in the systems the business already ran on, and product and stock data maintained back-office had to be reflected in the store. I built and customized the WooCommerce platform and then built the integration between the two sides.
+
+## The problem
+
+A storefront and a back-office system disagree the moment either one can change state independently. Orders, stock and customer records exist in both, and neither is naturally the follower. The work was to decide, record by record, which system owns the truth and how the other finds out about it.
+
+The tempting shortcut is to have the storefront call the other system directly at checkout. It is the smallest amount of code and the worst failure mode: a checkout that depends on the back office being reachable is a checkout that fails when the back office is down.
+
+## The integration
+
+Communication runs over webhooks into asynchronous workers. The storefront emits an event when something happens; a worker picks it up, translates it, and writes to the other side. If the destination is unavailable, the event waits and is retried instead of being lost at the till.
+
+Because delivery is at-least-once, every consumer is idempotent. The same event arriving twice produces one order, not two — deduplicated on the event's own identifier before any write. This is the part of the design I would defend hardest: retries are not an edge case, they are the normal operating mode of a webhook integration.
+
+<Diagram
+  caption="Fig. 3 — The storefront never calls the external system synchronously. Every write crosses an idempotent consumer."
+  layers={[
+    { nodes: [{ label: "WooCommerce", sub: "WordPress · storefront" }], edge: "webhook · order & stock events" },
+    { nodes: [{ label: "Async workers", sub: "C#/.NET · idempotent consumers" }], edge: "deduplicated writes · retry on failure" },
+    { nodes: [{ label: "PostgreSQL", sub: "integration state" }, { label: "External business systems", sub: "client-side" }] }
+  ]}
+/>
+
+## Trade-offs
+
+<Bullets items={[
+  { k: "Async over sync", v: "Queued events keep checkout available when the back office is not. The cost is that the two systems are only eventually consistent, so the store can briefly show stock the back office has already moved." },
+  { k: "Idempotency cost", v: "Every consumer carries deduplication state, which is extra storage and an extra thing to reason about. The alternative is duplicate orders, which is not a trade-off at all." },
+  { k: "WooCommerce", v: "Building on WordPress meant the catalogue and checkout came for free and the extension points did not. Customization work goes where the plugin ecosystem stops, and that boundary is where most of the effort went." },
+  { k: "Docker on a single host", v: "Containers behind Nginx gave reproducible deploys without introducing an orchestrator the client would have to operate after I left. It is a deliberate ceiling." }
+]} />
+
+## Results
+
+Delivered and handed over: the storefront runs in Docker behind Nginx on Linux, and orders and stock cross between the store and the client's systems through retryable, idempotent workers rather than synchronous calls.
+
+I am not publishing commercial figures for this project. The client authorized the technical description above, not their sales data.
+
+## Retrospective
+
+The integration would have been easier to operate with a delivery log surfaced in the admin from day one — a screen that answers "did this order reach the other side, and if not, why" without opening a database. I built the reliability and under-built the visibility into it.
+
+What I would repeat is refusing the synchronous shortcut. It was more work in week one and it is the reason the store's availability does not depend on someone else's uptime.

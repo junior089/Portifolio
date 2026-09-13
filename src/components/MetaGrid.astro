@@ -1,0 +1,18 @@
+---
+interface Props {
+  items: { k: string; v: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="mb-12 grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-8 border-y border-line py-8">
+  {
+    items.map((m) => (
+      <div>
+        <div class="mb-2 font-mono text-[11px] tracking-[0.1em] text-muted uppercase">{m.k}</div>
+        <div class="font-mono text-[13px] leading-[1.6] text-paper">{m.v}</div>
+      </div>
+    ))
+  }
+</div>

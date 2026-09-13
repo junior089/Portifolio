@@ -1,0 +1,21 @@
+---
+interface Props {
+  role: string;
+  org: string;
+  meta: string;
+  desc: string;
+  stack: string;
+}
+
+const { role, org, meta, desc, stack } = Astro.props;
+---
+
+<div class="mb-12 flex flex-wrap gap-[clamp(24px,5vw,56px)] border-t border-line pt-12">
+  <div class="w-[200px] shrink-0 font-mono text-xs leading-[1.9] text-muted">{meta}</div>
+  <div class="min-w-0 max-w-[680px] flex-1">
+    <h3 class="mb-1 font-sans text-xl font-medium text-paper">{role}</h3>
+    <div class="mb-5 font-mono text-xs text-muted">{org}</div>
+    <p class="mb-5 text-[17px] text-muted text-pretty">{desc}</p>
+    <div class="font-mono text-xs text-muted">{stack}</div>
+  </div>
+</div>

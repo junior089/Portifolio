@@ -1,0 +1,70 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MetaGrid from '../../components/MetaGrid.astro';
+import NumbersList from '../../components/NumbersList.astro';
+import CaseHeading from '../../components/CaseHeading.astro';
+import CaseParagraph from '../../components/CaseParagraph.astro';
+import Bullets from '../../components/Bullets.astro';
+import Diagram from '../../components/Diagram.astro';
+import { en } from '../../data/en';
+import { caseHref, homeHref } from '../../lib/routes';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ id }) => id.startsWith('en/'));
+  const sorted = projects.sort((a, b) => a.data.order - b.data.order);
+  return sorted.map((entry, i) => ({
+    params: { slug: entry.id.replace('en/', '') },
+    props: { entry, all: sorted, index: i }
+  }));
+}
+
+const { entry, all, index } = Astro.props;
+const { Content } = await render(entry);
+const t = en;
+
+const other = all[(index + 1) % all.length];
+const otherSlug = other.id.replace('en/', '');
+const slug = Astro.params.slug as string;
+---
+
+<BaseLayout
+  lang="en"
+  title={`${entry.data.title} — Carlos Alberto Jr.`}
+  description={entry.data.lede}
+  enHref={caseHref('en', slug)}
+  ptHref={caseHref('pt', slug)}
+>
+  <div class="mx-auto max-w-[1180px] px-[clamp(20px,4vw,32px)]">
+    <article class="py-[clamp(56px,9vw,96px)] pb-[clamp(96px,14vw,160px)]">
+      <a href={homeHref('en')} class="mb-16 inline-block font-mono text-xs text-muted">{t.labels.backHome}</a>
+
+      <header class="mb-18 max-w-[760px]">
+        <div class="mb-8 font-mono text-xs tracking-[0.14em] text-muted uppercase">{entry.data.eyebrow}</div>
+        <h1 class="mb-8 text-display-case font-serif text-paper text-pretty">{entry.data.title}</h1>
+        <p class="max-w-[680px] text-[19px] leading-[1.65] text-muted text-pretty">{entry.data.lede}</p>
+      </header>
+
+      <MetaGrid items={entry.data.meta} />
+      <NumbersList label={entry.data.numbersLabel} numbers={entry.data.numbers} note={entry.data.numbersNote} />
+
+      <div class="max-w-[760px]">
+        <Content components={{ h2: CaseHeading, p: CaseParagraph, Bullets, Diagram }} />
+      </div>
+
+      <div class="mt-18 flex max-w-[760px] flex-wrap gap-8 border-t border-line pt-12 font-mono text-[13px]">
+        <a href={caseHref('en', otherSlug)} class="text-bone">
+          {`Next case: ${other.data.name}`}
+        </a>
+        {
+          entry.data.viewSource && (
+            <a href={entry.data.viewSource} target="_blank" rel="noreferrer" class="text-muted">
+              {t.labels.viewSource}
+            </a>
+          )
+        }
+        <a href={homeHref('en')} class="text-muted">{t.labels.backHome}</a>
+      </div>
+    </article>
+  </div>
+</BaseLayout>
