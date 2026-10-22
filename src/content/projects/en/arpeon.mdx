@@ -30,7 +30,9 @@ home:
 import Bullets from '../../../components/Bullets.astro';
 import Diagram from '../../../components/Diagram.astro';
 import Screenshot from '../../../components/Screenshot.astro';
-import scoreEditor from '../../../assets/arpeon-score-editor.png';
+import playback from '../../../assets/arpeon-playback.png';
+import omrReview from '../../../assets/arpeon-omr-review.png';
+import editor from '../../../assets/arpeon-editor.png';
 
 ## Context
 
@@ -39,9 +41,9 @@ Studying from sheet music usually means juggling tools: one to read the score, a
 It is open source under AGPL-3.0-or-later and still a pre-release. Version 0.1.1 was published as source code; a 0.1.2 Windows build exists locally, but public binaries are held back until the release gates on signing, redistribution and recovery are closed.
 
 <Screenshot
-  src={scoreEditor}
-  alt="ARPEON score editor showing a short melody, the note inspector and the MIDI transport bar"
-  caption="Fig. 2 — The score editor in the 0.1.1 build: notation, inspector and MIDI transport. The interface is in Portuguese."
+  src={playback}
+  alt="ARPEON playback view showing the full score of Bach's Badinerie for flute with the MIDI transport bar"
+  caption="Fig. 1 — The current local build with Bach's Badinerie opened from MusicXML, ready for MIDI playback. The interface is in Portuguese."
 />
 
 ## The problem
@@ -68,7 +70,7 @@ The two halves talk over HTTP on 127.0.0.1, bound to an ephemeral port and authe
 Below the desktop application, eleven Gradle modules split the work: domain, MusicXML, audio, DSP, tuner, transport, playback, import, OMR, analysis and an offline machine-learning experiment. The domain module has no project dependencies, and none of the musical modules know about the window, the installer or the HTTP layer.
 
 <Diagram
-  caption="Fig. 3 — The interface never calls Java directly, and the musical modules never see the window they run in. Recognition is a separate process whose output re-enters through the same importer."
+  caption="Fig. 2 — The interface never calls Java directly, and the musical modules never see the window they run in. Recognition is a separate process whose output re-enters through the same importer."
   layers={[
     { nodes: [{ label: "Angular 22 interface", sub: "OpenSheetMusicDisplay · JCEF window" }], edge: "authenticated loopback HTTP · no JS-to-Java bridge" },
     { nodes: [{ label: "Desktop application", sub: "Java 25 · composition · local projects" }], edge: "musical modules · no UI or packaging dependencies" },
@@ -89,6 +91,12 @@ Five decisions shaped the system, and each of them cost something.
   { k: "Separate metrics", v: "Performance analysis reports pitch, timing, duration and confidence as separate numbers, with every formula documented. There is no overall score. A composite grade would be easier to show and impossible to defend." }
 ]} />
 
+<Screenshot
+  src={omrReview}
+  alt="ARPEON import review comparing an original score image on the left with the notation recognized by Audiveris on the right"
+  caption="Fig. 3 — A PNG of a score recognized by the bundled Audiveris process: the original on the left, the parsed result on the right, waiting for review before it can reach the editor."
+/>
+
 ## Quality and tests
 
 The repository has 242 JUnit tests and 184 Vitest tests. CI builds and tests the Java modules on Windows, Linux and macOS, runs formatting, linting, type checking, tests and a production build for the frontend, and checks dependency licenses. Tests use synthetic audio and saved fixtures, so pitch detection and the recognition pipeline are exercised without a microphone.
@@ -98,6 +106,12 @@ A green run on macOS means the modules work there, not that a macOS installer ex
 ## Results
 
 What exists: a Windows desktop build with score import and editing, MIDI playback with loops and a metronome, a chromatic tuner, fixed-tempo performance reports, PDF and image recognition with review, local study profiles and a per-user MSI installer. Local validation exercised install, repair, upgrade, downgrade rejection, uninstall and reinstall with projects and preferences preserved, and launched the application without Java or Node on the PATH.
+
+<Screenshot
+  src={editor}
+  alt="ARPEON score editor with the Badinerie, the note inspector and the flute fingering for the selected note"
+  caption="Fig. 4 — Editing the Badinerie: the inspector shows the selected note and its Boehm flute fingering next to the score."
+/>
 
 What does not exist yet: a public binary release. Trusted code signing, a live update feed and some redistribution obligations are still open, and installer rollback failed under fault injection on the test machine. Those are listed in the repository as open gates rather than hidden behind a download button.
 

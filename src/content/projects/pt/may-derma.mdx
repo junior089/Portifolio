@@ -13,25 +13,44 @@ meta:
     v: "WordPress · WooCommerce · C#/.NET · PostgreSQL · Docker · Nginx · Linux"
   - k: "Período"
     v: "Mai 2026 – Jul 2026"
-numbersLabel: "Escopo"
+numbersLabel: "Escopo · contagens lidas no WooCommerce em 22/10/2026"
 numbers:
-  - "1 loja WooCommerce, construída e customizada"
-  - "Integração com os sistemas externos de negócio do cliente via webhooks"
-  - "Consumidores assíncronos idempotentes em C#/.NET"
+  - "1 loja WooCommerce, construída e customizada · 15 produtos publicados"
+  - "259 pedidos pagos de 224 clientes desde o primeiro pedido pago, em outubro de 2025"
+  - "Plataforma de afiliados e prescritores em C#/.NET em afiliados.mayderma.com.br"
+  - "Integração por webhooks com os sistemas do cliente por meio de consumidores assíncronos idempotentes"
   - "Implantado em Docker atrás do Nginx em Linux"
-numbersNote: "O cliente autorizou este nível de detalhe. Os sistemas externos não são nomeados e nenhum dado comercial é publicado."
+numbersNote: "O cliente autorizou este nível de detalhe. Os sistemas externos não são nomeados e nenhum faturamento é publicado; as contagens de pedidos e clientes vêm do próprio admin da loja."
 home:
-  desc: "Plataforma WooCommerce construída e customizada para a MAY Derma, integrada a sistemas externos de negócio via webhooks e workers assíncronos, com idempotência para sobreviver a reenvios e entregas duplicadas."
+  desc: "Plataforma WooCommerce construída e customizada para a MAY Derma, com uma plataforma de afiliados e prescritores em C#/.NET, integrada a sistemas externos de negócio via webhooks e workers assíncronos, com idempotência para sobreviver a reenvios e entregas duplicadas."
   status: "Entregue · contrato"
   meta: "Mai 2026 – Jul 2026 · WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux"
 ---
 
 import Bullets from '../../../components/Bullets.astro';
 import Diagram from '../../../components/Diagram.astro';
+import Screenshot from '../../../components/Screenshot.astro';
+import shop from '../../../assets/may-derma-shop.png';
+import affiliates from '../../../assets/may-derma-affiliates.png';
+import checkout from '../../../assets/may-derma-checkout.png';
 
 ## Contexto
 
 A MAY Derma precisava de uma loja que não fosse uma ilha. Pedidos feitos online tinham de chegar aos sistemas em que o negócio já rodava, e dados de produto e estoque mantidos no back-office tinham de aparecer na loja. Construí e customizei a plataforma WooCommerce e depois construí a integração entre os dois lados.
+
+<Screenshot
+  src={shop}
+  alt="Catálogo da loja virtual da MAY Derma com produtos, preços e botões de compra"
+  caption="Fig. 1 — A loja em produção em loja.mayderma.com.br, capturada em 22/10/2026."
+/>
+
+Junto da loja construí a plataforma de afiliados e prescritores em C#/.NET: parceiros se cadastram, recebem links de indicação e cupons e acompanham vendas atribuídas e comissões nos próprios dashboards. Ela roda como aplicação separada, que compartilha o catálogo e a navegação da loja.
+
+<Screenshot
+  src={affiliates}
+  alt="Página pública de cadastro de afiliados da MAY Derma, servida pela plataforma em C#/.NET"
+  caption="Fig. 2 — A página pública de cadastro da plataforma de afiliados em afiliados.mayderma.com.br."
+/>
 
 ## O problema
 
@@ -46,7 +65,7 @@ A comunicação corre por webhooks para workers assíncronos. A loja emite um ev
 Como a entrega é at-least-once, todo consumidor é idempotente. O mesmo evento chegando duas vezes produz um pedido, não dois — deduplicado pelo identificador do próprio evento antes de qualquer escrita. É a parte do design que eu defenderia com mais convicção: reenvio não é caso de borda, é o modo normal de operação de uma integração por webhook.
 
 <Diagram
-  caption="Fig. 5 — A loja nunca chama o sistema externo de forma síncrona. Toda escrita atravessa um consumidor idempotente."
+  caption="Fig. 3 — A loja nunca chama o sistema externo de forma síncrona. Toda escrita atravessa um consumidor idempotente."
   layers={[
     { nodes: [{ label: "WooCommerce", sub: "WordPress · loja" }], edge: "webhook · eventos de pedido e estoque" },
     { nodes: [{ label: "Workers assíncronos", sub: "C#/.NET · consumidores idempotentes" }], edge: "escritas deduplicadas · reenvio em falha" },
@@ -67,7 +86,13 @@ Como a entrega é at-least-once, todo consumidor é idempotente. O mesmo evento 
 
 Entregue e repassado: a plataforma roda em Docker atrás do Nginx em Linux, e pedidos e estoque atravessam entre a loja e os sistemas do cliente por workers idempotentes e reprocessáveis, não por chamadas síncronas.
 
-Não publico dados comerciais deste projeto. O cliente autorizou a descrição técnica acima, não os números de venda.
+A loja recebeu 259 pedidos pagos de 224 clientes desde o primeiro pedido pago, em outubro de 2025, sendo 194 deles a partir de maio de 2026. Não publico o faturamento deste projeto.
+
+<Screenshot
+  src={checkout}
+  alt="Checkout da MAY Derma com um produto no carrinho e fluxo em três etapas: identificação, entrega e pagamento"
+  caption="Fig. 4 — O checkout customizado em três etapas em produção, com um produto no carrinho."
+/>
 
 ## Retrospectiva
 

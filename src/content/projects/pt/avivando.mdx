@@ -29,12 +29,21 @@ home:
 
 import Bullets from '../../../components/Bullets.astro';
 import Diagram from '../../../components/Diagram.astro';
+import Screenshot from '../../../components/Screenshot.astro';
+import publicSite from '../../../assets/avivando-site.png';
+import livePage from '../../../assets/avivando-live.png';
 
 ## Contexto
 
 A plataforma atende uma organização que acompanha membros, realiza atividades e precisa que pessoas diferentes vejam coisas diferentes. São duas aplicações: um site público e um core operacional com cadastro de membros, formulários, check-in, avisos, atividades e acesso por papéis.
 
 Trabalhei em dupla com um engenheiro sênior. Os dois compartilharam o código o tempo todo, e minhas decisões de design eram questionadas em review — esse ciclo é a origem de boa parte do raciocínio desta página. Não vou traçar uma linha no trabalho e reivindicar um lado dela.
+
+<Screenshot
+  src={publicSite}
+  alt="Site público da Avivando em produção, na página Sobre"
+  caption="Fig. 1 — O site público em produção em avivando.com, capturado em 22/10/2026. O core operacional fica atrás de autenticação e guarda dados de membros, por isso não aparece."
+/>
 
 ## O problema
 
@@ -60,7 +69,7 @@ O site público é uma aplicação separada que se integra ao core, em vez de fa
 O controle de acesso é baseado em papéis e configurado por coleção no Payload. Os papéis determinam o que cada coleção expõe, e a mesma configuração vale para as duas aplicações.
 
 <Diagram
-  caption="Fig. 4 — Um core, um schema, dois front ends. O site público se integra ao core em vez de passar por cima dele."
+  caption="Fig. 2 — Um core, um schema, dois front ends. O site público se integra ao core em vez de passar por cima dele."
   layers={[
     { nodes: [{ label: "Site público", sub: "React · TypeScript" }, { label: "Core operacional", sub: "Payload CMS · 23 módulos" }], edge: "22 rotas de API / BFF" },
     { nodes: [{ label: "Controle de acesso por papéis", sub: "configurado por coleção" }], edge: "apenas dados permitidos" },
@@ -90,6 +99,12 @@ O pipeline é a parte que eu defenderia com mais convicção. Duas pessoas em um
 Em produção, atendendo mais de 500 usuários. Duas aplicações integradas, 23 módulos de conteúdo e 22 rotas de API/BFF rodando sobre um único core e um único schema.
 
 O resultado que me interessa é mais estreito que um número de uso: um campo adicionado ao membro é adicionado uma vez, e as duas aplicações o enxergam.
+
+<Screenshot
+  src={livePage}
+  alt="Página ao vivo da Avivando em produção, com a transmissão do YouTube embutida e o botão de oferta"
+  caption="Fig. 3 — A página ao vivo em produção: a transmissão embutida, o painel de chat e o botão de oferta do culto atual."
+/>
 
 ## O que este case não afirma
 

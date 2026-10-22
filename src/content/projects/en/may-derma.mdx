@@ -13,25 +13,44 @@ meta:
     v: "WordPress · WooCommerce · C#/.NET · PostgreSQL · Docker · Nginx · Linux"
   - k: "Timeline"
     v: "May 2026 – Jul 2026"
-numbersLabel: "Scope"
+numbersLabel: "Scope · store counts read from WooCommerce on 22 Oct 2026"
 numbers:
-  - "1 WooCommerce storefront, built and customized"
-  - "Integration with the client's external business systems over webhooks"
-  - "Idempotent async consumers in C#/.NET"
+  - "1 WooCommerce storefront, built and customized · 15 published products"
+  - "259 paid orders from 224 customers since the first paid order in October 2025"
+  - "Affiliate and prescriber platform in C#/.NET at afiliados.mayderma.com.br"
+  - "Webhook integration with the client's business systems through idempotent async consumers"
   - "Deployed in Docker behind Nginx on Linux"
-numbersNote: "The client authorized this level of detail. The external systems are not named, and no commercial figures are published."
+numbersNote: "The client authorized this level of detail. The external systems are not named and no revenue is published; order and customer counts come from the store's own admin."
 home:
-  desc: "A WooCommerce platform built and customized for MAY Derma, integrated with external business systems over webhooks and async workers, with idempotency to survive retries and duplicate deliveries."
+  desc: "A WooCommerce platform built and customized for MAY Derma, with an affiliate and prescriber platform in C#/.NET, integrated with external business systems over webhooks and async workers, with idempotency to survive retries and duplicate deliveries."
   status: "Delivered · contract"
   meta: "May 2026 – Jul 2026 · WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux"
 ---
 
 import Bullets from '../../../components/Bullets.astro';
 import Diagram from '../../../components/Diagram.astro';
+import Screenshot from '../../../components/Screenshot.astro';
+import shop from '../../../assets/may-derma-shop.png';
+import affiliates from '../../../assets/may-derma-affiliates.png';
+import checkout from '../../../assets/may-derma-checkout.png';
 
 ## Context
 
 MAY Derma needed a storefront that was not an island. Orders taken online had to arrive in the systems the business already ran on, and product and stock data maintained back-office had to be reflected in the store. I built and customized the WooCommerce platform and then built the integration between the two sides.
+
+<Screenshot
+  src={shop}
+  alt="MAY Derma online store catalogue with products, prices and buy buttons"
+  caption="Fig. 1 — The storefront in production at loja.mayderma.com.br, captured on 22 Oct 2026."
+/>
+
+Alongside the store I built the affiliate and prescriber platform in C#/.NET: partners sign up, receive referral links and coupons, and follow attributed sales and commissions on their own dashboards. It runs as a separate application that shares the store's catalogue and navigation.
+
+<Screenshot
+  src={affiliates}
+  alt="MAY Derma affiliate sign-up page served by the C#/.NET affiliate platform"
+  caption="Fig. 2 — The public sign-up page of the affiliate platform at afiliados.mayderma.com.br."
+/>
 
 ## The problem
 
@@ -46,7 +65,7 @@ Communication runs over webhooks into asynchronous workers. The storefront emits
 Because delivery is at-least-once, every consumer is idempotent. The same event arriving twice produces one order, not two — deduplicated on the event's own identifier before any write. This is the part of the design I would defend hardest: retries are not an edge case, they are the normal operating mode of a webhook integration.
 
 <Diagram
-  caption="Fig. 5 — The storefront never calls the external system synchronously. Every write crosses an idempotent consumer."
+  caption="Fig. 3 — The storefront never calls the external system synchronously. Every write crosses an idempotent consumer."
   layers={[
     { nodes: [{ label: "WooCommerce", sub: "WordPress · storefront" }], edge: "webhook · order & stock events" },
     { nodes: [{ label: "Async workers", sub: "C#/.NET · idempotent consumers" }], edge: "deduplicated writes · retry on failure" },
@@ -67,7 +86,13 @@ Because delivery is at-least-once, every consumer is idempotent. The same event 
 
 Delivered and handed over: the storefront runs in Docker behind Nginx on Linux, and orders and stock cross between the store and the client's systems through retryable, idempotent workers rather than synchronous calls.
 
-I am not publishing commercial figures for this project. The client authorized the technical description above, not their sales data.
+The store has taken 259 paid orders from 224 customers since its first paid order in October 2025, 194 of them from May 2026 on. I am not publishing revenue for this project.
+
+<Screenshot
+  src={checkout}
+  alt="MAY Derma checkout with a product in the cart and a three-step flow: identification, delivery and payment"
+  caption="Fig. 4 — The customized three-step checkout in production, with one product in the cart."
+/>
 
 ## Retrospective
 

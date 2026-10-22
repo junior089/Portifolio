@@ -11,7 +11,7 @@ interface Props {
 const { src, alt, caption } = Astro.props;
 ---
 
-<figure class="mt-12">
+<figure class="my-12">
   <div class="overflow-hidden rounded-xl border border-line bg-surface">
     <Image src={src} alt={alt} widths={[760, 1264]} sizes="(min-width: 800px) 760px, 100vw" class="block h-auto w-full" />
   </div>

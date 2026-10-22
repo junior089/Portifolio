@@ -30,7 +30,9 @@ home:
 import Bullets from '../../../components/Bullets.astro';
 import Diagram from '../../../components/Diagram.astro';
 import Screenshot from '../../../components/Screenshot.astro';
-import scoreEditor from '../../../assets/arpeon-score-editor.png';
+import playback from '../../../assets/arpeon-playback.png';
+import omrReview from '../../../assets/arpeon-omr-review.png';
+import editor from '../../../assets/arpeon-editor.png';
 
 ## Contexto
 
@@ -39,9 +41,9 @@ Estudar por partitura costuma significar alternar entre ferramentas: uma para le
 É open source sob AGPL-3.0-or-later e ainda está em pré-lançamento. A versão 0.1.1 foi publicada como código-fonte; uma build 0.1.2 para Windows existe localmente, mas os binários públicos ficam retidos até fecharem os critérios de lançamento de assinatura, redistribuição e recuperação.
 
 <Screenshot
-  src={scoreEditor}
-  alt="Editor de partituras do ARPEON mostrando uma melodia curta, o inspetor de notas e a barra de transporte MIDI"
-  caption="Fig. 2 — O editor de partituras na build 0.1.1: notação, inspetor e transporte MIDI."
+  src={playback}
+  alt="Tela de reprodução do ARPEON com a partitura completa da Badinerie de Bach para flauta e a barra de transporte MIDI"
+  caption="Fig. 1 — A build local atual com a Badinerie de Bach aberta a partir de MusicXML, pronta para reprodução MIDI."
 />
 
 ## O problema
@@ -68,7 +70,7 @@ As duas metades conversam por HTTP em 127.0.0.1, numa porta efêmera, autenticad
 Abaixo da aplicação desktop, onze módulos Gradle dividem o trabalho: domínio, MusicXML, áudio, DSP, afinador, transporte, reprodução, importação, OMR, análise e um experimento offline de machine learning. O módulo de domínio não depende de nenhum outro, e nenhum módulo musical conhece a janela, o instalador ou a camada HTTP.
 
 <Diagram
-  caption="Fig. 3 — A interface nunca chama o Java diretamente, e os módulos musicais nunca veem a janela em que rodam. O reconhecimento é um processo separado cuja saída volta pelo mesmo importador."
+  caption="Fig. 2 — A interface nunca chama o Java diretamente, e os módulos musicais nunca veem a janela em que rodam. O reconhecimento é um processo separado cuja saída volta pelo mesmo importador."
   layers={[
     { nodes: [{ label: "Interface Angular 22", sub: "OpenSheetMusicDisplay · janela JCEF" }], edge: "HTTP loopback autenticado · sem ponte JS–Java" },
     { nodes: [{ label: "Aplicação desktop", sub: "Java 25 · composição · projetos locais" }], edge: "módulos musicais · sem dependência de UI ou empacotamento" },
@@ -89,6 +91,12 @@ Cinco decisões moldaram o sistema, e cada uma custou algo.
   { k: "Métricas separadas", v: "A análise de desempenho informa altura, tempo, duração e confiança como números separados, com todas as fórmulas documentadas. Não existe nota geral. Uma nota composta seria mais fácil de mostrar e impossível de defender." }
 ]} />
 
+<Screenshot
+  src={omrReview}
+  alt="Revisão de importação do ARPEON comparando a imagem original de uma partitura, à esquerda, com a notação reconhecida pelo Audiveris, à direita"
+  caption="Fig. 3 — Um PNG de partitura reconhecido pelo processo do Audiveris empacotado: o original à esquerda, o resultado à direita, aguardando revisão antes de chegar ao editor."
+/>
+
 ## Qualidade e testes
 
 O repositório tem 242 testes JUnit e 184 testes Vitest. O CI compila e testa os módulos Java em Windows, Linux e macOS, roda formatação, lint, checagem de tipos, testes e build de produção do frontend, e verifica as licenças das dependências. Os testes usam áudio sintético e fixtures salvas, então a detecção de afinação e o pipeline de reconhecimento são exercitados sem microfone.
@@ -98,6 +106,12 @@ Um CI verde no macOS significa que os módulos funcionam lá, não que exista in
 ## Resultados
 
 O que existe: uma build desktop para Windows com importação e edição de partituras, reprodução MIDI com loops e metrônomo, afinador cromático, relatórios de desempenho com andamento fixo, reconhecimento de PDF e imagem com revisão, perfis de estudo locais e um instalador MSI por usuário. A validação local exercitou instalação, reparo, atualização, rejeição de downgrade, desinstalação e reinstalação preservando projetos e preferências, e abriu a aplicação sem Java nem Node no PATH.
+
+<Screenshot
+  src={editor}
+  alt="Editor de partituras do ARPEON com a Badinerie, o inspetor de notas e a digitação de flauta da nota selecionada"
+  caption="Fig. 4 — Editando a Badinerie: o inspetor mostra a nota selecionada e a digitação de flauta Boehm ao lado da partitura."
+/>
 
 O que ainda não existe: um lançamento público dos binários. Assinatura de código confiável, um feed de atualização em produção e algumas obrigações de redistribuição continuam abertos, e o rollback do instalador falhou sob injeção de falhas na máquina de teste. Isso está listado no repositório como critérios em aberto, não escondido atrás de um botão de download.
 

@@ -83,7 +83,7 @@ export const en: SiteContent = {
           {
             k: 'Full Stack Developer',
             meta: 'MAY Derma · May – Jul 2026',
-            v: 'Built an affiliate and prescriber system in C#/.NET — referral links, coupons, commissions and dashboards — and the WordPress/WooCommerce store. Integrated payment, shipping and marketing over webhooks; ran production on Docker, Nginx and PostgreSQL.'
+            v: 'Built an affiliate and prescriber system in C#/.NET — referral links, coupons, commissions and dashboards — and the WordPress/WooCommerce store, which has taken 259 paid orders from 224 customers. Integrated payment, shipping and marketing over webhooks; ran production on Docker, Nginx and PostgreSQL.'
           },
           {
             k: 'Back-end Developer',

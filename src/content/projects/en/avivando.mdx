@@ -29,12 +29,21 @@ home:
 
 import Bullets from '../../../components/Bullets.astro';
 import Diagram from '../../../components/Diagram.astro';
+import Screenshot from '../../../components/Screenshot.astro';
+import publicSite from '../../../assets/avivando-site.png';
+import livePage from '../../../assets/avivando-live.png';
 
 ## Context
 
 The platform serves an organization that tracks members, runs activities and needs different people to see different things. It is two applications: a public site, and an operational core with member records, forms, check-in, announcements, activities and role-based access.
 
 I worked in a pair with a senior engineer. The two of us shared the codebase throughout, and my design decisions were questioned in review — that loop is where most of the reasoning on this page came from. I am not going to draw a line through the work and claim a side of it.
+
+<Screenshot
+  src={publicSite}
+  alt="The Avivando public site in production, showing the About page"
+  caption="Fig. 1 — The public site in production at avivando.com, captured on 22 Oct 2026. The operational core sits behind authentication and holds member data, so it is not shown."
+/>
 
 ## The problem
 
@@ -60,7 +69,7 @@ The public site is a separate application that integrates with the core rather t
 Access control is role-based and configured per collection in Payload. Roles decide what each collection exposes, and the same configuration governs both applications.
 
 <Diagram
-  caption="Fig. 4 — One core, one schema, two front ends. The public site integrates with the core rather than reaching past it."
+  caption="Fig. 2 — One core, one schema, two front ends. The public site integrates with the core rather than reaching past it."
   layers={[
     { nodes: [{ label: "Public site", sub: "React · TypeScript" }, { label: "Operational core", sub: "Payload CMS · 23 modules" }], edge: "22 API / BFF routes" },
     { nodes: [{ label: "Role-based access control", sub: "configured per collection" }], edge: "permitted data only" },
@@ -90,6 +99,12 @@ The pipeline is the part I would defend hardest. Two people on a live system wit
 In production, serving over 500 users. Two integrated applications, 23 content modules and 22 API/BFF routes run against a single core and a single schema.
 
 The outcome I care about is narrower than a usage number: a field added to a member is added once, and both applications see it.
+
+<Screenshot
+  src={livePage}
+  alt="The Avivando live page in production with an embedded YouTube broadcast and a giving button"
+  caption="Fig. 3 — The live page in production: the embedded broadcast, the chat panel and the giving button for the current service."
+/>
 
 ## What this case does not claim
 
