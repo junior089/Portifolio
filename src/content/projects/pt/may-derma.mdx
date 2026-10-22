@@ -1,7 +1,7 @@
 ---
-order: 3
+order: 4
 name: "MAY Derma"
-eyebrow: "Estudo de caso 03 · MAY Derma"
+eyebrow: "Estudo de caso 04 · MAY Derma"
 title: "Manter a loja e um sistema externo em sincronia"
 lede: "Plataforma de e-commerce em WooCommerce construída e customizada para a MAY Derma e integrada aos sistemas externos de negócio da empresa. Entregue como contrato remoto entre maio e julho de 2026."
 meta:
@@ -46,7 +46,7 @@ A comunicação corre por webhooks para workers assíncronos. A loja emite um ev
 Como a entrega é at-least-once, todo consumidor é idempotente. O mesmo evento chegando duas vezes produz um pedido, não dois — deduplicado pelo identificador do próprio evento antes de qualquer escrita. É a parte do design que eu defenderia com mais convicção: reenvio não é caso de borda, é o modo normal de operação de uma integração por webhook.
 
 <Diagram
-  caption="Fig. 3 — A loja nunca chama o sistema externo de forma síncrona. Toda escrita atravessa um consumidor idempotente."
+  caption="Fig. 5 — A loja nunca chama o sistema externo de forma síncrona. Toda escrita atravessa um consumidor idempotente."
   layers={[
     { nodes: [{ label: "WooCommerce", sub: "WordPress · loja" }], edge: "webhook · eventos de pedido e estoque" },
     { nodes: [{ label: "Workers assíncronos", sub: "C#/.NET · consumidores idempotentes" }], edge: "escritas deduplicadas · reenvio em falha" },

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Carlos Alberto Soares de Oliveira Júnior — Currículo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=block"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="cv.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Carlos Alberto Soares de Oliveira Júnior</h1>
+      <p class="role">Estudante de Engenharia de Software · Desenvolvedor Back-end</p>
+      <p class="contact">
+        Brasília, DF · (61) 99244-5034 ·
+        <a href="mailto:carlosalbertoliveirajr07@gmail.com">carlosalbertoliveirajr07@gmail.com</a><br />
+        <a href="https://carlosjr.engineer/pt">carlosjr.engineer</a> ·
+        <a href="https://github.com/junior089">github.com/junior089</a> ·
+        <a href="https://www.linkedin.com/in/carlos-alberto-soares-de-oliveira-júnior">linkedin.com/in/carlos-alberto-soares-de-oliveira-júnior</a>
+      </p>
+    </header>
+
+    <section>
+      <h2>Resumo</h2>
+      <p>
+        Estudante de Engenharia de Software na UniCEUB e desenvolvedor back-end com experiência em contratos construindo
+        sistemas em produção para e-commerce e para os setores jurídico e médico. Trabalho principalmente com C#/.NET, Python,
+        Java e PostgreSQL, construí uma plataforma de dados judiciais que normaliza 19 integrações de tribunais atrás de uma API
+        e mantenho um aplicativo desktop open source em Java e Angular.
+      </p>
+    </section>
+
+    <section>
+      <h2>Experiência</h2>
+      <div class="item">
+        <div class="head">
+          <span class="title">Desenvolvedor Full Stack (contrato, remoto) · MAY Derma</span>
+          <span class="date">Mai 2026 – Jul 2026</span>
+        </div>
+        <ul>
+          <li>Desenvolvi em C#/.NET uma plataforma de afiliados e prescritores com links de indicação, cupons, atribuição de vendas, comissões e dashboards, usada por 20 parceiros.</li>
+          <li>Montei e customizei a loja em WordPress/WooCommerce — 18 produtos com variações, kits e promoções — que chegou a mais de 500 clientes pagantes.</li>
+          <li>Integrei pagamento, frete e marketing via webhooks e workers assíncronos; mantive a produção com Docker, Nginx, PostgreSQL e VPS Linux.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="head">
+          <span class="title">Desenvolvedor Back-end (contrato, remoto) · Agiliza Doutor</span>
+          <span class="date">Ago 2025 – Fev 2026</span>
+        </div>
+        <ul>
+          <li>Implementei 149 endpoints REST como fatias verticais completas — modelagem, migrações, DTOs, repositório, controller e documentação — sobre um schema de 32 tabelas, em sprints Scrum.</li>
+          <li>Criei em Python um pipeline de web scraping que coleta e normaliza atualizações processuais de tribunais, complementando dados incompletos da API unificada; depois ele evoluiu para o CourtIQ.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projetos</h2>
+      <div class="item">
+        <div class="head">
+          <span class="title">CourtIQ — Plataforma de dados judiciais</span>
+          <span class="date">Projeto pessoal · não implantado</span>
+        </div>
+        <p class="sub">Python · FastAPI · PostgreSQL · Redis · Playwright · Docker</p>
+        <ul>
+          <li>Normaliza 19 integrações de tribunais (PJe e e-SAJ) em um único modelo de domínio por meio de uma camada de adaptadores registrados, com organizações multi-tenant, chaves de API, SDKs e cobrança.</li>
+          <li>Pipeline assíncrono com workers em fila, retentativas com backoff exponencial e jitter, webhooks at-least-once e tabela dead-letter; 634 testes, 504 deles na API com 66,42% de cobertura de linhas.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="head">
+          <span class="title">ARPEON — Editor de partituras desktop open source</span>
+          <span class="date">2026 – atual</span>
+        </div>
+        <p class="sub">Java 25 · Angular 22 · TypeScript · Gradle · JCEF · Audiveris · <a href="https://github.com/junior089/ARPEON">github.com/junior089/ARPEON</a></p>
+        <ul>
+          <li>Aplicativo local para ler, editar e estudar partituras: reprodução MIDI, afinador YIN, relatórios de desempenho com andamento fixo e reconhecimento de partituras em PDF e imagem.</li>
+          <li>11 módulos Gradle atrás de uma ponte loopback autenticada; 242 testes JUnit e 184 Vitest; CI em Windows, Linux e macOS; instalador MSI por usuário para Windows.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="head">
+          <span class="title">Avivando — Plataforma de gestão de membros</span>
+          <span class="date">Jun 2026 – Set 2026</span>
+        </div>
+        <p class="sub">React · TypeScript · Payload CMS · PostgreSQL · Node.js</p>
+        <ul>
+          <li>Construída em dupla com um engenheiro sênior e em produção para mais de 500 usuários: duas aplicações integradas com controle de acesso por papéis, 23 módulos de conteúdo e 181 testes automatizados no CI.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="head">
+          <span class="title">Visio Divina — Gerador de apresentações com IA · Projeto de extensão UniCEUB</span>
+          <span class="date">Jun 2026</span>
+        </div>
+        <p class="sub">TypeScript · React · LLM (NVIDIA NIM) · Zod · Supabase/PostgreSQL · <a href="https://github.com/junior089/visio-divina">github.com/junior089/visio-divina</a></p>
+        <ul>
+          <li>Aplicação web em equipe que transforma roteiros de pregação em apresentações editáveis; a saída do modelo é validada com schemas Zod, prompt de reparo e fallback, com Row Level Security e exportação para PPTX, PDF e PNG.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Formação</h2>
+      <div class="item">
+        <div class="head">
+          <span class="title">Bacharelado em Engenharia de Software · Centro Universitário de Brasília (UniCEUB)</span>
+          <span class="date">Fev 2026 – Dez 2029 (previsto)</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="lines">
+      <h2>Competências técnicas</h2>
+      <p><b>Linguagens:</b> C#, Python, Java, TypeScript, JavaScript, SQL</p>
+      <p><b>Back-end e dados:</b> .NET (ASP.NET Core), FastAPI, APIs REST, webhooks, filas, workers assíncronos, idempotência, PostgreSQL, Redis</p>
+      <p><b>Front-end:</b> Angular, React, Next.js, Tailwind CSS</p>
+      <p><b>Ferramentas e práticas:</b> Docker, Linux, Nginx, Git, GitHub Actions, Azure DevOps · Scrum, análise de requisitos, testes automatizados</p>
+    </section>
+
+    <section class="lines">
+      <h2>Certificações, comunidade e idiomas</h2>
+      <p>
+        <b>Certificações:</b>
+        <a href="https://catalog-education.oracle.com/ords/certview/sharebadge_m?id=7E8557318DE662BDC508C49E9A2347B6B1C8ABE1D3EAF1267A111AC51F8A0535">Oracle Cloud Infrastructure Certified Architect Associate (1Z0-1072-26)</a> ·
+        <a href="https://catalog-education.oracle.com/ords/certview/sharebadge_m?id=CE3A2CFA318FD153B0B378F298731C5E9E6D3AAE754AECC24B48CA94586AAD9B">Oracle AI Database Certified Foundations Associate</a> ·
+        AWS Certified AI Practitioner (AIF-C01) · AWS Certified Cloud Practitioner (CLF-C02)
+      </p>
+      <p><b>Comunidade:</b> AWS Builder Center — Campus Builder Student Leader, Brasil (2026–atual) · comunidade Microsoft Azure</p>
+      <p><b>Idiomas:</b> português (nativo) · inglês (intermediário, leitura e escrita profissionais)</p>
+    </section>
+  </body>
+</html>

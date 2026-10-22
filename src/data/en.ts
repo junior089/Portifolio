@@ -1,11 +1,12 @@
 import type { SiteContent } from './types';
+import { OCI_ARCHITECT_BADGE_URL, ORACLE_AI_DATABASE_BADGE_URL } from './constants';
 
 export const en: SiteContent = {
   nav: { work: 'Work', resume: 'Résumé' },
   hero: {
     eyebrow: 'Brasília, Brazil — open to remote',
     headline: 'Software Engineering Student & Backend Developer',
-    sub: 'I build backend systems and data pipelines with Python, C#/.NET, PostgreSQL and Docker. Software Engineering student at UniCEUB, Brasília.',
+    sub: 'I build backend systems and data pipelines with C#/.NET, Python, Java and PostgreSQL, and maintain an open-source desktop application in Java and Angular. Software Engineering student at UniCEUB, Brasília.',
     ctaWork: 'View selected work →',
     ctaResume: 'Read the résumé'
   },
@@ -20,39 +21,41 @@ export const en: SiteContent = {
     education: 'Education',
     certs: 'Certifications',
     location: 'Location',
-    backHome: '← Index'
+    backHome: '← Index',
+    verify: 'Verify →'
   },
   experience: [
     {
       role: 'Full Stack Developer',
       org: 'MAY Derma · Contract · Remote',
       meta: 'May 2026 – Jul 2026',
-      desc: "Built and customized a WooCommerce e-commerce platform and integrated it with external business systems. Worked with WordPress, C#/.NET, PostgreSQL, Docker, Nginx and Linux in production.",
-      stack: 'WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux'
+      desc: "Set up the company's WordPress/WooCommerce store and built an affiliate and prescriber system around it in C#/.NET — referral links, coupons, commissions and partner dashboards. Integrated payment, shipping and marketing over webhooks and kept production running on Docker, Nginx, PostgreSQL and Linux.",
+      stack: 'C#/.NET · WordPress · WooCommerce · PostgreSQL · Docker · Nginx · Linux'
     },
     {
       role: 'Back-end Developer',
       org: 'Agiliza Doutor · Contract · Remote',
       meta: 'Aug 2025 – Feb 2026',
-      desc: "Back-end development on a platform serving the medical and legal sectors, working in Scrum sprints. I built the judicial scraper that later evolved into CourtIQ, and implemented most of the platform's API endpoints — each delivered as a full vertical slice: data modeling, migrations, models and DTOs, repository layer, controller, endpoint and documentation.",
+      desc: 'Back-end development on a platform serving the medical and legal sectors, working in Scrum sprints. I built the judicial scraper that later evolved into CourtIQ, modeled a 32-table relational database and implemented 149 REST endpoints — each delivered as a full vertical slice: data modeling, migrations, models and DTOs, repository layer, controller, endpoint and documentation.',
       stack: 'Python · REST APIs · PostgreSQL · Async processing · Scrum'
     }
   ],
   focus: [
-    { group: 'Languages', items: 'Python · C# / .NET · TypeScript · SQL' },
-    { group: 'Backend', items: 'FastAPI · REST APIs · Async workers · Webhooks · Idempotency' },
-    { group: 'Data', items: 'PostgreSQL · Payload CMS · Data modeling · Data normalization' },
-    { group: 'Infrastructure', items: 'Docker · Linux · Nginx · CI/CD · Git' },
-    { group: 'Frontend', items: 'React · Next.js · Tailwind CSS' }
+    { group: 'Languages', items: 'Python · C# / .NET · Java · TypeScript · SQL' },
+    { group: 'Backend', items: 'FastAPI · ASP.NET Core · REST APIs · Async workers · Webhooks · Idempotency' },
+    { group: 'Data', items: 'PostgreSQL · Redis · Payload CMS · Data modeling · Data normalization' },
+    { group: 'Infrastructure', items: 'Docker · Linux · Nginx · GitHub Actions · Azure DevOps · Git' },
+    { group: 'Frontend', items: 'Angular · React · Next.js · Tailwind CSS' }
   ],
   education: {
     degree: "Bachelor's in Software Engineering",
     meta: 'UniCEUB — Centro Universitário de Brasília · Feb 2026 – Dec 2029'
   },
   certsList: [
-    { name: 'Oracle Cloud Infrastructure 2026 Architect Associate', year: '2026' },
-    { name: 'AWS Certified Cloud Practitioner', year: '2026' },
-    { name: 'AWS Certified AI Practitioner', year: '2026' }
+    { name: 'Oracle Cloud Infrastructure Certified Architect Associate', year: '2026', href: OCI_ARCHITECT_BADGE_URL },
+    { name: 'Oracle AI Database Certified Foundations Associate', year: '2026', href: ORACLE_AI_DATABASE_BADGE_URL },
+    { name: 'AWS Certified AI Practitioner', year: '2026' },
+    { name: 'AWS Certified Cloud Practitioner', year: '2026' }
   ],
   contact: {
     headline: 'Open to internships and backend engineering roles.',
@@ -80,12 +83,12 @@ export const en: SiteContent = {
           {
             k: 'Full Stack Developer',
             meta: 'MAY Derma · May – Jul 2026',
-            v: "Built and customized a WooCommerce platform and integrated it with external business systems. WordPress, C#/.NET, PostgreSQL, Docker, Nginx and Linux in production."
+            v: 'Built an affiliate and prescriber system in C#/.NET — referral links, coupons, commissions and dashboards — and the WordPress/WooCommerce store. Integrated payment, shipping and marketing over webhooks; ran production on Docker, Nginx and PostgreSQL.'
           },
           {
             k: 'Back-end Developer',
             meta: 'Agiliza Doutor · Aug 2025 – Feb 2026',
-            v: "Back-end development on a platform serving the medical and legal sectors, in Scrum sprints. Built the judicial scraper that later evolved into CourtIQ and implemented most of the platform's API endpoints as full vertical slices."
+            v: 'Implemented 149 REST endpoints and a 32-table data model with migrations for a platform serving the legal and medical sectors, in Scrum sprints. Built the Python scraping pipeline for court updates that later evolved into CourtIQ.'
           }
         ]
       },
@@ -95,7 +98,12 @@ export const en: SiteContent = {
           {
             k: 'CourtIQ',
             meta: 'Personal project · not deployed',
-            v: 'Judicial monitoring SaaS. Adapter-based architecture normalizing 19 court integrations into one domain model. Python, FastAPI, PostgreSQL, Redis, Playwright, Docker.'
+            v: 'Judicial data API normalizing 19 court integrations (PJe and e-SAJ) into one domain model, with queues, retries with exponential backoff and 634 automated tests. Python, FastAPI, PostgreSQL, Redis, Playwright, Docker.'
+          },
+          {
+            k: 'ARPEON',
+            meta: '2026 – present · open source',
+            v: 'Local-first desktop score editor with MIDI playback, a YIN tuner, performance reports and PDF/image recognition. 11 Java modules behind an Angular interface, 242 JUnit and 184 Vitest tests, CI on Windows, Linux and macOS. Java, Angular, TypeScript, Gradle.'
           },
           {
             k: 'Avivando',
@@ -103,9 +111,9 @@ export const en: SiteContent = {
             v: 'Member management platform serving over 500 users, built alongside a senior engineer. Two integrated applications on Payload CMS: public site and operational core, with role-based access control. React, TypeScript, Payload CMS, PostgreSQL, Node.js.'
           },
           {
-            k: 'MAY Derma',
-            meta: 'May – Jul 2026 · contract',
-            v: 'WooCommerce platform integrated with external business systems over webhooks and idempotent async workers.'
+            k: 'Visio Divina',
+            meta: 'Jun 2026 · UniCEUB extension project',
+            v: 'Team web application that turns sermon scripts into editable slide decks with an LLM (Llama 3.3 70B), validating the output against Zod schemas with a repair prompt and a fallback. PostgreSQL on Supabase with Row Level Security; export to PPTX, PDF and PNG. TypeScript, React.'
           }
         ]
       },
@@ -114,32 +122,45 @@ export const en: SiteContent = {
         rows: [
           {
             k: "Bachelor's in Software Engineering",
-            meta: 'UniCEUB · Feb 2026 – Dec 2029',
-            v: 'Centro Universitário de Brasília.'
+            meta: 'UniCEUB · Feb 2026 – Dec 2029 (expected)',
+            v: 'Centro Universitário de Brasília. Currently in the second semester.'
           }
         ]
       },
       {
         label: 'Certifications',
         rows: [
-          { k: 'Oracle Cloud Infrastructure 2026 Architect Associate', meta: '2026', v: '' },
-          { k: 'AWS Certified Cloud Practitioner', meta: '2026', v: '' },
-          { k: 'AWS Certified AI Practitioner', meta: '2026', v: '' }
+          { k: 'Oracle Cloud Infrastructure Certified Architect Associate', meta: '2026', v: '', href: OCI_ARCHITECT_BADGE_URL },
+          { k: 'Oracle AI Database Certified Foundations Associate', meta: '2026', v: '', href: ORACLE_AI_DATABASE_BADGE_URL },
+          { k: 'AWS Certified AI Practitioner', meta: '2026', v: '' },
+          { k: 'AWS Certified Cloud Practitioner', meta: '2026', v: '' }
         ]
       },
       {
         label: 'Technical',
         rows: [
           {
-            k: 'Languages & backend',
+            k: 'Languages & frameworks',
             meta: '',
-            v: 'Python, C#/.NET, TypeScript, SQL. FastAPI, REST APIs, async workers, webhooks, idempotency.'
+            v: 'C#, Python, Java, TypeScript, JavaScript and SQL. .NET (ASP.NET Core), FastAPI, Angular and React.'
           },
           {
-            k: 'Data & infrastructure',
+            k: 'Back-end & data',
             meta: '',
-            v: 'PostgreSQL, Payload CMS, Docker, Linux, Nginx, CI/CD, Git.'
+            v: 'REST APIs, webhooks, queues and async workers, idempotency. PostgreSQL, Redis, data modeling and migrations.'
+          },
+          {
+            k: 'Tools',
+            meta: '',
+            v: 'Docker, Linux, Nginx, Git, GitHub Actions and Azure DevOps.'
           }
+        ]
+      },
+      {
+        label: 'Languages',
+        rows: [
+          { k: 'Portuguese', meta: 'Native', v: '' },
+          { k: 'English', meta: 'Intermediate', v: 'Professional reading and writing.' }
         ]
       }
     ]

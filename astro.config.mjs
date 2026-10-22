@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import { satteri } from '@astrojs/markdown-satteri';
 
 export default defineConfig({
   site: 'https://carlosjr.engineer',
@@ -11,7 +12,7 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
   markdown: {
-    smartypants: false
+    processor: satteri({ features: { smartPunctuation: false } })
   },
 
   integrations: [mdx(), sitemap()]

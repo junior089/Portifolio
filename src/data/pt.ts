@@ -1,11 +1,12 @@
 import type { SiteContent } from './types';
+import { OCI_ARCHITECT_BADGE_URL, ORACLE_AI_DATABASE_BADGE_URL } from './constants';
 
 export const pt: SiteContent = {
   nav: { work: 'Trabalhos', resume: 'Currículo' },
   hero: {
     eyebrow: 'Brasília, Brasil — aberto a remoto',
     headline: 'Estudante de Engenharia de Software e desenvolvedor backend',
-    sub: 'Construo sistemas backend e pipelines de dados com Python, C#/.NET, PostgreSQL e Docker. Estudante de Engenharia de Software na UniCEUB, Brasília.',
+    sub: 'Construo sistemas backend e pipelines de dados com C#/.NET, Python, Java e PostgreSQL, e mantenho um aplicativo desktop open source em Java e Angular. Estudante de Engenharia de Software na UniCEUB, Brasília.',
     ctaWork: 'Ver trabalhos selecionados →',
     ctaResume: 'Ver o currículo'
   },
@@ -20,39 +21,41 @@ export const pt: SiteContent = {
     education: 'Formação',
     certs: 'Certificações',
     location: 'Localização',
-    backHome: '← Índice'
+    backHome: '← Índice',
+    verify: 'Verificar →'
   },
   experience: [
     {
       role: 'Desenvolvedor Full Stack',
       org: 'MAY Derma · Contrato · Remoto',
       meta: 'Mai 2026 – Jul 2026',
-      desc: 'Construí e customizei uma plataforma de e-commerce em WooCommerce e a integrei a sistemas externos de negócio. Trabalhei com WordPress, C#/.NET, PostgreSQL, Docker, Nginx e Linux em produção.',
-      stack: 'WordPress · C#/.NET · PostgreSQL · Docker · Nginx · Linux'
+      desc: 'Montei a loja da empresa em WordPress/WooCommerce e construí em C#/.NET um sistema de afiliados e prescritores em torno dela — links de indicação, cupons, comissões e dashboards para parceiros. Integrei pagamento, frete e marketing via webhooks e mantive a produção com Docker, Nginx, PostgreSQL e Linux.',
+      stack: 'C#/.NET · WordPress · WooCommerce · PostgreSQL · Docker · Nginx · Linux'
     },
     {
       role: 'Desenvolvedor Back-end',
       org: 'Agiliza Doutor · Contrato · Remoto',
       meta: 'Ago 2025 – Fev 2026',
-      desc: 'Desenvolvimento back-end em uma plataforma para os setores médico e jurídico, trabalhando em sprints Scrum. Construí o scraper judicial que depois evoluiu para o CourtIQ e implementei a maior parte dos endpoints da API da plataforma — cada um entregue como fatia vertical completa: modelagem de dados, migrações, models e DTOs, camada de repositório, controller, endpoint e documentação.',
+      desc: 'Desenvolvimento back-end em uma plataforma para os setores médico e jurídico, trabalhando em sprints Scrum. Construí o scraper judicial que depois evoluiu para o CourtIQ, modelei um banco relacional de 32 tabelas e implementei 149 endpoints REST — cada um entregue como fatia vertical completa: modelagem de dados, migrações, models e DTOs, camada de repositório, controller, endpoint e documentação.',
       stack: 'Python · APIs REST · PostgreSQL · Processamento assíncrono · Scrum'
     }
   ],
   focus: [
-    { group: 'Linguagens', items: 'Python · C# / .NET · TypeScript · SQL' },
-    { group: 'Backend', items: 'FastAPI · APIs REST · Workers assíncronos · Webhooks · Idempotência' },
-    { group: 'Dados', items: 'PostgreSQL · Payload CMS · Modelagem de dados · Normalização de dados' },
-    { group: 'Infraestrutura', items: 'Docker · Linux · Nginx · CI/CD · Git' },
-    { group: 'Frontend', items: 'React · Next.js · Tailwind CSS' }
+    { group: 'Linguagens', items: 'Python · C# / .NET · Java · TypeScript · SQL' },
+    { group: 'Backend', items: 'FastAPI · ASP.NET Core · APIs REST · Workers assíncronos · Webhooks · Idempotência' },
+    { group: 'Dados', items: 'PostgreSQL · Redis · Payload CMS · Modelagem de dados · Normalização de dados' },
+    { group: 'Infraestrutura', items: 'Docker · Linux · Nginx · GitHub Actions · Azure DevOps · Git' },
+    { group: 'Frontend', items: 'Angular · React · Next.js · Tailwind CSS' }
   ],
   education: {
     degree: 'Bacharelado em Engenharia de Software',
     meta: 'UniCEUB — Centro Universitário de Brasília · Fev 2026 – Dez 2029'
   },
   certsList: [
-    { name: 'Oracle Cloud Infrastructure 2026 Architect Associate', year: '2026' },
-    { name: 'AWS Certified Cloud Practitioner', year: '2026' },
-    { name: 'AWS Certified AI Practitioner', year: '2026' }
+    { name: 'Oracle Cloud Infrastructure Certified Architect Associate', year: '2026', href: OCI_ARCHITECT_BADGE_URL },
+    { name: 'Oracle AI Database Certified Foundations Associate', year: '2026', href: ORACLE_AI_DATABASE_BADGE_URL },
+    { name: 'AWS Certified AI Practitioner', year: '2026' },
+    { name: 'AWS Certified Cloud Practitioner', year: '2026' }
   ],
   contact: {
     headline: 'Aberto a estágios e vagas de engenharia backend.',
@@ -80,12 +83,12 @@ export const pt: SiteContent = {
           {
             k: 'Desenvolvedor Full Stack',
             meta: 'MAY Derma · Mai – Jul 2026',
-            v: 'Construí e customizei uma plataforma WooCommerce e a integrei a sistemas externos de negócio. WordPress, C#/.NET, PostgreSQL, Docker, Nginx e Linux em produção.'
+            v: 'Construí em C#/.NET um sistema de afiliados e prescritores — links de indicação, cupons, comissões e dashboards — e montei a loja em WordPress/WooCommerce. Integrei pagamento, frete e marketing via webhooks; mantive a produção com Docker, Nginx e PostgreSQL.'
           },
           {
             k: 'Desenvolvedor Back-end',
             meta: 'Agiliza Doutor · Ago 2025 – Fev 2026',
-            v: 'Desenvolvimento back-end em plataforma para os setores médico e jurídico, em sprints Scrum. Construí o scraper judicial que evoluiu para o CourtIQ e implementei a maior parte dos endpoints da API como fatias verticais completas.'
+            v: 'Implementei 149 endpoints REST e um modelo de dados de 32 tabelas com migrações para uma plataforma dos setores jurídico e médico, em sprints Scrum. Construí o pipeline de scraping em Python para atualizações processuais que evoluiu para o CourtIQ.'
           }
         ]
       },
@@ -95,7 +98,12 @@ export const pt: SiteContent = {
           {
             k: 'CourtIQ',
             meta: 'Projeto pessoal · não implantado',
-            v: 'SaaS de monitoramento judicial. Arquitetura de adaptadores normalizando 19 integrações judiciais em um modelo de domínio. Python, FastAPI, PostgreSQL, Redis, Playwright, Docker.'
+            v: 'API de dados judiciais que normaliza 19 integrações de tribunais (PJe e e-SAJ) em um único modelo de domínio, com filas, retentativas com backoff exponencial e 634 testes automatizados. Python, FastAPI, PostgreSQL, Redis, Playwright, Docker.'
+          },
+          {
+            k: 'ARPEON',
+            meta: '2026 – atual · open source',
+            v: 'Editor de partituras desktop e local, com reprodução MIDI, afinador YIN, relatórios de desempenho e reconhecimento de PDF e imagem. 11 módulos Java atrás de uma interface Angular, 242 testes JUnit e 184 Vitest, CI em Windows, Linux e macOS. Java, Angular, TypeScript, Gradle.'
           },
           {
             k: 'Avivando',
@@ -103,9 +111,9 @@ export const pt: SiteContent = {
             v: 'Plataforma de gestão de membros atendendo mais de 500 usuários, construída ao lado de um engenheiro sênior. Duas aplicações integradas sobre Payload CMS: site público e core operacional, com controle de acesso por papéis. React, TypeScript, Payload CMS, PostgreSQL, Node.js.'
           },
           {
-            k: 'MAY Derma',
-            meta: 'Mai – Jul 2026 · contrato',
-            v: 'Plataforma WooCommerce integrada a sistemas externos de negócio via webhooks e workers assíncronos idempotentes.'
+            k: 'Visio Divina',
+            meta: 'Jun 2026 · projeto de extensão UniCEUB',
+            v: 'Aplicação web em equipe que transforma roteiros de pregação em apresentações editáveis com um LLM (Llama 3.3 70B), validando a saída com schemas Zod, prompt de reparo e fallback. PostgreSQL no Supabase com Row Level Security; exportação para PPTX, PDF e PNG. TypeScript, React.'
           }
         ]
       },
@@ -114,32 +122,45 @@ export const pt: SiteContent = {
         rows: [
           {
             k: 'Bacharelado em Engenharia de Software',
-            meta: 'UniCEUB · Fev 2026 – Dez 2029',
-            v: 'Centro Universitário de Brasília.'
+            meta: 'UniCEUB · Fev 2026 – Dez 2029 (previsto)',
+            v: 'Centro Universitário de Brasília. Cursando o segundo semestre.'
           }
         ]
       },
       {
         label: 'Certificações',
         rows: [
-          { k: 'Oracle Cloud Infrastructure 2026 Architect Associate', meta: '2026', v: '' },
-          { k: 'AWS Certified Cloud Practitioner', meta: '2026', v: '' },
-          { k: 'AWS Certified AI Practitioner', meta: '2026', v: '' }
+          { k: 'Oracle Cloud Infrastructure Certified Architect Associate', meta: '2026', v: '', href: OCI_ARCHITECT_BADGE_URL },
+          { k: 'Oracle AI Database Certified Foundations Associate', meta: '2026', v: '', href: ORACLE_AI_DATABASE_BADGE_URL },
+          { k: 'AWS Certified AI Practitioner', meta: '2026', v: '' },
+          { k: 'AWS Certified Cloud Practitioner', meta: '2026', v: '' }
         ]
       },
       {
         label: 'Técnico',
         rows: [
           {
-            k: 'Linguagens e backend',
+            k: 'Linguagens e frameworks',
             meta: '',
-            v: 'Python, C#/.NET, TypeScript, SQL. FastAPI, APIs REST, workers assíncronos, webhooks, idempotência.'
+            v: 'C#, Python, Java, TypeScript, JavaScript e SQL. .NET (ASP.NET Core), FastAPI, Angular e React.'
           },
           {
-            k: 'Dados e infraestrutura',
+            k: 'Back-end e dados',
             meta: '',
-            v: 'PostgreSQL, Payload CMS, Docker, Linux, Nginx, CI/CD, Git.'
+            v: 'APIs REST, webhooks, filas e workers assíncronos, idempotência. PostgreSQL, Redis, modelagem de dados e migrações.'
+          },
+          {
+            k: 'Ferramentas',
+            meta: '',
+            v: 'Docker, Linux, Nginx, Git, GitHub Actions e Azure DevOps.'
           }
+        ]
+      },
+      {
+        label: 'Idiomas',
+        rows: [
+          { k: 'Português', meta: 'Nativo', v: '' },
+          { k: 'Inglês', meta: 'Intermediário', v: 'Leitura e escrita profissionais.' }
         ]
       }
     ]

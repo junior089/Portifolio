@@ -80,19 +80,26 @@ const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
       <div class="mb-14 font-mono text-xs tracking-[0.14em] text-muted uppercase">{t.labels.certifications}</div>
       <div class="flex flex-wrap gap-[clamp(24px,5vw,56px)]">
         <div class="w-[200px] shrink-0 font-mono text-xs leading-[1.9] text-muted">{t.labels.education}</div>
-        <div class="mb-12 min-w-0 max-w-[680px] flex-1">
+        <div class="mb-12 min-w-[260px] max-w-[680px] flex-1">
           <h3 class="mb-1 font-sans text-xl font-medium text-paper">{t.education.degree}</h3>
           <div class="font-mono text-xs text-muted">{t.education.meta}</div>
         </div>
       </div>
       <div class="flex flex-wrap gap-[clamp(24px,5vw,56px)] pt-6">
         <div class="w-[200px] shrink-0 font-mono text-xs leading-[1.9] text-muted">{t.labels.certs}</div>
-        <div class="min-w-0 max-w-[680px] flex-1">
+        <div class="min-w-[260px] max-w-[680px] flex-1">
           {
             t.certsList.map((c) => (
-              <div class="flex justify-between gap-6 border-t border-line py-4">
+              <div class="flex flex-wrap justify-between gap-x-6 gap-y-1 border-t border-line py-4">
                 <span class="text-[17px] text-paper">{c.name}</span>
-                <span class="shrink-0 font-mono text-xs text-muted">{c.year}</span>
+                <span class="flex shrink-0 items-baseline gap-4 font-mono text-xs text-muted">
+                  {c.href && (
+                    <a href={c.href} target="_blank" rel="noreferrer" class="text-muted hover:text-paper">
+                      {t.labels.verify}
+                    </a>
+                  )}
+                  <span>{c.year}</span>
+                </span>
               </div>
             ))
           }

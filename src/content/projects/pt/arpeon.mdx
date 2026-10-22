@@ -1,0 +1,108 @@
+---
+order: 2
+name: "ARPEON"
+eyebrow: "Estudo de caso 02 · ARPEON"
+title: "Uma estação de partituras local que só informa o que consegue medir"
+lede: "O ARPEON é meu aplicativo desktop open source para ler, editar e estudar partituras. Módulos Java cuidam da música, do áudio e dos arquivos; uma interface Angular roda numa janela Chromium embutida. É um pré-lançamento: o código é público, os binários para Windows ainda não."
+meta:
+  - k: "Papel"
+    v: "Desenvolvedor único · módulos Java, interface Angular, empacotamento"
+  - k: "Status"
+    v: "Open source · pré-lançamento"
+  - k: "Stack"
+    v: "Java 25 · Angular 22 · TypeScript · Gradle · JCEF · Audiveris"
+  - k: "Licença"
+    v: "AGPL-3.0-or-later"
+viewSource: "https://github.com/junior089/ARPEON"
+numbersLabel: "Auditado no repositório · snapshot de 21/10/2026"
+numbers:
+  - "11 módulos Gradle, além da aplicação desktop"
+  - "242 testes JUnit e 184 testes Vitest"
+  - "~17 mil linhas de Java em 101 arquivos; ~9,8 mil linhas de TypeScript em 52 arquivos"
+  - "CI em Windows, Linux e macOS · 14 registros de decisão de arquitetura"
+numbersNote: "As contagens vêm do próprio repositório. Não há número de usuários nesta página porque ainda não há lançamento público dos binários."
+home:
+  desc: "Aplicativo desktop open source e local para ler, editar e estudar partituras. Onze módulos Java cuidam do domínio musical, do parsing de MusicXML, da detecção de afinação e da reprodução MIDI; uma interface Angular roda numa janela Chromium embutida e só fala com o Java por uma ponte loopback autenticada. Inclui afinador YIN, relatórios de desempenho com andamento fixo e reconhecimento de partituras em PDF e imagem via Audiveris."
+  status: "Open source · pré-lançamento"
+  meta: "2026 – atual · Java · Angular · TypeScript · Gradle · JCEF"
+---
+
+import Bullets from '../../../components/Bullets.astro';
+import Diagram from '../../../components/Diagram.astro';
+import Screenshot from '../../../components/Screenshot.astro';
+import scoreEditor from '../../../assets/arpeon-score-editor.png';
+
+## Contexto
+
+Estudar por partitura costuma significar alternar entre ferramentas: uma para ler, outra para reproduzir, um afinador, um metrônomo e alguma coisa para gravar uma tentativa e comparar com o que estava escrito. A maioria exige conta online ou envia o áudio para um servidor. O ARPEON junta esse ciclo num único aplicativo desktop que roda inteiro na máquina à sua frente.
+
+É open source sob AGPL-3.0-or-later e ainda está em pré-lançamento. A versão 0.1.1 foi publicada como código-fonte; uma build 0.1.2 para Windows existe localmente, mas os binários públicos ficam retidos até fecharem os critérios de lançamento de assinatura, redistribuição e recuperação.
+
+<Screenshot
+  src={scoreEditor}
+  alt="Editor de partituras do ARPEON mostrando uma melodia curta, o inspetor de notas e a barra de transporte MIDI"
+  caption="Fig. 2 — O editor de partituras na build 0.1.1: notação, inspetor e transporte MIDI."
+/>
+
+## O problema
+
+Software musical falha em silêncio. Um parser que descarta uma segunda voz, um motor de reprodução que arredonda uma quiáltera ou um afinador que reporta uma altura confiante para ruído produzem resultados que parecem certos. Desenhar notas na tela é a parte fácil. A difícil é manter uma representação exata da música da importação à edição, reprodução e análise — e se recusar a fingir quando uma entrada não pode ser representada.
+
+O segundo problema é o formato da aplicação. A interface pede um framework web moderno e um renderizador de notação; captura de áudio, tempo e arquivos pedem um runtime com acesso direto à máquina. Juntar os dois sem cuidado dá uma página web com o microfone ligado ao JavaScript ou uma interface nativa cara de evoluir.
+
+## Restrições
+
+<Bullets items={[
+  { k: "Local", v: "Partituras, projetos e processamento de áudio ficam na máquina. Sem conta, telemetria ou envio de áudio; o microfone só liga a pedido." },
+  { k: "Exatidão", v: "Acordes, vozes e repetições são preservados ou rejeitados explicitamente. Nada é achatado para uma importação dar certo." },
+  { k: "Entrada não confiável", v: "MusicXML, MIDI, WAV, PDF e imagens podem vir de qualquer lugar. Todo parser é limitado e falha fechado." },
+  { k: "Um desenvolvedor", v: "Eu sou o time inteiro, então toda fronteira tem de ser garantida pelo build e pelos testes, não pela memória." }
+]} />
+
+## Arquitetura
+
+A aplicação são dois programas entregues como um. O Java 25 cuida do domínio musical, do parsing de MusicXML, da captura de áudio, da detecção de afinação, do transporte MIDI e do armazenamento de projetos. A interface em Angular 22 renderiza a notação com OpenSheetMusicDisplay e roda dentro de uma janela Chromium embutida via JCEF, então o renderizador vai junto com a aplicação em vez de depender do navegador instalado.
+
+As duas metades conversam por HTTP em 127.0.0.1, numa porta efêmera, autenticadas por um token de sessão aleatório de 256 bits gerado com segurança criptográfica. As requisições são limitadas, Host e Origin são verificados, o CORS fica desligado e não existe ponte JavaScript–Java. Só dados da partitura e medições atravessam essa linha; o microfone pertence ao Java.
+
+Abaixo da aplicação desktop, onze módulos Gradle dividem o trabalho: domínio, MusicXML, áudio, DSP, afinador, transporte, reprodução, importação, OMR, análise e um experimento offline de machine learning. O módulo de domínio não depende de nenhum outro, e nenhum módulo musical conhece a janela, o instalador ou a camada HTTP.
+
+<Diagram
+  caption="Fig. 3 — A interface nunca chama o Java diretamente, e os módulos musicais nunca veem a janela em que rodam. O reconhecimento é um processo separado cuja saída volta pelo mesmo importador."
+  layers={[
+    { nodes: [{ label: "Interface Angular 22", sub: "OpenSheetMusicDisplay · janela JCEF" }], edge: "HTTP loopback autenticado · sem ponte JS–Java" },
+    { nodes: [{ label: "Aplicação desktop", sub: "Java 25 · composição · projetos locais" }], edge: "módulos musicais · sem dependência de UI ou empacotamento" },
+    { nodes: [{ label: "Núcleo da partitura", sub: "domínio · MusicXML · MIDI" }, { label: "Análise de áudio", sub: "captura · YIN · métricas" }, { label: "Importações", sub: "MIDI · WAV · PDF · imagem" }], edge: "só OMR · processo isolado, timeout, cancelamento" },
+    { nodes: [{ label: "Audiveris CLI", sub: "PDF / imagem → MusicXML" }] }
+  ]}
+/>
+
+## Decisões-chave e trade-offs
+
+Cinco decisões moldaram o sistema, e cada uma custou algo.
+
+<Bullets items={[
+  { k: "Ponte loopback", v: "Escolhi um contrato HTTP local autenticado em vez de expor objetos Java ao JavaScript. O mesmo contrato funciona num navegador durante o desenvolvimento e na janela desktop, e uma página comprometida não consegue chamar Java arbitrário. O custo é uma camada de serialização e um ciclo de vida de sessão para administrar." },
+  { k: "Chromium embutido", v: "Embutir o Chromium via JCEF faz a notação renderizar igual em qualquer máquina. O custo é um instalador maior, inicialização nativa e assumir as atualizações de segurança do Chromium." },
+  { k: "Revisões imutáveis", v: "Uma partitura importada nunca é modificada. Cada edição aceita vira uma nova revisão, validada contra a exportação MusicXML, a linha do tempo e a sequência MIDI antes de ser confirmada, e os originais importados são guardados e verificados. O custo é memória, e uma edição que quebraria o total de um compasso falha em vez de ser remendada." },
+  { k: "OMR como processo", v: "O reconhecimento de partituras roda a ferramenta de linha de comando do Audiveris como processo isolado, com timeout e cancelamento da árvore de processos, em vez de carregar suas classes internas como biblioteca. A saída volta pelo mesmo importador seguro de MusicXML e exige revisão. O custo é o overhead de processo e um runtime empacotado; o ganho é que uma mudança no Audiveris não alcança o código de domínio." },
+  { k: "Métricas separadas", v: "A análise de desempenho informa altura, tempo, duração e confiança como números separados, com todas as fórmulas documentadas. Não existe nota geral. Uma nota composta seria mais fácil de mostrar e impossível de defender." }
+]} />
+
+## Qualidade e testes
+
+O repositório tem 242 testes JUnit e 184 testes Vitest. O CI compila e testa os módulos Java em Windows, Linux e macOS, roda formatação, lint, checagem de tipos, testes e build de produção do frontend, e verifica as licenças das dependências. Os testes usam áudio sintético e fixtures salvas, então a detecção de afinação e o pipeline de reconhecimento são exercitados sem microfone.
+
+Um CI verde no macOS significa que os módulos funcionam lá, não que exista instalador para macOS. Latência de microfone, qualidade do sintetizador e dispositivos de áudio reais ainda precisam de aceite em hardware físico, e o repositório diz isso em vez de deixar um build aprovado sugerir o contrário.
+
+## Resultados
+
+O que existe: uma build desktop para Windows com importação e edição de partituras, reprodução MIDI com loops e metrônomo, afinador cromático, relatórios de desempenho com andamento fixo, reconhecimento de PDF e imagem com revisão, perfis de estudo locais e um instalador MSI por usuário. A validação local exercitou instalação, reparo, atualização, rejeição de downgrade, desinstalação e reinstalação preservando projetos e preferências, e abriu a aplicação sem Java nem Node no PATH.
+
+O que ainda não existe: um lançamento público dos binários. Assinatura de código confiável, um feed de atualização em produção e algumas obrigações de redistribuição continuam abertos, e o rollback do instalador falhou sob injeção de falhas na máquina de teste. Isso está listado no repositório como critérios em aberto, não escondido atrás de um botão de download.
+
+## Retrospectiva
+
+A primeira versão abria o navegador do sistema a partir de um launcher Java. Era o tamanho certo para a primeira fatia vertical — um afinador funcionando — e o formato errado para um produto: a experiência dependia do navegador instalado, e o microfone ficava preso a uma aba aberta. Migrar para uma janela Chromium embutida só foi barato porque o contrato loopback já existia; a interface não precisou mudar.
+
+O que eu repetiria é falhar fechado. Todo importador rejeita o que não consegue representar fielmente. Isso deixa a lista de recursos mais curta — MSCZ de uma pauta, rascunhos de MIDI monofônico — mas nada que o usuário abre fica silenciosamente diferente do arquivo que ele escolheu.

@@ -1,0 +1,19 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption: string;
+}
+
+const { src, alt, caption } = Astro.props;
+---
+
+<figure class="mt-12">
+  <div class="overflow-hidden rounded-xl border border-line bg-surface">
+    <Image src={src} alt={alt} widths={[760, 1264]} sizes="(min-width: 800px) 760px, 100vw" class="block h-auto w-full" />
+  </div>
+  <figcaption class="mt-4 font-mono text-xs leading-[1.6] text-muted">{caption}</figcaption>
+</figure>

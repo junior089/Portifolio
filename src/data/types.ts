@@ -21,6 +21,7 @@ export interface SiteContent {
     certs: string;
     location: string;
     backHome: string;
+    verify: string;
   };
   experience: {
     role: string;
@@ -31,7 +32,7 @@ export interface SiteContent {
   }[];
   focus: { group: string; items: string }[];
   education: { degree: string; meta: string };
-  certsList: { name: string; year: string }[];
+  certsList: { name: string; year: string; href?: string }[];
   contact: { headline: string; body: string; location: string };
   notFound: {
     title: string;
@@ -45,7 +46,7 @@ export interface SiteContent {
     cvFile: string;
     blocks: {
       label: string;
-      rows: { k: string; meta: string; v: string }[];
+      rows: { k: string; meta: string; v: string; href?: string }[];
     }[];
   };
 }

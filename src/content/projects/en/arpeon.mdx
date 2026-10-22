@@ -1,0 +1,108 @@
+---
+order: 2
+name: "ARPEON"
+eyebrow: "Case study 02 · ARPEON"
+title: "A local-first score workstation that only reports what it can measure"
+lede: "ARPEON is my open-source desktop application for reading, editing and practising sheet music. Java modules own the music, the audio and the files; an Angular interface runs in an embedded Chromium window. It is a pre-release: the code is public, the Windows binaries are not yet."
+meta:
+  - k: "Role"
+    v: "Sole developer · Java modules, Angular UI, packaging"
+  - k: "Status"
+    v: "Open source · pre-release"
+  - k: "Stack"
+    v: "Java 25 · Angular 22 · TypeScript · Gradle · JCEF · Audiveris"
+  - k: "License"
+    v: "AGPL-3.0-or-later"
+viewSource: "https://github.com/junior089/ARPEON"
+numbersLabel: "Audited in the repository · snapshot 21 Oct 2026"
+numbers:
+  - "11 Gradle modules plus the desktop application"
+  - "242 JUnit tests and 184 Vitest tests"
+  - "~17,000 lines of Java across 101 files; ~9,800 lines of TypeScript across 52 files"
+  - "CI on Windows, Linux and macOS · 14 architecture decision records"
+numbersNote: "Counts come from the repository itself. There is no usage figure on this page because there is no public binary release yet."
+home:
+  desc: "An open-source, local-first desktop application for reading, editing and practising sheet music. Eleven Java modules own the musical domain, MusicXML parsing, pitch detection and MIDI playback; an Angular interface runs in an embedded Chromium window and reaches Java only through an authenticated loopback bridge. It includes a YIN tuner, fixed-tempo performance reports and PDF/image score recognition through Audiveris."
+  status: "Open source · Pre-release"
+  meta: "2026 – present · Java · Angular · TypeScript · Gradle · JCEF"
+---
+
+import Bullets from '../../../components/Bullets.astro';
+import Diagram from '../../../components/Diagram.astro';
+import Screenshot from '../../../components/Screenshot.astro';
+import scoreEditor from '../../../assets/arpeon-score-editor.png';
+
+## Context
+
+Studying from sheet music usually means juggling tools: one to read the score, another to play it back, a tuner, a metronome, and something to record an attempt and compare it with what was written. Most of them assume an online account or send audio to a server. ARPEON puts that loop into one desktop application that runs entirely on the machine in front of you.
+
+It is open source under AGPL-3.0-or-later and still a pre-release. Version 0.1.1 was published as source code; a 0.1.2 Windows build exists locally, but public binaries are held back until the release gates on signing, redistribution and recovery are closed.
+
+<Screenshot
+  src={scoreEditor}
+  alt="ARPEON score editor showing a short melody, the note inspector and the MIDI transport bar"
+  caption="Fig. 2 — The score editor in the 0.1.1 build: notation, inspector and MIDI transport. The interface is in Portuguese."
+/>
+
+## The problem
+
+Music software fails quietly. A parser that drops a second voice, a playback engine that rounds a triplet, or a tuner that reports a confident pitch for noise all produce output that looks right. Drawing notes on a screen is the easy part. The hard part is keeping one exact representation of the music through import, editing, playback and analysis — and refusing to pretend when an input cannot be represented.
+
+The second problem is the shape of the application. The interface wants a modern web framework and a notation renderer; audio capture, timing and file handling want a runtime with direct access to the machine. Joined carelessly, that gives either a web page with the microphone wired into JavaScript or a native interface that is expensive to change.
+
+## Constraints
+
+<Bullets items={[
+  { k: "Local-first", v: "Scores, projects and audio processing stay on the machine. No account, telemetry or audio upload; the microphone starts only on request." },
+  { k: "Exactness", v: "Chords, voices and repeats are preserved or rejected explicitly. Nothing is flattened to make an import succeed." },
+  { k: "Untrusted input", v: "MusicXML, MIDI, WAV, PDF and images can come from anywhere. Every parser is bounded and fails closed." },
+  { k: "One developer", v: "I am the whole team, so every boundary has to be enforced by the build and the tests, not by memory." }
+]} />
+
+## Architecture
+
+The application is two programs that ship as one. Java 25 owns the musical domain, MusicXML parsing, audio capture, pitch detection, the MIDI transport and project storage. The Angular 22 interface renders notation with OpenSheetMusicDisplay and runs inside a Chromium window embedded through JCEF, so the renderer ships with the application instead of depending on whatever browser is installed.
+
+The two halves talk over HTTP on 127.0.0.1, bound to an ephemeral port and authenticated with a cryptographically random 256-bit session token. Requests are bounded, Host and Origin are checked, CORS is disabled and there is no JavaScript-to-Java bridge. Only score data and measurements cross that line; the microphone belongs to Java.
+
+Below the desktop application, eleven Gradle modules split the work: domain, MusicXML, audio, DSP, tuner, transport, playback, import, OMR, analysis and an offline machine-learning experiment. The domain module has no project dependencies, and none of the musical modules know about the window, the installer or the HTTP layer.
+
+<Diagram
+  caption="Fig. 3 — The interface never calls Java directly, and the musical modules never see the window they run in. Recognition is a separate process whose output re-enters through the same importer."
+  layers={[
+    { nodes: [{ label: "Angular 22 interface", sub: "OpenSheetMusicDisplay · JCEF window" }], edge: "authenticated loopback HTTP · no JS-to-Java bridge" },
+    { nodes: [{ label: "Desktop application", sub: "Java 25 · composition · local projects" }], edge: "musical modules · no UI or packaging dependencies" },
+    { nodes: [{ label: "Score core", sub: "domain · MusicXML · MIDI" }, { label: "Audio analysis", sub: "capture · YIN · metrics" }, { label: "Imports", sub: "MIDI · WAV · PDF · image" }], edge: "OMR only · isolated process, timeout, cancellation" },
+    { nodes: [{ label: "Audiveris CLI", sub: "PDF / image → MusicXML" }] }
+  ]}
+/>
+
+## Key decisions and trade-offs
+
+Five decisions shaped the system, and each of them cost something.
+
+<Bullets items={[
+  { k: "Loopback bridge", v: "I chose an authenticated local HTTP contract over exposing Java objects to JavaScript. The same contract works in a browser during development and in the desktop window, and a compromised page cannot call arbitrary Java. The cost is a serialization layer and a session lifecycle to manage." },
+  { k: "Shipped Chromium", v: "Embedding Chromium through JCEF means notation renders the same way on every machine. The cost is a larger installer, native initialization and owning Chromium's security updates." },
+  { k: "Immutable revisions", v: "An imported score is never modified. Each accepted edit becomes a new revision, validated against MusicXML export, the score timeline and the MIDI sequence before it is committed, and imported originals are kept and verified. The cost is memory, and an edit that would break a measure's total fails instead of being patched." },
+  { k: "OMR as a process", v: "Score recognition runs the Audiveris command-line tool as an isolated process with a timeout and process-tree cancellation, instead of loading its internal classes as a library. Its output re-enters through the same secure MusicXML importer and requires review. The cost is process overhead and a bundled runtime; the benefit is that an upstream change cannot reach the domain code." },
+  { k: "Separate metrics", v: "Performance analysis reports pitch, timing, duration and confidence as separate numbers, with every formula documented. There is no overall score. A composite grade would be easier to show and impossible to defend." }
+]} />
+
+## Quality and tests
+
+The repository has 242 JUnit tests and 184 Vitest tests. CI builds and tests the Java modules on Windows, Linux and macOS, runs formatting, linting, type checking, tests and a production build for the frontend, and checks dependency licenses. Tests use synthetic audio and saved fixtures, so pitch detection and the recognition pipeline are exercised without a microphone.
+
+A green run on macOS means the modules work there, not that a macOS installer exists. Microphone latency, synthesizer quality and real audio devices still need acceptance on physical hardware, and the repository says so instead of letting a passing build imply it.
+
+## Results
+
+What exists: a Windows desktop build with score import and editing, MIDI playback with loops and a metronome, a chromatic tuner, fixed-tempo performance reports, PDF and image recognition with review, local study profiles and a per-user MSI installer. Local validation exercised install, repair, upgrade, downgrade rejection, uninstall and reinstall with projects and preferences preserved, and launched the application without Java or Node on the PATH.
+
+What does not exist yet: a public binary release. Trusted code signing, a live update feed and some redistribution obligations are still open, and installer rollback failed under fault injection on the test machine. Those are listed in the repository as open gates rather than hidden behind a download button.
+
+## Retrospective
+
+The first version opened the system browser from a Java launcher. It was the right size for the first vertical slice — a working tuner — and the wrong shape for a product: the experience depended on whichever browser was installed, and the microphone stayed tied to an open tab. Moving to an embedded Chromium window was cheap only because the loopback contract already existed; the interface did not have to change.
+
+What I would repeat is failing closed. Every importer rejects what it cannot represent faithfully. It makes the feature list shorter — one-staff MSCZ, monophonic MIDI drafts — but nothing a user opens is silently different from the file they chose.

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Carlos Alberto Soares de Oliveira Júnior — Résumé</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=block"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="cv.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Carlos Alberto Soares de Oliveira Júnior</h1>
+      <p class="role">Software Engineering Student · Back-end Developer</p>
+      <p class="contact">
+        Brasília, Brazil · +55 61 99244-5034 ·
+        <a href="mailto:carlosalbertoliveirajr07@gmail.com">carlosalbertoliveirajr07@gmail.com</a><br />
+        <a href="https://carlosjr.engineer">carlosjr.engineer</a> ·
+        <a href="https://github.com/junior089">github.com/junior089</a> ·
+        <a href="https://www.linkedin.com/in/carlos-alberto-soares-de-oliveira-júnior">linkedin.com/in/carlos-alberto-soares-de-oliveira-júnior</a>
+      </p>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <p>
+        Software Engineering undergraduate at UniCEUB and back-end developer with contract experience building production
+        systems for e-commerce and for the legal and medical sectors. I work mainly with C#/.NET, Python, Java and PostgreSQL,
+        built a judicial data platform that normalizes 19 court integrations behind one API, and maintain an open-source desktop
+        application in Java and Angular.
+      </p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      <div class="item">
+        <div class="head">
+          <span class="title">Full Stack Developer (contract, remote) · MAY Derma</span>
+          <span class="date">May 2026 – Jul 2026</span>
+        </div>
+        <ul>
+          <li>Built a C#/.NET affiliate and prescriber platform with referral links, coupons, sales attribution, commissions and dashboards, serving 20 registered partners.</li>
+          <li>Set up and customized the WordPress/WooCommerce store — 18 products with variants, bundles and promotions — which grew to over 500 paying customers.</li>
+          <li>Integrated payment, shipping and marketing systems over webhooks and async workers; maintained production on Docker, Nginx, PostgreSQL and a Linux VPS.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="head">
+          <span class="title">Back-end Developer (contract, remote) · Agiliza Doutor</span>
+          <span class="date">Aug 2025 – Feb 2026</span>
+        </div>
+        <ul>
+          <li>Implemented 149 REST endpoints as full vertical slices — data modeling, migrations, DTOs, repository, controller and documentation — over a 32-table schema, in Scrum sprints.</li>
+          <li>Built a Python web-scraping pipeline that collects and normalizes case updates from court portals, supplementing incomplete unified API data; it later evolved into CourtIQ.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      <div class="item">
+        <div class="head">
+          <span class="title">CourtIQ — Judicial data platform</span>
+          <span class="date">Personal project · not deployed</span>
+        </div>
+        <p class="sub">Python · FastAPI · PostgreSQL · Redis · Playwright · Docker</p>
+        <ul>
+          <li>Normalizes 19 court integrations (PJe and e-SAJ) into one domain model through a registered adapter layer, with multi-tenant organizations, API keys, SDKs and billing.</li>
+          <li>Async pipeline with queued workers, retries with exponential backoff and jitter, at-least-once webhooks and a dead-letter table; 634 tests, 504 of them for the API at 66.42% line coverage.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="head">
+          <span class="title">ARPEON — Open-source desktop score editor</span>
+          <span class="date">2026 – present</span>
+        </div>
+        <p class="sub">Java 25 · Angular 22 · TypeScript · Gradle · JCEF · Audiveris · <a href="https://github.com/junior089/ARPEON">github.com/junior089/ARPEON</a></p>
+        <ul>
+          <li>Local-first application for reading, editing and practising sheet music: MIDI playback, YIN tuner, fixed-tempo performance reports and PDF/image score recognition.</li>
+          <li>11 Gradle modules behind an authenticated loopback bridge; 242 JUnit and 184 Vitest tests; CI on Windows, Linux and macOS; per-user Windows MSI installer.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="head">
+          <span class="title">Avivando — Member management platform</span>
+          <span class="date">Jun 2026 – Sep 2026</span>
+        </div>
+        <p class="sub">React · TypeScript · Payload CMS · PostgreSQL · Node.js</p>
+        <ul>
+          <li>Built in a pair with a senior engineer and in production for over 500 users: two integrated applications with role-based access control, 23 content modules and 181 automated tests in CI.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="head">
+          <span class="title">Visio Divina — AI presentation generator · UniCEUB extension project</span>
+          <span class="date">Jun 2026</span>
+        </div>
+        <p class="sub">TypeScript · React · LLM (NVIDIA NIM) · Zod · Supabase/PostgreSQL · <a href="https://github.com/junior089/visio-divina">github.com/junior089/visio-divina</a></p>
+        <ul>
+          <li>Team web application that turns sermon scripts into editable slide decks; model output is validated against Zod schemas with a repair prompt and a fallback, with Row Level Security and PPTX, PDF and PNG export.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="item">
+        <div class="head">
+          <span class="title">B.Sc. in Software Engineering · Centro Universitário de Brasília (UniCEUB)</span>
+          <span class="date">Feb 2026 – Dec 2029 (expected)</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="lines">
+      <h2>Technical skills</h2>
+      <p><b>Languages:</b> C#, Python, Java, TypeScript, JavaScript, SQL</p>
+      <p><b>Back-end &amp; data:</b> .NET (ASP.NET Core), FastAPI, REST APIs, webhooks, queues, async workers, idempotency, PostgreSQL, Redis</p>
+      <p><b>Front-end:</b> Angular, React, Next.js, Tailwind CSS</p>
+      <p><b>Tools &amp; practices:</b> Docker, Linux, Nginx, Git, GitHub Actions, Azure DevOps · Scrum, requirements analysis, automated testing</p>
+    </section>
+
+    <section class="lines">
+      <h2>Certifications, community &amp; languages</h2>
+      <p>
+        <b>Certifications:</b>
+        <a href="https://catalog-education.oracle.com/ords/certview/sharebadge_m?id=7E8557318DE662BDC508C49E9A2347B6B1C8ABE1D3EAF1267A111AC51F8A0535">Oracle Cloud Infrastructure Certified Architect Associate (1Z0-1072-26)</a> ·
+        <a href="https://catalog-education.oracle.com/ords/certview/sharebadge_m?id=CE3A2CFA318FD153B0B378F298731C5E9E6D3AAE754AECC24B48CA94586AAD9B">Oracle AI Database Certified Foundations Associate</a> ·
+        AWS Certified AI Practitioner (AIF-C01) · AWS Certified Cloud Practitioner (CLF-C02)
+      </p>
+      <p><b>Community:</b> AWS Builder Center — Campus Builder Student Leader, Brazil (2026–present) · Microsoft Azure community</p>
+      <p><b>Languages:</b> Portuguese (native) · English (intermediate, professional reading and writing)</p>
+    </section>
+  </body>
+</html>

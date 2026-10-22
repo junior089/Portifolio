@@ -1,7 +1,7 @@
 ---
-order: 3
+order: 4
 name: "MAY Derma"
-eyebrow: "Case study 03 · MAY Derma"
+eyebrow: "Case study 04 · MAY Derma"
 title: "Keeping a storefront and an external business system in sync"
 lede: "A WooCommerce e-commerce platform built and customized for MAY Derma and integrated with the company's external business systems. Delivered as a remote contract between May and July 2026."
 meta:
@@ -46,7 +46,7 @@ Communication runs over webhooks into asynchronous workers. The storefront emits
 Because delivery is at-least-once, every consumer is idempotent. The same event arriving twice produces one order, not two — deduplicated on the event's own identifier before any write. This is the part of the design I would defend hardest: retries are not an edge case, they are the normal operating mode of a webhook integration.
 
 <Diagram
-  caption="Fig. 3 — The storefront never calls the external system synchronously. Every write crosses an idempotent consumer."
+  caption="Fig. 5 — The storefront never calls the external system synchronously. Every write crosses an idempotent consumer."
   layers={[
     { nodes: [{ label: "WooCommerce", sub: "WordPress · storefront" }], edge: "webhook · order & stock events" },
     { nodes: [{ label: "Async workers", sub: "C#/.NET · idempotent consumers" }], edge: "deduplicated writes · retry on failure" },

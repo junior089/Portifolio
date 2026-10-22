@@ -5,3 +5,7 @@ export const GITHUB_URL = 'https://github.com/junior089';
 export const GITHUB_HANDLE = 'junior089';
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/carlos-alberto-soares-de-oliveira-júnior';
 export const LINKEDIN_HANDLE = 'carlos-alberto-oliveira-júnior';
+export const OCI_ARCHITECT_BADGE_URL =
+  'https://catalog-education.oracle.com/ords/certview/sharebadge_m?id=7E8557318DE662BDC508C49E9A2347B6B1C8ABE1D3EAF1267A111AC51F8A0535';
+export const ORACLE_AI_DATABASE_BADGE_URL =
+  'https://catalog-education.oracle.com/ords/certview/sharebadge_m?id=CE3A2CFA318FD153B0B378F298731C5E9E6D3AAE754AECC24B48CA94586AAD9B';
