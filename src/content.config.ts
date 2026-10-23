@@ -11,6 +11,7 @@ const projects = defineCollection({
     lede: z.string(),
     meta: z.array(z.object({ k: z.string(), v: z.string() })),
     viewSource: z.string().optional(),
+    links: z.array(z.object({ label: z.string(), href: z.string() })).optional(),
     numbersLabel: z.string(),
     numbers: z.array(z.string()),
     numbersNote: z.string(),

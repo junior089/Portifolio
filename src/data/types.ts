@@ -1,5 +1,10 @@
 export type Lang = 'en' | 'pt';
 
+export interface Link {
+  label: string;
+  href: string;
+}
+
 export interface SiteContent {
   nav: { work: string; resume: string };
   hero: {
@@ -22,6 +27,9 @@ export interface SiteContent {
     location: string;
     backHome: string;
     verify: string;
+    community: string;
+    nextCase: string;
+    downloadCv: string;
   };
   experience: {
     role: string;
@@ -32,7 +40,8 @@ export interface SiteContent {
   }[];
   focus: { group: string; items: string }[];
   education: { degree: string; meta: string };
-  certsList: { name: string; year: string; href?: string }[];
+  certsList: { name: string; issuer: string; code?: string; year: string; href?: string }[];
+  community: { name: string; meta: string }[];
   contact: { headline: string; body: string; location: string };
   notFound: {
     title: string;
@@ -46,7 +55,7 @@ export interface SiteContent {
     cvFile: string;
     blocks: {
       label: string;
-      rows: { k: string; meta: string; v: string; href?: string }[];
+      rows: { k: string; meta: string; v: string; link?: Link }[];
     }[];
   };
 }

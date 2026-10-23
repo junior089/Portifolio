@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { en } from '../data/en';
-import { EMAIL } from '../data/constants';
+import { EMAIL, GITHUB_URL, GITHUB_HANDLE, LINKEDIN_URL } from '../data/constants';
 import { homeHref, resumeHref } from '../lib/routes';
 
 const t = en;
@@ -17,6 +17,8 @@ const t = en;
       <div class="flex flex-wrap gap-6 border-b border-line pb-16 font-mono text-[13px]">
         <a href={t.resume.cvFile} download class="border-b border-line pb-0.5 text-bone">{t.resume.download}</a>
         <a href={`mailto:${EMAIL}`} class="text-muted">{EMAIL}</a>
+        <a href={GITHUB_URL} target="_blank" rel="noreferrer" class="text-muted">{`github.com/${GITHUB_HANDLE}`}</a>
+        <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" class="text-muted">LinkedIn</a>
       </div>
 
       {
@@ -28,9 +30,9 @@ const t = en;
                 <div class="flex flex-wrap items-baseline justify-between gap-6">
                   <span class="text-lg font-medium text-paper">{row.k}</span>
                   <span class="flex shrink-0 items-baseline gap-4 font-mono text-xs text-muted">
-                    {row.href && (
-                      <a href={row.href} target="_blank" rel="noreferrer" class="text-muted hover:text-paper">
-                        {t.labels.verify}
+                    {row.link && (
+                      <a href={row.link.href} target="_blank" rel="noreferrer" class="text-bone hover:text-paper">
+                        {row.link.label}
                       </a>
                     )}
                     <span>{row.meta}</span>

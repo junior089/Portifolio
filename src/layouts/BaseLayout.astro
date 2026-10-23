@@ -3,6 +3,10 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import type { Lang } from '../data/types';
+import { en } from '../data/en';
+import { pt } from '../data/pt';
+import { SITE_NAME, SITE_URL, EMAIL, GITHUB_URL, LINKEDIN_URL } from '../data/constants';
+import { absoluteUrl } from '../lib/routes';
 
 interface Props {
   lang: Lang;
@@ -10,9 +14,34 @@ interface Props {
   description: string;
   enHref: string;
   ptHref: string;
+  noindex?: boolean;
 }
 
-const { lang, title, description, enHref, ptHref } = Astro.props;
+const { lang, title, description, enHref, ptHref, noindex = false } = Astro.props;
+const t = lang === 'pt' ? pt : en;
+
+const canonical = absoluteUrl(lang === 'pt' ? ptHref : enHref);
+const enUrl = absoluteUrl(enHref);
+const ptUrl = absoluteUrl(ptHref);
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE_NAME,
+  alternateName: 'Carlos Alberto Jr.',
+  url: SITE_URL,
+  email: `mailto:${EMAIL}`,
+  jobTitle: t.hero.headline,
+  address: { '@type': 'PostalAddress', addressLocality: 'Brasília', addressRegion: 'DF', addressCountry: 'BR' },
+  sameAs: [GITHUB_URL, LINKEDIN_URL],
+  hasCredential: t.certsList.map((c) => ({
+    '@type': 'EducationalOccupationalCredential',
+    name: c.name,
+    credentialCategory: 'certification',
+    recognizedBy: { '@type': 'Organization', name: c.issuer },
+    ...(c.href && { url: c.href })
+  }))
+};
 ---
 
 <html lang={lang}>
@@ -22,6 +51,31 @@ const { lang, title, description, enHref, ptHref } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={SITE_NAME} />
+    <meta name="theme-color" content="#100f0e" />
+    {
+      noindex ? (
+        <meta name="robots" content="noindex" />
+      ) : (
+        <>
+          <link rel="canonical" href={canonical} />
+          <link rel="alternate" hreflang="en" href={enUrl} />
+          <link rel="alternate" hreflang="pt-BR" href={ptUrl} />
+          <link rel="alternate" hreflang="x-default" href={enUrl} />
+          <meta property="og:url" content={canonical} />
+        </>
+      )
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={lang === 'pt' ? 'pt_BR' : 'en_US'} />
+    <meta property="og:locale:alternate" content={lang === 'pt' ? 'en_US' : 'pt_BR'} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(person)} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

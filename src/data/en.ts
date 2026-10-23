@@ -1,5 +1,11 @@
 import type { SiteContent } from './types';
-import { OCI_ARCHITECT_BADGE_URL, ORACLE_AI_DATABASE_BADGE_URL } from './constants';
+import {
+  ARPEON_REPO_URL,
+  AVIVANDO_URL,
+  OCI_ARCHITECT_BADGE_URL,
+  ORACLE_AI_DATABASE_BADGE_URL,
+  VISIO_DIVINA_REPO_URL
+} from './constants';
 
 export const en: SiteContent = {
   nav: { work: 'Work', resume: 'Résumé' },
@@ -22,7 +28,10 @@ export const en: SiteContent = {
     certs: 'Certifications',
     location: 'Location',
     backHome: '← Index',
-    verify: 'Verify →'
+    verify: 'Verify →',
+    community: 'Community',
+    nextCase: 'Next case',
+    downloadCv: 'CV (PDF)'
   },
   experience: [
     {
@@ -52,11 +61,23 @@ export const en: SiteContent = {
     meta: 'UniCEUB — Centro Universitário de Brasília · Feb 2026 – Dec 2029'
   },
   certsList: [
-    { name: 'Oracle Cloud Infrastructure Certified Architect Associate', year: '2026', href: OCI_ARCHITECT_BADGE_URL },
-    { name: 'Oracle AI Database Certified Foundations Associate', year: '2026', href: ORACLE_AI_DATABASE_BADGE_URL },
-    { name: 'AWS Certified AI Practitioner', year: '2026' },
-    { name: 'AWS Certified Cloud Practitioner', year: '2026' }
+    {
+      name: 'Oracle Cloud Infrastructure Certified Architect Associate',
+      issuer: 'Oracle',
+      code: '1Z0-1072-26',
+      year: '2026',
+      href: OCI_ARCHITECT_BADGE_URL
+    },
+    {
+      name: 'Oracle AI Database Certified Foundations Associate',
+      issuer: 'Oracle',
+      year: '2026',
+      href: ORACLE_AI_DATABASE_BADGE_URL
+    },
+    { name: 'AWS Certified AI Practitioner', issuer: 'Amazon Web Services', code: 'AIF-C01', year: '2026' },
+    { name: 'AWS Certified Cloud Practitioner', issuer: 'Amazon Web Services', code: 'CLF-C02', year: '2026' }
   ],
+  community: [{ name: 'AWS Builder Center — Campus Builder Student Leader, Brazil', meta: '2026 – present' }],
   contact: {
     headline: 'Open to internships and backend engineering roles.',
     body: 'The fastest way to reach me is email. Code is on GitHub; the résumé is one page and downloadable as PDF.',
@@ -103,17 +124,20 @@ export const en: SiteContent = {
           {
             k: 'ARPEON',
             meta: '2026 – present · open source',
-            v: 'Local-first desktop score editor with MIDI playback, a YIN tuner, performance reports and PDF/image recognition. 11 Java modules behind an Angular interface, 242 JUnit and 184 Vitest tests, CI on Windows, Linux and macOS. Java, Angular, TypeScript, Gradle.'
+            v: 'Local-first desktop score editor with MIDI playback, a YIN tuner, performance reports and PDF/image recognition. 11 Java modules behind an Angular interface, 242 JUnit and 184 Vitest tests, CI on Windows, Linux and macOS. Java, Angular, TypeScript, Gradle.',
+            link: { label: 'Source →', href: ARPEON_REPO_URL }
           },
           {
             k: 'Avivando',
             meta: 'Jun – Sep 2026 · in production',
-            v: 'Member management platform serving over 500 users, built alongside a senior engineer. Two integrated applications on Payload CMS: public site and operational core, with role-based access control. React, TypeScript, Payload CMS, PostgreSQL, Node.js.'
+            v: 'Member management platform serving over 500 users, built alongside a senior engineer. Two integrated applications on Payload CMS: public site and operational core, with role-based access control. React, TypeScript, Payload CMS, PostgreSQL, Node.js.',
+            link: { label: 'Live site →', href: AVIVANDO_URL }
           },
           {
             k: 'Visio Divina',
             meta: 'Jun 2026 · UniCEUB extension project',
-            v: 'Team web application that turns sermon scripts into editable slide decks with an LLM (Llama 3.3 70B), validating the output against Zod schemas with a repair prompt and a fallback. PostgreSQL on Supabase with Row Level Security; export to PPTX, PDF and PNG. TypeScript, React.'
+            v: 'Team web application that turns sermon scripts into editable slide decks with an LLM (Llama 3.3 70B), validating the output against Zod schemas with a repair prompt and a fallback. PostgreSQL on Supabase with Row Level Security; export to PPTX, PDF and PNG. TypeScript, React.',
+            link: { label: 'Source →', href: VISIO_DIVINA_REPO_URL }
           }
         ]
       },
@@ -130,10 +154,30 @@ export const en: SiteContent = {
       {
         label: 'Certifications',
         rows: [
-          { k: 'Oracle Cloud Infrastructure Certified Architect Associate', meta: '2026', v: '', href: OCI_ARCHITECT_BADGE_URL },
-          { k: 'Oracle AI Database Certified Foundations Associate', meta: '2026', v: '', href: ORACLE_AI_DATABASE_BADGE_URL },
-          { k: 'AWS Certified AI Practitioner', meta: '2026', v: '' },
-          { k: 'AWS Certified Cloud Practitioner', meta: '2026', v: '' }
+          {
+            k: 'Oracle Cloud Infrastructure Certified Architect Associate',
+            meta: 'Oracle · 1Z0-1072-26 · 2026',
+            v: '',
+            link: { label: 'Verify →', href: OCI_ARCHITECT_BADGE_URL }
+          },
+          {
+            k: 'Oracle AI Database Certified Foundations Associate',
+            meta: 'Oracle · 2026',
+            v: '',
+            link: { label: 'Verify →', href: ORACLE_AI_DATABASE_BADGE_URL }
+          },
+          { k: 'AWS Certified AI Practitioner', meta: 'AWS · AIF-C01 · 2026', v: '' },
+          { k: 'AWS Certified Cloud Practitioner', meta: 'AWS · CLF-C02 · 2026', v: '' }
+        ]
+      },
+      {
+        label: 'Community',
+        rows: [
+          {
+            k: 'AWS Builder Center',
+            meta: '2026 – present',
+            v: 'Campus Builder Student Leader, Brazil.'
+          }
         ]
       },
       {

@@ -31,6 +31,7 @@ const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
         </a>
         <a href={resumeHref('en')} class="border-b border-line pb-0.5 text-bone">{t.hero.ctaResume}</a>
         <a href={GITHUB_URL} target="_blank" rel="noreferrer" class="text-muted">{`github.com/${GITHUB_HANDLE}`}</a>
+        <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" class="text-muted">LinkedIn</a>
         <a href={`mailto:${EMAIL}`} class="text-muted">{EMAIL}</a>
       </div>
     </section>
@@ -49,6 +50,7 @@ const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
               meta={p.data.home.meta}
               href={caseHref('en', p.id.replace('en/', ''))}
               viewSource={p.data.viewSource}
+              links={p.data.links}
               readCaseLabel={t.labels.readCase}
               viewSourceLabel={t.labels.viewSource}
             />
@@ -76,7 +78,7 @@ const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
       </div>
     </section>
 
-    <section class="border-t border-line py-20 pb-22">
+    <section id="certifications" class="scroll-mt-20 border-t border-line py-20 pb-22">
       <div class="mb-14 font-mono text-xs tracking-[0.14em] text-muted uppercase">{t.labels.certifications}</div>
       <div class="flex flex-wrap gap-[clamp(24px,5vw,56px)]">
         <div class="w-[200px] shrink-0 font-mono text-xs leading-[1.9] text-muted">{t.labels.education}</div>
@@ -90,11 +92,14 @@ const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
         <div class="min-w-[260px] max-w-[680px] flex-1">
           {
             t.certsList.map((c) => (
-              <div class="flex flex-wrap justify-between gap-x-6 gap-y-1 border-t border-line py-4">
-                <span class="text-[17px] text-paper">{c.name}</span>
+              <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-t border-line py-4">
+                <div>
+                  <div class="text-[17px] text-paper">{c.name}</div>
+                  <div class="mt-1 font-mono text-xs text-muted">{c.code ? `${c.issuer} · ${c.code}` : c.issuer}</div>
+                </div>
                 <span class="flex shrink-0 items-baseline gap-4 font-mono text-xs text-muted">
                   {c.href && (
-                    <a href={c.href} target="_blank" rel="noreferrer" class="text-muted hover:text-paper">
+                    <a href={c.href} target="_blank" rel="noreferrer" class="text-bone hover:text-paper">
                       {t.labels.verify}
                     </a>
                   )}
@@ -105,9 +110,22 @@ const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
           }
         </div>
       </div>
+      <div class="flex flex-wrap gap-[clamp(24px,5vw,56px)] pt-12">
+        <div class="w-[200px] shrink-0 font-mono text-xs leading-[1.9] text-muted">{t.labels.community}</div>
+        <div class="min-w-[260px] max-w-[680px] flex-1">
+          {
+            t.community.map((c) => (
+              <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t border-line py-4">
+                <span class="text-[17px] text-paper">{c.name}</span>
+                <span class="shrink-0 font-mono text-xs text-muted">{c.meta}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
     </section>
 
-    <section class="max-w-[760px] border-t border-line py-20 pb-40">
+    <section id="contact" class="max-w-[760px] scroll-mt-20 border-t border-line py-20 pb-40">
       <div class="mb-10 font-mono text-xs tracking-[0.14em] text-muted uppercase">{t.labels.contact}</div>
       <h2 class="mb-8 text-subtitle font-serif text-paper text-pretty">{t.contact.headline}</h2>
       <p class="mb-12 max-w-[680px] text-lg text-muted text-pretty">{t.contact.body}</p>
@@ -123,6 +141,10 @@ const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
         <div>
           <div class="mb-2 text-[11px] tracking-[0.1em] text-muted uppercase">LinkedIn</div>
           <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" class="text-bone">{LINKEDIN_HANDLE}</a>
+        </div>
+        <div>
+          <div class="mb-2 text-[11px] tracking-[0.1em] text-muted uppercase">{t.nav.resume}</div>
+          <a href={t.resume.cvFile} download class="text-bone">{t.labels.downloadCv}</a>
         </div>
         <div>
           <div class="mb-2 text-[11px] tracking-[0.1em] text-muted uppercase">{t.labels.location}</div>
