@@ -2,7 +2,7 @@
 import type { Lang } from '../data/types';
 import { en } from '../data/en';
 import { pt } from '../data/pt';
-import { SITE_NAME } from '../data/constants';
+import { SITE_NAME, EMAIL, GITHUB_URL, LINKEDIN_URL } from '../data/constants';
 
 interface Props {
   lang: Lang;
@@ -13,8 +13,16 @@ const t = lang === 'pt' ? pt : en;
 ---
 
 <footer class="border-t border-line">
-  <div class="mx-auto flex max-w-[1180px] flex-wrap justify-between gap-6 px-[clamp(20px,4vw,32px)] py-10 font-mono text-xs text-muted">
-    <span>{SITE_NAME}</span>
-    <span>{t.contact.location}</span>
+  <div class="mx-auto flex max-w-[1180px] flex-wrap items-baseline justify-between gap-6 px-[clamp(20px,4vw,32px)] py-10 font-mono text-xs text-muted">
+    <div class="flex flex-col gap-2">
+      <span>{SITE_NAME}</span>
+      <span>{t.contact.location}</span>
+    </div>
+    <nav class="flex flex-wrap gap-x-6 gap-y-3">
+      <a href={`mailto:${EMAIL}`} class="text-muted hover:text-paper">Email</a>
+      <a href={GITHUB_URL} target="_blank" rel="noreferrer" class="text-muted hover:text-paper">GitHub</a>
+      <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" class="text-muted hover:text-paper">LinkedIn</a>
+      <a href={t.resume.cvFile} download class="text-muted hover:text-paper">{t.labels.downloadCv}</a>
+    </nav>
   </div>
 </footer>

@@ -26,6 +26,7 @@ const t = en;
 const other = all[(index + 1) % all.length];
 const otherSlug = other.id.replace('en/', '');
 const slug = Astro.params.slug as string;
+const links = entry.data.links ?? [];
 ---
 
 <BaseLayout
@@ -43,6 +44,22 @@ const slug = Astro.params.slug as string;
         <div class="mb-8 font-mono text-xs tracking-[0.14em] text-muted uppercase">{entry.data.eyebrow}</div>
         <h1 class="mb-8 text-display-case font-serif text-paper text-pretty">{entry.data.title}</h1>
         <p class="max-w-[680px] text-[19px] leading-[1.65] text-muted text-pretty">{entry.data.lede}</p>
+        {
+          (links.length > 0 || entry.data.viewSource) && (
+            <div class="mt-10 flex flex-wrap gap-x-8 gap-y-4 font-mono text-[13px]">
+              {links.map((l) => (
+                <a href={l.href} target="_blank" rel="noreferrer" class="border-b border-line pb-0.5 text-bone">
+                  {l.label}
+                </a>
+              ))}
+              {entry.data.viewSource && (
+                <a href={entry.data.viewSource} target="_blank" rel="noreferrer" class="border-b border-line pb-0.5 text-bone">
+                  {t.labels.viewSource}
+                </a>
+              )}
+            </div>
+          )
+        }
       </header>
 
       <MetaGrid items={entry.data.meta} />
@@ -54,8 +71,15 @@ const slug = Astro.params.slug as string;
 
       <div class="mt-18 flex max-w-[760px] flex-wrap gap-8 border-t border-line pt-12 font-mono text-[13px]">
         <a href={caseHref('en', otherSlug)} class="text-bone">
-          {`Next case: ${other.data.name}`}
+          {`${t.labels.nextCase}: ${other.data.name}`}
         </a>
+        {
+          links.map((l) => (
+            <a href={l.href} target="_blank" rel="noreferrer" class="text-muted">
+              {l.label}
+            </a>
+          ))
+        }
         {
           entry.data.viewSource && (
             <a href={entry.data.viewSource} target="_blank" rel="noreferrer" class="text-muted">
